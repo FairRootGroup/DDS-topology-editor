@@ -1,0 +1,298 @@
+/* General */
+body {
+    font-family: "Roboto", sans-serif;
+    font-weight: 300;
+}
+pre {
+    background-color: white;
+    border: 0;
+    padding: 0;
+    font-family: 'PT Mono', monospace;
+}
+.btn:focus, .btn:active:focus, .btn.active:focus {
+    outline: none;
+}
+.btn:active, .btn.active {
+    text-shadow: 0px 0px 3px rgba(255, 255, 255, 0.5);
+}
+a:focus, a:active:focus {
+    outline: none;
+}
+.navbar {
+    border-radius: 0px;
+}
+
+/* File Open Dialog */
+.btn-file {
+    position: relative;
+    overflow: hidden;
+}
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
+
+/* Pretty Print Modifications */
+pre.prettyprint {
+    padding: 0;
+    border: 0;
+}
+
+/* File Action Buttons */
+.file-actions .btn {
+    width: 100%;
+}
+
+.file-actions .btn-load {
+    padding-right: 6px;
+}
+
+.file-actions .btn-save {
+    padding-left: 6px;
+}
+
+/* Add Buttons */
+.add-task-btn, .add-collection-btn, .add-group-btn {
+    top: 4px;
+    float: right;
+    cursor: pointer;
+}
+.add-task-btn {
+    color: #e1f5fe;
+}
+.add-collection-btn {
+    color: #eceff1;
+}
+.add-group-btn {
+    color: #e0f2f1;
+}
+
+/* List of Tasks, Collections, Groups */
+.list-group-item {
+    padding: 10px;
+}
+/* Headers */
+.tasks-header, .collections-header, .groups-header {
+    margin: 0;
+    padding: 0 10px;
+    text-transform: uppercase;
+    border-bottom: 0;
+    font-size: 12px;
+}
+.tasks-header {
+    color: white;
+    background-color: #03a9f4;
+}
+.collections-header {
+    color: white;
+    background-color: #607d8b;
+}
+.groups-header {
+    color: white;
+    background-color: #009688;
+}
+
+/* List Elements */
+li.tasks {
+    background-color: #e1f5fe;
+    border-top: 0;
+}
+li.collections {
+    background-color: #eceff1;
+    border-top: 0;
+}
+li.groups {
+    background-color: #e0f2f1;
+    border-top: 0;
+}
+
+/* individual Elements */
+.task > *, .collection > *, .group > * {
+    padding: 2px 5px;
+}
+
+/* Glyphicons */
+.task .glyphicon-tasks, .collection .glyphicon-tasks, .group .glyphicon-tasks {
+    top: 2px;
+    margin-right: 2px;
+}
+.task .glyphicon-chevron-up, .collection .glyphicon-chevron-up, .group .glyphicon-chevron-up {
+    top: 1px;
+    left: 1px;
+}
+.task .glyphicon-chevron-down, .collection .glyphicon-chevron-down, .group .glyphicon-chevron-down {
+    top: 2px;
+    left: 0px;
+}
+.glyphicon-edit {
+    float: right;
+    margin: 0 4px;
+}
+
+/* Element Headers */
+.task h5, .collection h5, .group h5 {
+    color: white;
+    padding: 4px;
+    margin: 0;
+    text-transform: uppercase;
+    font-weight: 300;
+    font-size: 14px;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+}
+.task h5 {
+    background-color: #03a9f4;
+}
+.collection h5 {
+    background-color: #607d8b;
+}
+.group h5 {
+    background-color: #009688;
+}
+
+/* Tasks */
+.task {
+    border-radius: 2px;
+    background-color: white;
+    color: black;
+    padding: 0;
+    margin: 3px 2px;
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    /*display: inline-block;*/
+}
+.task .glyphicon-chevron-up {
+    color: white;
+    float: right;
+}
+.task .glyphicon-chevron-down {
+    color: white;
+    float: right;
+}
+.task .glyphicon {
+    color: white;
+    cursor: pointer;
+}
+.task .glyphicon-log-in {
+    color: black;
+    margin-right: 4px;
+    top: 2px;
+}
+.task .glyphicon-log-out {
+    color: black;
+    margin-right: 4px;
+    top: 2px;
+}
+.task .glyphicon-edit {
+    color: #e1f5fe;
+}
+.task li {
+    list-style-type: none;
+    font-size: 12px;
+    font-family: "Open Sans", sans-serif;
+    border-bottom: 1px dotted #2a36b1;
+}
+.task li:last-child {
+    /*border-bottom: none;*/
+}
+
+/* Collections */
+.collection {
+    border-radius: 2px;
+    background-color: white;
+    color: black;
+    padding: 0;
+    margin: 4px 2px;
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    /*display: inline-block;*/
+}
+.collection .glyphicon-chevron-up {
+    float: right;
+    color: white;
+}
+.collection .glyphicon-chevron-down {
+    float: right;
+    color: white;
+}
+.collection .glyphicon {
+    color: white;
+    cursor: pointer;
+}
+.collection .glyphicon-edit {
+    color: #eceff1;
+}
+.collection div span {
+    border-radius: 2px;
+    background-color: #03a9f4;
+    color: white;
+    padding: 1px 3px;
+    margin: 2px 2px;
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    display: inline-block;
+}
+.collection div {
+    margin: 2px 0;
+}
+
+/* Groups */
+.group {
+    border-radius: 2px;
+    background-color: white;
+    color: black;
+    padding: 0;
+    margin: 2px 2px;
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    /*display: inline-block;*/
+}
+.group div span {
+    border-radius: 2px;
+    padding: 1px 3px;
+    margin: 2px 2px;
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    display: inline-block;
+}
+.group div.group-tasks span {
+    background-color: #03a9f4;
+    color: white;
+}
+.group div.group-collections span {
+    background-color: #607d8b;
+    color: white;
+}
+.group .glyphicon-chevron-up {
+    float: right;
+    color: white;
+}
+.group .glyphicon-chevron-down {
+    float: right;
+    color: white;
+}
+.group .glyphicon {
+    color: white;
+    cursor: pointer;
+}
+.group .glyphicon-edit {
+    color: #e0f2f1;
+}
+
+/* Properties */
+.visible-container {
+    display: block;
+}
+.invisible-container {
+    display: none;
+}
+
+.connection {
+    border-top: 1px dotted #2a36b1;
+}
