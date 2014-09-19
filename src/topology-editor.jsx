@@ -34,7 +34,24 @@ var TopologyEditor = React.createClass({
         });
     },
 
+    handleAddTask: function(e) {
+        e.preventDefault();
+        var nextTasks = this.state.tasks.concat([{
+            inputs: [],
+            outputs: [],
+            properties: {name: 'new task'}
+        }]);
+        this.setState({
+            tasks: nextTasks
+        });
+    },
+
     render: function() {
+        var OverlayTrigger = ReactBootstrap.OverlayTrigger;
+        var Popover = ReactBootstrap.Popover;
+        var Button = ReactBootstrap.Button;
+        var Input = ReactBootstrap.Input;
+
         return (
             <div>
                 <TopBar topologyName={this.state.topologyName} />
@@ -52,14 +69,23 @@ var TopologyEditor = React.createClass({
                                 />
 
                                 <li className="list-group-item tasks-header">
-                                    tasks<span className="glyphicon glyphicon-plus add-task-btn" title="add new task"></span>
+                                    tasks<span className="glyphicon glyphicon-plus add-task-btn" title="add new task" onClick={this.handleAddTask}></span>
                                 </li>
                                 <li className="list-group-item tasks">
                                     <TaskList tasks={this.state.tasks} />
                                 </li>
 
                                 <li className="list-group-item collections-header">
-                                    collections<span className="glyphicon glyphicon-plus add-collection-btn" title="add new collection"></span>
+                                    collections
+                                    <OverlayTrigger trigger="click" placement="bottom" overlay={
+                                        <Popover title="add new collection">
+                                            <Input type="text" addonBefore="name" />
+                                            <br />
+                                            <Button bsSize="xsmall" bsStyle="primary">add</Button>
+                                        </Popover>
+                                    }>
+                                        <span className="glyphicon glyphicon-plus add-collection-btn" title="add new collection"></span>
+                                    </OverlayTrigger>
                                 </li>
                                 <li className="list-group-item collections">
                                     <CollectionList collections={this.state.collections} />

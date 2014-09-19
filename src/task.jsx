@@ -23,7 +23,8 @@ var TaskList = React.createClass({
 var Task = React.createClass({
     getInitialState: function() {
         return {
-            bodyVisible: false
+            bodyVisible: false,
+            beeingEdited: false
         }
     },
 
@@ -46,7 +47,7 @@ var Task = React.createClass({
             <div className="task">
                 <h5>
                     <span className="glyphicon glyphicon-tasks"></span>
-                    {this.props.task.properties.name} 
+                    <span>{this.props.task.properties.name}</span>
                     <span
                         className={this.state.bodyVisible ? "glyphicon glyphicon-chevron-up" : "glyphicon glyphicon-chevron-down"}
                         title={this.state.bodyVisible ? "hide": "show"}
@@ -56,16 +57,16 @@ var Task = React.createClass({
                 </h5>
                 <ul className={this.state.bodyVisible ? "visible-container" : "invisible-container"}>
                     <div>{taskProperties}</div>
-                    {this.props.task.inputs.map(function(input) {
+                    {this.props.task.inputs.map(function(input, key) {
                         return (
-                            <div data-toggle="tooltip" data-placement="right" title={input.type + " " + input.buffSize + " " + input.method}>
+                            <div data-toggle="tooltip" data-placement="right" title={input.type + " " + input.buffSize + " " + input.method} key={key}>
                                 <span className="glyphicon glyphicon-log-in"></span>{input.address}
                             </div>
                         );
                     })}
-                    {this.props.task.outputs.map(function(output) {
+                    {this.props.task.outputs.map(function(output, key) {
                         return (
-                            <div data-toggle="tooltip" data-placement="right" title={output.type + " " + output.buffSize + " " + output.method}>
+                            <div data-toggle="tooltip" data-placement="right" title={output.type + " " + output.buffSize + " " + output.method} key={key}>
                                 <span className="glyphicon glyphicon-log-out"></span>{output.address}
                             </div>
                         );
