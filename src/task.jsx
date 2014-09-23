@@ -23,8 +23,7 @@ var TaskList = React.createClass({
 var Task = React.createClass({
     getInitialState: function() {
         return {
-            bodyVisible: false,
-            beeingEdited: false
+            bodyVisible: false
         }
     },
 
@@ -47,7 +46,7 @@ var Task = React.createClass({
             <div className="task">
                 <h5>
                     <span className="glyphicon glyphicon-tasks"></span>
-                    <span>{this.props.task.properties.name}</span>
+                    <span className="element-title" title={this.props.task.properties.name}>{this.props.task.properties.name}</span>
                     <span
                         className={this.state.bodyVisible ? "glyphicon glyphicon-chevron-up" : "glyphicon glyphicon-chevron-down"}
                         title={this.state.bodyVisible ? "hide": "show"}

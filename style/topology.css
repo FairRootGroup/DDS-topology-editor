@@ -21,6 +21,22 @@ a:focus, a:active:focus {
 .navbar {
     border-radius: 0px;
 }
+input[type="radio"], input[type="checkbox"] {
+    margin: 5px 0 0;
+}
+.popover {
+    max-width: 250px;
+}
+.popover-title {
+    text-align: center;
+    text-transform: uppercase;
+}
+input[type=text], input[type=password], input[type=email], textarea, [type=text].form-control, [type=password].form-control, textarea.form-control {
+    line-height: normal;
+}
+.form-control {
+    height: 30px;
+}
 
 /* File Open Dialog */
 .btn-file {
@@ -64,9 +80,13 @@ pre.prettyprint {
 
 /* Add Buttons */
 .add-task-btn, .add-collection-btn, .add-group-btn {
-    top: 4px;
-    float: right;
+    position: absolute;
+    top: 6px;
+    right: 6px;
     cursor: pointer;
+}
+.add-task-btn:hover, .add-collection-btn:hover, .add-group-btn:hover {
+    text-shadow: 0px 0px 5px #555;
 }
 .add-task-btn {
     color: #e1f5fe;
@@ -78,14 +98,47 @@ pre.prettyprint {
     color: #e0f2f1;
 }
 
+/* Add Popovers */
+/* cg - collection+group */
+.popover-content {
+    padding: 9px 9px;
+}
+
+.add-cg-popover span.input-group-addon {
+    padding: 2px 5px 0 0;
+    font-size: 14px;
+    font-weight: 300;
+}
+.add-cg-popover .form-group {
+    margin: 0;
+    display: inline-block;
+}
+.add-cg-popover .element-name {
+    text-align: right;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.add-cg-popover p {
+    text-align: center;
+    background-color: #F7F7F7;
+}
+.add-cg-tc-counter {
+    padding: 0 0 0 6px;
+    height: 28px
+}
+.add-cg-popover-btn {
+    margin: 15px 5px 0 5px;
+}
+
 /* List of Tasks, Collections, Groups */
 .list-group-item {
     padding: 10px;
 }
 /* Headers */
 .tasks-header, .collections-header, .groups-header {
+    position: relative;
     margin: 0;
-    padding: 0 10px;
+    padding: 2px 10px;
     text-transform: uppercase;
     border-bottom: 0;
     font-size: 12px;
@@ -124,32 +177,40 @@ li.groups {
 
 /* Glyphicons */
 .task .glyphicon-tasks, .collection .glyphicon-tasks, .group .glyphicon-tasks {
-    top: 2px;
-    margin-right: 2px;
+    position: absolute;
+    top: 5px;
+    left: 5px;
 }
 .task .glyphicon-chevron-up, .collection .glyphicon-chevron-up, .group .glyphicon-chevron-up {
-    top: 1px;
-    left: 1px;
+    position: absolute;
+    top: 4px;
+    right: 4px;
 }
 .task .glyphicon-chevron-down, .collection .glyphicon-chevron-down, .group .glyphicon-chevron-down {
-    top: 2px;
-    left: 0px;
+    position: absolute;
+    top: 5px;
+    right: 5px;
 }
 .glyphicon-edit {
-    float: right;
-    margin: 0 4px;
+    position: absolute;
+    top: 4px;
+    right: 21px;
 }
 
 /* Element Headers */
 .task h5, .collection h5, .group h5 {
     color: white;
-    padding: 4px;
+    padding: 4px 38px 4px 22px;
     margin: 0;
-    text-transform: uppercase;
     font-weight: 300;
     font-size: 14px;
     border-top-left-radius: 2px;
     border-top-right-radius: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    position: relative;
+    height: 23px;
 }
 .task h5 {
     background-color: #03a9f4;
@@ -159,6 +220,15 @@ li.groups {
 }
 .group h5 {
     background-color: #009688;
+}
+.element-title {
+    left: 22px;
+    margin-right: -32px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+    width: 100%;
 }
 
 /* Tasks */
@@ -173,11 +243,9 @@ li.groups {
 }
 .task .glyphicon-chevron-up {
     color: white;
-    float: right;
 }
 .task .glyphicon-chevron-down {
     color: white;
-    float: right;
 }
 .task .glyphicon {
     color: white;
@@ -217,11 +285,9 @@ li.groups {
     /*display: inline-block;*/
 }
 .collection .glyphicon-chevron-up {
-    float: right;
     color: white;
 }
 .collection .glyphicon-chevron-down {
-    float: right;
     color: white;
 }
 .collection .glyphicon {
@@ -270,11 +336,9 @@ li.groups {
     color: white;
 }
 .group .glyphicon-chevron-up {
-    float: right;
     color: white;
 }
 .group .glyphicon-chevron-down {
-    float: right;
     color: white;
 }
 .group .glyphicon {

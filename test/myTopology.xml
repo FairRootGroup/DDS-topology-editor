@@ -1,0 +1,40 @@
+<topology name="myTopology">
+    <task name="task1" exec="app1"/>
+    <task name="task2" exec="app2"/>
+    <task name="task3" exec="app3"/>
+    <task name="task4" exec="app4"/>
+    <task name="task5" exec="app5"/>
+    <collection name="collection1">
+        <task name="task1"/>
+        <task name="task2"/>
+        <task name="task2"/>
+        <task name="task3"/>
+    </collection>
+    <collection name="collection2">
+        <task name="task4"/>
+        <task name="task4"/>
+        <task name="task5"/>
+    </collection>
+    <main name="main" n="1" minRequired="1">
+        <task name="task1"/>
+        <collection name="collection1"/>
+        <collection name="collection2"/>
+        <group name="group1" n="10" minRequired="1">
+            <task name="task1"/>
+            <collection name="collection1"/>
+            <collection name="collection2"/>
+        </group>
+        <group name="group2" n="15" minRequired="3">
+            <task name="task3"/>
+            <task name="task4"/>
+            <collection name="collection1"/>
+            <collection name="collection2"/>
+        </group>
+        <group name="blorg" n="1" minRequired="1">
+            <task name="task1"/>
+            <task name="task2"/>
+            <task name="task2"/>
+            <collection name="collection1"/>
+        </group>
+    </main>
+</topology>

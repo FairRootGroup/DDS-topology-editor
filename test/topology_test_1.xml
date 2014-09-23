@@ -1,44 +1,20 @@
 <topology name="myTopology">
-
-	<port name="port1" min="20000" max="22000"/>
-	<port name="port2" min="20000" max="22000"/>
-	<port name="port3" min="20000" max="22000"/>
-	<port name="port4" min="20000" max="22000"/>
-	<port name="port5" min="20000" max="22000"/>
-
-	<task name="task1" exec="app1">
-		<port name="port1"/>
-		<port name="port5"/>
-	</task>
-	<task name="task2" exec="app2">
-		<port name="port1"/>
-		<port name="port2"/>
-	</task>
-	<task name="task3" exec="app3">
-		<port name="port2"/>
-		<port name="port3"/>
-	</task>
-	<task name="task4" exec="app4">
-		<port name="port3"/>
-		<port name="port4"/>
-	</task>
-	<task name="task5" exec="app5">
-		<port name="port1"/>
-	</task>
-
+	<task name="task1" exec="app1"/>
+	<task name="task2" exec="app2"/>
+	<task name="task3" exec="app3"/>
+	<task name="task4" exec="app4"/>
+	<task name="task5" exec="app5"/>
 	<collection name="collection1">
 		<task name="task1"/>
 		<task name="task2"/>
 		<task name="task2"/>
 		<task name="task3"/>
 	</collection>
-
 	<collection name="collection2">
 		<task name="task4"/>
 		<task name="task4"/>
 		<task name="task5"/>
 	</collection>
-
 	<main name="main" n="1" minRequired="1">
 		<task name="task1"/>
 		<collection name="collection1"/>

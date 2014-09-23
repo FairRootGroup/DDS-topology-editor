@@ -16,7 +16,8 @@ var FileActions = React.createClass({
             tasks = [],
             collections = [],
             main = {},
-            self = this;
+            self = this,
+            targetPointer = event.target;
 
         reader.onload = function() {
             var $xml = $(parser.parseFromString(reader.result, 'application/xml'));
@@ -101,6 +102,8 @@ var FileActions = React.createClass({
             // console.log(main);
 
             self.props.onFileLoad(topologyName, tasks, collections, main);
+
+            targetPointer.value = "";
         }
 
         reader.readAsText(event.target.files[0]);
