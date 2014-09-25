@@ -9,6 +9,22 @@
  ********************************************************************************/
 
 var TopBar = React.createClass({
+    getInitialState: function() {
+        return {
+            beeingEdited: false
+        };
+    },
+
+    toggleEditing: function() {
+        this.setState({ beeingEdited: !this.state.beeingEdited });
+    },
+
+    handleTopologyNameChange: function(e) {
+        e.preventDefault();
+        this.toggleEditing();
+        this.props.onTopologyNameChange(e.target[0].form[0].value);
+    },
+
     render: function() {
         return (
             <nav className="navbar navbar-inverse" role="navigation">
@@ -24,11 +40,14 @@ var TopBar = React.createClass({
                     </div>
                     <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                         <ul className="nav navbar-nav">
-                            <li className="active"><a href="#" className="topology-name">{this.props.topologyName}</a></li>
-                        </ul>
-                        <ul className="nav navbar-nav navbar-right">
-                            <li>
-                                <a href="#" id="fluid-toggle"><span className="glyphicon glyphicon-transfer"></span></a>
+                            <li className="active">
+                                {this.state.beeingEdited ? 
+                                    <form className="name-change" onSubmit={this.handleTopologyNameChange}>
+                                        <input type="text" autoFocus defaultValue={this.props.topologyName}></input>
+                                        <input type="submit" value="ok" ></input>
+                                    </form>
+                                    :
+                                    <a href="#" onClick={this.toggleEditing}>{this.props.topologyName}</a>}
                             </li>
                         </ul>
                     </div>

@@ -38,6 +38,49 @@ input[type=text], input[type=password], input[type=email], textarea, [type=text]
     height: 30px;
 }
 
+/* Name Change Form */
+form.name-change {
+    position: relative;
+    display: block;
+    padding: 10px 15px;
+    padding-top: 20.5px;
+    padding-bottom: 20.5px;
+    line-height: 23px;
+    color: #FFF;
+    background-color: #0C7CD5;
+}
+form.name-change input {
+    height: 23px;
+    padding: 0;
+    margin: 0;
+    border: 0;
+}
+form.name-change input[type=text] {
+    background-color: #2196F3;
+    color: #FFF;
+    font-size: 13px;
+    width: 100px;
+    padding: 0 0 0 3px;
+}
+form.name-change input[type=text]:focus {
+    box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.25);
+    border: 0;
+    outline: none;
+}
+form.name-change input[type=submit] {
+    background-color: #2196F3;
+    color: #FFF;
+    font-size: 13px;
+    margin: 0 2px;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    padding: 0 3px;
+    box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.25);
+}
+form.name-change input[type=submit]:hover {
+    text-shadow: 0px 0px 2px rgba(255,255,255,0.5);
+}
+
 /* File Open Dialog */
 .btn-file {
     position: relative;
@@ -103,31 +146,75 @@ pre.prettyprint {
 .popover-content {
     padding: 9px 9px;
 }
-
+.ct-box {
+    color: #FFF;
+    display: inline-block;
+    margin: 1px;
+    border-radius: 2px;
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    font-size: 12px;
+}
+.ct-box-task {
+    background-color: #03A9F4;
+}
+.ct-box-collection {
+    background-color: #607D8B;
+}
 .add-cg-popover span.input-group-addon {
     padding: 2px 5px 0 0;
     font-size: 14px;
     font-weight: 300;
 }
 .add-cg-popover .form-group {
-    margin: 0;
+    margin: 2px;
     display: inline-block;
+    vertical-align: middle;
+}
+.add-cg-popover input[type=number] {
+    padding: 0 0 0 6px;
+}
+.add-cg-popover .col-xs-4 {
+    padding-right: 2px;
+}
+.add-cg-popover .col-xs-8 {
+    padding-left: 2px;
+}
+.add-cg-popover .col-xs-12 {
+    text-align: center;
 }
 .add-cg-popover .element-name {
-    text-align: right;
     overflow: hidden;
     text-overflow: ellipsis;
+    display: inline-block;
+    height: 28px;
+    line-height: normal;
+    vertical-align: middle;
+    padding: 5px 4px 0 4px;
 }
 .add-cg-popover p {
     text-align: center;
     background-color: #F7F7F7;
+    margin: 7px 0 5px 0;
 }
 .add-cg-tc-counter {
     padding: 0 0 0 6px;
-    height: 28px
+    height: 25px;
+    width: 42px;
+    color: #000;
+    font-size: 12px;
+}
+.ct-box-task .add-cg-tc-counter {
+    background-color: #E1F5FE;
+}
+.ct-box-collection .add-cg-tc-counter {
+    background-color: #ECEFF1;
 }
 .add-cg-popover-btn {
     margin: 15px 5px 0 5px;
+}
+
+.invalid-input {
+    background-color: #FF9B9F;
 }
 
 /* List of Tasks, Collections, Groups */
@@ -271,7 +358,10 @@ li.groups {
     border-bottom: 1px dotted #2a36b1;
 }
 .task li:last-child {
-    /*border-bottom: none;*/
+    border-bottom: none;
+}
+.task-connection {
+    border-top: 1px dotted #2a36b1;
 }
 
 /* Collections */

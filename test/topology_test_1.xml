@@ -1,4 +1,5 @@
 <topology name="myTopology">
+	<property name="bla" default="" />
 	<task name="task1" exec="app1"/>
 	<task name="task2" exec="app2"/>
 	<task name="task3" exec="app3"/>
@@ -15,7 +16,7 @@
 		<task name="task4"/>
 		<task name="task5"/>
 	</collection>
-	<main name="main" n="1" minRequired="1">
+	<main name="main">
 		<task name="task1"/>
 		<collection name="collection1"/>
 		<collection name="collection2"/>
@@ -31,5 +32,4 @@
 			<collection name="collection2"/>
 		</group>
 	</main>
-
 </topology>

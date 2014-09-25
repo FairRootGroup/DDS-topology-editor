@@ -1,22 +1,15 @@
 <topology name="startThree">
-    <task name="101" exec="testDetectorSamplerBin" type="sampler" inputFile="testdigi.root" parameterFile="testparams.root" branch="FairTestDetectorDigi">
-        <output type="push" buffSize="1000" method="bind" address="tcp://*:5566"/>
-    </task>
-    <task name="201" exec="testDetectorProcessorBin" type="processor" processorTask="FairTestDetectorMQRecoTask">
-        <input type="pull" buffSize="1000" method="connect" address="tcp://localhost:5566"/>
-        <output type="push" buffSize="1000" method="connect" address="tcp://localhost:5570"/>
-    </task>
-    <task name="301" exec="fileSinkBin" type="sink">
-        <input type="pull" buffSize="1000" method="bind" address="tcp://*:5570"/>
-    </task>
+    <task name="101" exec="testDetectorSamplerBin 101 testdigi.root testparams.root FairTestDetectorDigi 0 1 push 1000 bind tcp://*:5566" />
+    <task name="201" exec="testDetectorProcessorBin 201 FairTestDetectorMQRecoTask 1 pull 1000 connect tcp://localhost:5566 push 1000 connect tcp://localhost:5570" />
+    <task name="301" exec="fileSinkBin 301 1 pull 1000 bind tcp://*:5570" />
     <collection name="collection1">
-        <task name="101"/>
-        <task name="201"/>
-        <task name="301"/>
+        <101 />
+        <201 />
+        <301 />
     </collection>
-    <main name="main" n="1" minRequired="1">
-        <task name="101"/>
-        <task name="201"/>
-        <task name="301"/>
+    <main name="main">
+        <101 />
+        <201 />
+        <301 />
     </main>
 </topology>

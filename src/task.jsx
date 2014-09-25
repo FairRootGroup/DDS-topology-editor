@@ -37,8 +37,8 @@ var Task = React.createClass({
 
     render: function() {
         var taskProperties = [];
-        _.forIn(this.props.task.properties, function(prop, key) {
-            if (key !== 'name') {
+        _.forIn(this.props.task, function(prop, key) {
+            if (key !== 'name' && key !== 'inputs' && key !== 'outputs') {
                 taskProperties.push(<TaskProperty property={prop} key={key} />);
             }
         });
@@ -46,7 +46,7 @@ var Task = React.createClass({
             <div className="task">
                 <h5>
                     <span className="glyphicon glyphicon-tasks"></span>
-                    <span className="element-title" title={this.props.task.properties.name}>{this.props.task.properties.name}</span>
+                    <span className="element-title" title={this.props.task.name}>{this.props.task.name}</span>
                     <span
                         className={this.state.bodyVisible ? "glyphicon glyphicon-chevron-up" : "glyphicon glyphicon-chevron-down"}
                         title={this.state.bodyVisible ? "hide": "show"}
@@ -58,14 +58,14 @@ var Task = React.createClass({
                     <div>{taskProperties}</div>
                     {this.props.task.inputs.map(function(input, key) {
                         return (
-                            <div data-toggle="tooltip" data-placement="right" title={input.type + " " + input.buffSize + " " + input.method} key={key}>
+                            <div className="task-connection" data-toggle="tooltip" data-placement="right" title={input.type + " " + input.buffSize + " " + input.method} key={key}>
                                 <span className="glyphicon glyphicon-log-in"></span>{input.address}
                             </div>
                         );
                     })}
                     {this.props.task.outputs.map(function(output, key) {
                         return (
-                            <div data-toggle="tooltip" data-placement="right" title={output.type + " " + output.buffSize + " " + output.method} key={key}>
+                            <div className="task-connection" data-toggle="tooltip" data-placement="right" title={output.type + " " + output.buffSize + " " + output.method} key={key}>
                                 <span className="glyphicon glyphicon-log-out"></span>{output.address}
                             </div>
                         );

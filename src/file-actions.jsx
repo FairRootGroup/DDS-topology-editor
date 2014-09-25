@@ -17,7 +17,7 @@ var FileActions = React.createClass({
             collections = [],
             main = {},
             self = this,
-            targetPointer = event.target;
+            target = event.target;
 
         reader.onload = function() {
             var $xml = $(parser.parseFromString(reader.result, 'application/xml'));
@@ -28,11 +28,10 @@ var FileActions = React.createClass({
             // tasks
             $xml.find('topology>task').each(function() {
                 var task = {};
-                task.properties = {};
                 task.inputs = [];
                 task.outputs = [];
                 $.each(this.attributes, function(i, attrib) {
-                    task.properties[attrib.name] = attrib.value;
+                    task[attrib.name] = attrib.value;
                 });
                 $(this).find('input').each(function() {
                     var input = {};
@@ -40,6 +39,7 @@ var FileActions = React.createClass({
                     input.buffSize = $(this).attr('buffSize');
                     input.method = $(this).attr('method');
                     input.address = $(this).attr('address');
+                    input.port = $(this).attr('address').match(/\d+/)[0];
                     task.inputs.push(input);
                 });
                 $(this).find('output').each(function() {
@@ -48,6 +48,7 @@ var FileActions = React.createClass({
                     output.buffSize = $(this).attr('buffSize');
                     output.method = $(this).attr('method');
                     output.address = $(this).attr('address');
+                    output.port = $(this).attr('address').match(/\d+/)[0];
                     task.outputs.push(output);
                 });
                 tasks.push(task);
@@ -67,8 +68,6 @@ var FileActions = React.createClass({
             // main
             $main = $xml.find('topology>main');
             main.name = $main.attr('name');
-            main.n = $main.attr('n');
-            main.minRequired = $main.attr('minRequired');
             main.tasks = [];
             main.collections = [];
             main.groups = [];
@@ -103,7 +102,7 @@ var FileActions = React.createClass({
 
             self.props.onFileLoad(topologyName, tasks, collections, main);
 
-            targetPointer.value = "";
+            target.value = "";
         }
 
         reader.readAsText(event.target.files[0]);
@@ -117,8 +116,10 @@ var FileActions = React.createClass({
         // tasks
         this.props.tasks.forEach(function(task) {
             var newTask = xmlDoc.createElement("task");
-            _.forIn(task.properties, function(prop, key) {
-                newTask.setAttribute(key, prop);
+            _.forIn(task, function(prop, key) {
+                if(key !== "inputs" && key !== "outputs") {
+                    newTask.setAttribute(key, prop);
+                }
             });
             task.inputs.forEach(function(input) {
                 var newInput = xmlDoc.createElement("input");
@@ -156,8 +157,6 @@ var FileActions = React.createClass({
         // main
         var main = xmlDoc.createElement("main");
         main.setAttribute("name", this.props.main.name);
-        main.setAttribute("n", this.props.main.n);
-        main.setAttribute("minRequired", this.props.main.minRequired);
         // tasks in main
         this.props.main.tasks.forEach(function(task) {
             var newTask = xmlDoc.createElement("task");
