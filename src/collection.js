@@ -8,19 +8,20 @@
  *                  copied verbatim in the file "LICENSE"                       *
  ********************************************************************************/
 
-var GroupList = React.createClass({
+var CollectionList = React.createClass({
     render: function() {
+        var that = this;
         return (
             <div>
-                {this.props.groups.map(function(group, index) {
-                    return <Group group={group} key={index} />;
+                {this.props.collections.map(function(collection, index) {
+                    return <Collection collection={collection} key={index} onRemoveCollection={that.props.onRemoveCollection} />;
                 })}
             </div>
         );
     }
 });
 
-var Group = React.createClass({
+var Collection = React.createClass({
     getInitialState: function() {
         return {
             bodyVisible: false
@@ -31,26 +32,26 @@ var Group = React.createClass({
         this.setState({ bodyVisible: !this.state.bodyVisible });
     },
 
+    handleRemoveCollection: function() {
+        this.props.onRemoveCollection(this.props.key);
+    },
+
     render: function() {
         return (
-            <div className="group">
+            <div className="collection">
                 <h5>
                     <span className="glyphicon glyphicon-tasks"></span>
-                    {this.props.group.name} 
+                    {this.props.collection.id} 
                     <span
                         className={this.state.bodyVisible ? "glyphicon glyphicon-chevron-up" : "glyphicon glyphicon-chevron-down"}
                         title={this.state.bodyVisible ? "hide": "show"}
                         onClick={this.toggleBodyVisibility}>
                     </span>
+                    <span className="glyphicon glyphicon-remove" title="remove" onClick={this.handleRemoveCollection}></span>
                     <span className="glyphicon glyphicon-edit" title="edit"></span>
                 </h5>
                 <div className={this.state.bodyVisible ? "visible-container" : "invisible-container"}>
-                    <div className="group-tasks">
-                        {this.props.group.tasks}
-                    </div>
-                    <div className="group-collections">
-                        {this.props.group.collections}
-                    </div>
+                    {this.props.collection.tasks}
                 </div>
             </div>
         );

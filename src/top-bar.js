@@ -19,10 +19,10 @@ var TopBar = React.createClass({
         this.setState({ beeingEdited: !this.state.beeingEdited });
     },
 
-    handleTopologyNameChange: function(e) {
+    handleTopologyIdChange: function(e) {
         e.preventDefault();
         this.toggleEditing();
-        this.props.onTopologyNameChange(e.target[0].form[0].value);
+        this.props.onTopologyIdChange(e.target[0].form[0].value);
     },
 
     render: function() {
@@ -42,12 +42,12 @@ var TopBar = React.createClass({
                         <ul className="nav navbar-nav">
                             <li className="active">
                                 {this.state.beeingEdited ? 
-                                    <form className="name-change" onSubmit={this.handleTopologyNameChange}>
-                                        <input type="text" autoFocus defaultValue={this.props.topologyName}></input>
+                                    <form className="name-change" onSubmit={this.handleTopologyIdChange}>
+                                        <input type="text" autoFocus defaultValue={this.props.topologyId}></input>
                                         <input type="submit" value="ok" ></input>
                                     </form>
                                     :
-                                    <a href="#" onClick={this.toggleEditing}>{this.props.topologyName}</a>}
+                                    <a href="#" onClick={this.toggleEditing}>{this.props.topologyId}</a>}
                             </li>
                         </ul>
                     </div>

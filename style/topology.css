@@ -38,6 +38,11 @@ input[type=text], input[type=password], input[type=email], textarea, [type=text]
     height: 30px;
 }
 
+.radio, .checkbox {
+    margin-top: 5px;
+    margin-bottom: 0px;
+}
+
 /* Name Change Form */
 form.name-change {
     position: relative;
@@ -79,6 +84,31 @@ form.name-change input[type=submit] {
 }
 form.name-change input[type=submit]:hover {
     text-shadow: 0px 0px 2px rgba(255,255,255,0.5);
+}
+span.reachable {
+    position: absolute;
+    right: 0px;
+    top: 2px;
+    font-size: 10px;
+    opacity: 0.75;
+    cursor: default;
+}
+.code {
+    font-family: "Inconsolata", monospace;
+    font-size: 12px;
+    background-color: #e1f5fe;
+    padding: 0px 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+    margin-bottom: 2px;
+    border: 1px solid #03a9f4;
+    width: 100%
+}
+
+.default-cursor {
+    cursor: default;
 }
 
 /* File Open Dialog */
@@ -122,14 +152,17 @@ pre.prettyprint {
 }
 
 /* Add Buttons */
-.add-task-btn, .add-collection-btn, .add-group-btn {
+.add-property-btn, .add-task-btn, .add-collection-btn, .add-group-btn {
     position: absolute;
     top: 6px;
     right: 6px;
     cursor: pointer;
 }
-.add-task-btn:hover, .add-collection-btn:hover, .add-group-btn:hover {
+.add-property-btn:hover, .add-task-btn:hover, .add-collection-btn:hover, .add-group-btn:hover {
     text-shadow: 0px 0px 5px #555;
+}
+.add-property-btn {
+    color: #f1f8e9;
 }
 .add-task-btn {
     color: #e1f5fe;
@@ -154,6 +187,9 @@ pre.prettyprint {
     box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
     font-size: 12px;
 }
+.ct-box-property {
+    background-color: #8bc34a;
+}
 .ct-box-task {
     background-color: #03A9F4;
 }
@@ -164,6 +200,7 @@ pre.prettyprint {
     padding: 2px 5px 0 0;
     font-size: 14px;
     font-weight: 300;
+    width: 32px;
 }
 .add-cg-popover .form-group {
     margin: 2px;
@@ -201,7 +238,10 @@ pre.prettyprint {
     height: 25px;
     width: 42px;
     color: #000;
-    font-size: 12px;
+    font-size: 12px !important;
+}
+.ct-box-property .add-cg-tc-counter {
+    background-color: #f1f8e9;
 }
 .ct-box-task .add-cg-tc-counter {
     background-color: #E1F5FE;
@@ -222,13 +262,17 @@ pre.prettyprint {
     padding: 10px;
 }
 /* Headers */
-.tasks-header, .collections-header, .groups-header {
+.properties-header, .tasks-header, .collections-header, .groups-header {
     position: relative;
     margin: 0;
     padding: 2px 10px;
     text-transform: uppercase;
     border-bottom: 0;
     font-size: 12px;
+}
+.properties-header {
+    color: white;
+    background-color: #8bc34a;
 }
 .tasks-header {
     color: white;
@@ -244,6 +288,10 @@ pre.prettyprint {
 }
 
 /* List Elements */
+li.properties {
+    background-color: #f1f8e9;
+    border-top: 0;
+}
 li.tasks {
     background-color: #e1f5fe;
     border-top: 0;
@@ -258,34 +306,47 @@ li.groups {
 }
 
 /* individual Elements */
-.task > *, .collection > *, .group > * {
+.property > *, .task > *, .collection > *, .group > * {
     padding: 2px 5px;
 }
 
 /* Glyphicons */
-.task .glyphicon-tasks, .collection .glyphicon-tasks, .group .glyphicon-tasks {
+.property .glyphicon-tasks, .task .glyphicon-tasks, .collection .glyphicon-tasks, .group .glyphicon-tasks {
     position: absolute;
     top: 5px;
     left: 5px;
 }
-.task .glyphicon-chevron-up, .collection .glyphicon-chevron-up, .group .glyphicon-chevron-up {
+.property .glyphicon-chevron-up, .task .glyphicon-chevron-up, .collection .glyphicon-chevron-up, .group .glyphicon-chevron-up {
     position: absolute;
     top: 4px;
     right: 4px;
 }
-.task .glyphicon-chevron-down, .collection .glyphicon-chevron-down, .group .glyphicon-chevron-down {
+.property .glyphicon-chevron-down, .task .glyphicon-chevron-down, .collection .glyphicon-chevron-down, .group .glyphicon-chevron-down {
     position: absolute;
     top: 5px;
     right: 5px;
 }
-.glyphicon-edit {
+.property .glyphicon-edit, .task .glyphicon-edit, .collection .glyphicon-edit, .group .glyphicon-edit {
     position: absolute;
     top: 4px;
+    right: 38px;
+}
+.property .glyphicon-remove, .task .glyphicon-remove, .collection .glyphicon-remove, .group .glyphicon-remove {
+    position: absolute;
+    top: 5px;
     right: 21px;
+}
+.property form {
+    padding-bottom: 3px;
+}
+.property .form-control {
+    display: inline-block;
+    width: 80%;
+    margin-right: 4px;
 }
 
 /* Element Headers */
-.task h5, .collection h5, .group h5 {
+.property h5, .task h5, .collection h5, .group h5 {
     color: white;
     padding: 4px 38px 4px 22px;
     margin: 0;
@@ -298,6 +359,9 @@ li.groups {
     text-overflow: ellipsis;
     position: relative;
     height: 23px;
+}
+.property h5 {
+    background-color: #8bc34a;
 }
 .task h5 {
     background-color: #03a9f4;
@@ -316,6 +380,45 @@ li.groups {
     text-overflow: ellipsis;
     display: block;
     width: 100%;
+}
+.left-pane h5 > span {
+    cursor: default;
+}
+
+/* Properties */
+.property {
+    border-radius: 2px;
+    background-color: white;
+    color: black;
+    padding: 0;
+    margin: 3px 2px;
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    /*display: inline-block;*/
+}
+.property .glyphicon-chevron-up {
+    color: white;
+}
+.property .glyphicon-chevron-down {
+    color: white;
+}
+.property .glyphicon {
+    color: white;
+    cursor: pointer;
+}
+.property .glyphicon-edit, .property .glyphicon-remove {
+    color: #8bc34a;
+}
+.property:hover .glyphicon-edit, .property:hover .glyphicon-remove {
+    color: white;
+}
+.property li {
+    list-style-type: none;
+    font-size: 12px;
+    font-family: "Open Sans", sans-serif;
+    border-bottom: 1px dotted #2a36b1;
+}
+.property li:last-child {
+    border-bottom: none;
 }
 
 /* Tasks */
@@ -338,30 +441,35 @@ li.groups {
     color: white;
     cursor: pointer;
 }
-.task .glyphicon-log-in {
-    color: black;
-    margin-right: 4px;
-    top: 2px;
+.task .glyphicon-edit, .task .glyphicon-remove {
+    color: #03a9f4;
 }
-.task .glyphicon-log-out {
-    color: black;
-    margin-right: 4px;
-    top: 2px;
+.task:hover .glyphicon-edit, .task:hover .glyphicon-remove {
+    color: white;
 }
-.task .glyphicon-edit {
-    color: #e1f5fe;
+.task div span {
+    border-radius: 2px;
+    background-color: #8bc34a;
+    color: white;
+    padding: 1px 3px;
+    margin: 2px 2px;
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    display: inline-block;
+}
+.task div {
+    margin: 2px 0;
 }
 .task li {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    position: relative;
+    white-space: nowrap;
     list-style-type: none;
     font-size: 12px;
     font-family: "Open Sans", sans-serif;
-    border-bottom: 1px dotted #2a36b1;
+/*    border-bottom: 1px dotted #2a36b1;*/
 }
 .task li:last-child {
-    border-bottom: none;
-}
-.task-connection {
-    border-top: 1px dotted #2a36b1;
 }
 
 /* Collections */
@@ -384,8 +492,11 @@ li.groups {
     color: white;
     cursor: pointer;
 }
-.collection .glyphicon-edit {
-    color: #eceff1;
+.collection .glyphicon-edit, .collection .glyphicon-remove {
+    color: #607d8b;
+}
+.collection:hover .glyphicon-edit, .collection:hover .glyphicon-remove {
+    color: white;
 }
 .collection div span {
     border-radius: 2px;
@@ -435,11 +546,22 @@ li.groups {
     color: white;
     cursor: pointer;
 }
-.group .glyphicon-edit {
-    color: #e0f2f1;
+.group .glyphicon-edit, .group .glyphicon-remove {
+    color: #009688;
+}
+.group:hover .glyphicon-edit, .group:hover .glyphicon-remove {
+    color: white;
+}
+.group hr {
+    margin: 2px;
+}
+.group span.plain {
+    box-shadow: none;
+    margin: 0;
+    padding: 0;
 }
 
-/* Properties */
+
 .visible-container {
     display: block;
 }

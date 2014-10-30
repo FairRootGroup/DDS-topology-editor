@@ -8,19 +8,20 @@
  *                  copied verbatim in the file "LICENSE"                       *
  ********************************************************************************/
 
-var CollectionList = React.createClass({
+var GroupList = React.createClass({
     render: function() {
+        var that = this;
         return (
             <div>
-                {this.props.collections.map(function(collection, index) {
-                    return <Collection collection={collection} key={index} />;
+                {this.props.groups.map(function(group, index) {
+                    return <Group group={group} key={index} onRemoveGroup={that.props.onRemoveGroup} />;
                 })}
             </div>
         );
     }
 });
 
-var Collection = React.createClass({
+var Group = React.createClass({
     getInitialState: function() {
         return {
             bodyVisible: false
@@ -31,21 +32,33 @@ var Collection = React.createClass({
         this.setState({ bodyVisible: !this.state.bodyVisible });
     },
 
+    handleRemoveGroup: function() {
+        this.props.onRemoveGroup(this.props.key);
+    },
+
     render: function() {
         return (
-            <div className="collection">
+            <div className="group">
                 <h5>
                     <span className="glyphicon glyphicon-tasks"></span>
-                    {this.props.collection.name} 
+                    {this.props.group.id} 
                     <span
                         className={this.state.bodyVisible ? "glyphicon glyphicon-chevron-up" : "glyphicon glyphicon-chevron-down"}
                         title={this.state.bodyVisible ? "hide": "show"}
                         onClick={this.toggleBodyVisibility}>
                     </span>
+                    <span className="glyphicon glyphicon-remove" title="remove" onClick={this.handleRemoveGroup}></span>
                     <span className="glyphicon glyphicon-edit" title="edit"></span>
                 </h5>
                 <div className={this.state.bodyVisible ? "visible-container" : "invisible-container"}>
-                    {this.props.collection.tasks}
+                    <div><strong> n: </strong><span className="plain">{this.props.group.n}</span></div>
+                    <hr />
+                    <div className="group-tasks">
+                        {this.props.group.tasks}
+                    </div>
+                    <div className="group-collections">
+                        {this.props.group.collections}
+                    </div>
                 </div>
             </div>
         );
