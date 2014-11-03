@@ -106,6 +106,10 @@ span.reachable {
     border: 1px solid #03a9f4;
     width: 100%
 }
+input.mono {
+    font-family: "Inconsolata", monospace;
+    width: 195px !important;
+}
 
 .default-cursor {
     cursor: default;
@@ -341,7 +345,7 @@ li.groups {
 }
 .property .form-control {
     display: inline-block;
-    width: 70%;
+    width: 78%;
     margin-right: 4px;
     font-size: 13px;
     height: 24px;

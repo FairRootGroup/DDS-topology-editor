@@ -11,14 +11,6 @@
 var MainEditor = React.createClass({
     render: function() {
         return (
-            <MainTask tasks={this.props.tasks} />
-        );
-    }
-});
-
-var MainTask = React.createClass({
-    render: function() {
-        return (
             <div className="panel panel-default">
                 <div className="panel-heading">
                     <p className="panel-title">Topology</p>
@@ -29,3 +21,4 @@ var MainTask = React.createClass({
         );
     }
 });
+

@@ -122,13 +122,13 @@ var TopologyEditor = React.createClass({
 
     handleAddTask: function(e) {
         e.preventDefault();
-        if(e.target[0].form[0].value === "" || e.target[0].form[1].value === "") {
+        if (e.target[0].form[0].value === "" || e.target[0].form[1].value === "") {
             this.setState({
                 invalidInput: true
             });
             return;
         }
-        if(_.some(this.state.tasks, { 'id': e.target[0].form[0].value })) {
+        if (_.some(this.state.tasks, { 'id': e.target[0].form[0].value })) {
             this.setState({
                 invalidInput: true
             });
@@ -164,6 +164,12 @@ var TopologyEditor = React.createClass({
         this.refs.addTaskBtn.toggle();
         this.setState({
             tasks: nextTasks
+        });
+    },
+
+    handleEditTask: function(tasks) {
+        this.setState({
+            tasks: tasks
         });
     },
 
@@ -427,10 +433,10 @@ var TopologyEditor = React.createClass({
                                         <Popover className="add-cg-popover" title="add new task">
                                             <form onSubmit={this.handleAddTask}>
                                                 <Input type="text" addonBefore="id" onChange={this.handleInputChange} className={this.state.invalidInput ? "invalid-input" : "" } />
-                                                <Input type="text" addonBefore="exe" onChange={this.handleInputChange} className={this.state.invalidInput ? "invalid-input" : "" } />
-                                                <Input type="checkbox" label="exe reachable"/>
-                                                <Input type="text" addonBefore="env" />
-                                                <Input type="checkbox" label="env reachable"/>
+                                                <Input type="text" addonBefore="exe" onChange={this.handleInputChange} className={this.state.invalidInput ? "mono invalid-input" : "mono" } />
+                                                <Input type="checkbox" label="exe reachable (optional)"/>
+                                                <Input type="text" addonBefore="env" className="mono" />
+                                                <Input type="checkbox" label="env reachable (optional)"/>
                                                 <p>Properties in this task:</p>
                                                 {PropertyCheckboxes}
                                                 <div className="row">
@@ -446,7 +452,7 @@ var TopologyEditor = React.createClass({
                                     </OverlayTrigger>
                                 </li>
                                 <li className="list-group-item tasks">
-                                    <TaskList tasks={this.state.tasks} onRemoveTask={this.handleRemoveTask} />
+                                    <TaskList properties={this.state.properties} tasks={this.state.tasks} onRemoveTask={this.handleRemoveTask} onEditTask={this.handleEditTask} />
                                 </li>
 
                                 <li className="list-group-item collections-header">

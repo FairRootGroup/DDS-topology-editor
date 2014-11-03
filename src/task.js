@@ -10,11 +10,18 @@
 
 var TaskList = React.createClass({
     render: function() {
-        var that = this;
+        var self = this;
         return (
             <div>
                 {this.props.tasks.map(function(task, index) {
-                    return <Task task={task} key={index} onRemoveTask={that.props.onRemoveTask} />;
+                    return <Task
+                            properties={self.props.properties}
+                            task={task}
+                            key={index}
+                            onRemoveTask={self.props.onRemoveTask}
+                            onEditTask={self.props.onEditTask} 
+                            tasks={self.props.tasks} 
+                            />;
                 })}
             </div>
         );
@@ -24,12 +31,81 @@ var TaskList = React.createClass({
 var Task = React.createClass({
     getInitialState: function() {
         return {
-            bodyVisible: false
+            bodyVisible: false,
+            invalidInput: false
         }
+    },
+
+    handleInputChange: function(e) {
+        e.preventDefault();
+        this.setState({
+            invalidInput: false
+        });
+    },
+
+    hideAddTaskButton: function(e) {
+        e.preventDefault();
+        this.setState({
+            invalidInput: false
+        });
+        this.refs.editTaskBtn.toggle();
     },
 
     toggleBodyVisibility: function() {
         this.setState({ bodyVisible: !this.state.bodyVisible });
+    },
+
+    handleEditTask: function(e) {
+        e.preventDefault();
+        var self = this;
+        if (e.target[0].form[0].value === "" || e.target[0].form[1].value === "") {
+            this.setState({
+                invalidInput: true
+            });
+            return;
+        }
+        var otherTasks = _.filter(this.props.tasks, function(task) {
+            return task.id !== self.props.task.id;
+        });
+        if (_.some(otherTasks, { 'id': e.target[0].form[0].value })) {
+            this.setState({
+                invalidInput: true
+            });
+            return;
+        }
+        var selectedProperties = [];
+        this.props.properties.forEach(function(property, index) {
+            for(var i = 0; i < e.target[0].form[index+5].value; i++) {
+                selectedProperties.push({ id: property.id });
+            }
+        });
+        var newTask = {
+            id: e.target[0].form[0].value,
+            exe: {
+                valueText: e.target[0].form[1].value
+            },
+            properties: selectedProperties
+        }
+
+        if (e.target[0].form[2].checked === true) {
+            newTask.exe.reachable = "true";
+        }
+
+        if (e.target[0].form[3].value !== "") {
+            newTask.env = {};
+            newTask.env.valueText = e.target[0].form[3].value;
+            if (e.target[0].form[4].checked == true) {
+                newTask.env.reachable = "true";
+            }
+        }
+
+        var taskIndex = this.props.tasks.map(function(task) { return task.id; }).indexOf(this.props.task.id);
+
+        var nextTasks = this.props.tasks;
+        nextTasks[taskIndex] = newTask;
+
+        this.refs.editTaskBtn.toggle();
+        this.props.onEditTask(nextTasks);
     },
 
     handleRemoveTask: function() {
@@ -37,17 +113,45 @@ var Task = React.createClass({
     },
 
     render: function() {
+        var OverlayTrigger = ReactBootstrap.OverlayTrigger;
+        var Popover = ReactBootstrap.Popover;
+        var Button = ReactBootstrap.Button;
+        var Input = ReactBootstrap.Input;
+        var PropertyCheckboxes = [];
+        var exeReachableCheckbox = false;
+        var envReachableCheckbox = false;
+        var envPresent = false;
+        var self = this;
+
+        this.props.properties.forEach(function(property, i) {
+            count = 0;
+            self.props.task.properties.forEach(function(currentProperty, i) {
+                if (property.id === currentProperty.id) {
+                    count++;
+                }
+            });
+            PropertyCheckboxes.push(
+                <div className="ct-box ct-box-property" key={"t-box" + i}>
+                    <div className="element-name" title={property.id}>{property.id}</div>
+                    <Input className="add-cg-tc-counter" type="number" min="0" defaultValue={count} />
+                </div>
+            );
+        });
+
         if (this.props.task.exe.reachable) {
             if (this.props.task.exe.reachable === "true") {
                 var exeReachable = <span className="reachable" title="executable is available on worker nodes">(reachable)</span>
+                exeReachableCheckbox = true;
             } else if (this.props.task.exe.reachable === "false") {
                 var exeReachable = <span className="reachable" title="executable is not available on worker nodes">(unreachable)</span>
             }
         }
         if (this.props.task.env) {
+            envPresent = true;
             if (this.props.task.env.reachable) {
                 if (this.props.task.env.reachable === "true") {
                     var envValue = <li><span className="default-cursor"><strong>env:</strong></span> <input className="code" readOnly value={this.props.task.env.valueText}></input><span className="reachable" title="executable is available on worker nodes">(reachable)</span></li>;
+                    envReachableCheckbox = true;
                 } else if (this.props.task.env.reachable === "false") {
                     var envValue = <li><span className="default-cursor"><strong>env:</strong></span> <input className="code" readOnly value={this.props.task.env.valueText}></input><span className="reachable" title="executable is not available on worker nodes">(unreachable)</span></li>;
                 }
@@ -66,7 +170,27 @@ var Task = React.createClass({
                         onClick={this.toggleBodyVisibility}>
                     </span>
                     <span className="glyphicon glyphicon-remove" title="remove" onClick={this.handleRemoveTask}></span>
-                    <span className="glyphicon glyphicon-edit" title="edit"></span>
+                    <OverlayTrigger trigger="click" placement="right" ref="editTaskBtn" onClick={this.handleInputChange} overlay={
+                        <Popover className="add-cg-popover" title="edit task">
+                            <form onSubmit={this.handleEditTask}>
+                                <Input type="text" addonBefore="id" onChange={this.handleInputChange} className={this.state.invalidInput ? "invalid-input" : "" } defaultValue={this.props.task.id} />
+                                <Input type="text" addonBefore="exe" onChange={this.handleInputChange} className={this.state.invalidInput ? "mono invalid-input" : "mono" } defaultValue={this.props.task.exe.valueText || ""} />
+                                <Input type="checkbox" label="exe reachable (optional)" defaultChecked={exeReachableCheckbox} />
+                                <Input type="text" addonBefore="env" className="mono" defaultValue={envPresent ? this.props.task.env.valueText || "" : ""}/>
+                                <Input type="checkbox" label="env reachable (optional)"defaultChecked={envReachableCheckbox} />
+                                <p>Properties in this task:</p>
+                                {PropertyCheckboxes}
+                                <div className="row">
+                                    <div className="col-xs-12">
+                                        <Input className="add-cg-popover-btn" type="submit" bsSize="small" bsStyle="primary" value="add" />
+                                        <Button className="add-cg-popover-btn" bsSize="small" bsStyle="default" onClick={this.hideAddTaskButton}>cancel</Button>
+                                    </div>
+                                </div>
+                            </form>
+                        </Popover>
+                    }>
+                        <span className="glyphicon glyphicon-edit" title="edit task"></span>
+                    </OverlayTrigger>
                 </h5>
                 <ul className={this.state.bodyVisible ? "visible-container" : "invisible-container"}>
                     <li><span className="default-cursor"><strong>exe:</strong></span> <input className="code" readOnly value={this.props.task.exe.valueText}></input>{exeReachable}</li>

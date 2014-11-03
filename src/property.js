@@ -10,11 +10,11 @@
 
 var PropertyList = React.createClass({
     render: function() {
-        var that = this;
+        var self = this;
         return (
             <div>
                 {this.props.properties.map(function(property, index) {
-                    return <Property property={property} key={index} onRemoveProperty={that.props.onRemoveProperty} onEditProperty={that.props.onEditProperty} />;
+                    return <Property property={property} key={index} onRemoveProperty={self.props.onRemoveProperty} onEditProperty={self.props.onEditProperty} />;
                 })}
             </div>
         );
@@ -79,7 +79,7 @@ var Property = React.createClass({
                             <form onSubmit={this.handleEditProperty}>
                                 <strong>id: </strong>
                                 <input className="form-control" type="text" autoFocus defaultValue={this.props.property.id}></input>
-                                <button className="btn btn-xs btn-primary" type="submit">save</button>
+                                <button className="btn btn-xs btn-primary" type="submit">ok</button>
                             </form>
                             :
                             <span><strong>id:</strong> {this.props.property.id}</span>
