@@ -10,11 +10,11 @@
 
 var GroupList = React.createClass({
     render: function() {
-        var that = this;
+        var self = this;
         return (
             <div>
                 {this.props.groups.map(function(group, index) {
-                    return <Group group={group} key={index} onRemoveGroup={that.props.onRemoveGroup} />;
+                    return <Group group={group} key={index} onRemoveGroup={self.props.onRemoveGroup} />;
                 })}
             </div>
         );

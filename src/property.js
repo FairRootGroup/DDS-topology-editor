@@ -77,6 +77,7 @@ var Property = React.createClass({
                     <div>
                         {this.state.beeingEdited ?
                             <form onSubmit={this.handleEditProperty}>
+                                <strong>id: </strong>
                                 <input className="form-control" type="text" autoFocus defaultValue={this.props.property.id}></input>
                                 <button className="btn btn-xs btn-primary" type="submit">save</button>
                             </form>

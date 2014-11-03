@@ -100,12 +100,21 @@ var TopologyEditor = React.createClass({
         });
     },
 
-    handleEditProperty: function(key, property) {
-        if (_.some(this.state.properties, { 'id': property.id })) {
+    handleEditProperty: function(key, newproperty) {
+        if (_.some(this.state.properties, { 'id': newproperty.id })) {
             return;
         }
         var nextProperties = this.state.properties;
-        nextProperties[key] = property;
+        var oldId = nextProperties[key].id;
+        nextProperties[key] = newproperty;
+        var nextTasks = this.state.tasks;
+        nextTasks.forEach(function(task, index) {
+            task.properties.forEach(function(property, index) {
+                if (property.id === oldId) {
+                    property.id = newproperty.id;
+                }
+            })
+        });
         this.setState({
             properties: nextProperties
         });
@@ -160,9 +169,33 @@ var TopologyEditor = React.createClass({
 
     handleRemoveTask: function(key) {
         var nextTasks = this.state.tasks;
-        nextTasks.splice(key, 1);
+        var removedTask = nextTasks.splice(key, 1);
+        var nextCollections = this.state.collections;
+        nextCollections.forEach(function(collection, index) {
+            collection.tasks = _.filter(collection.tasks, function(task) {
+                return task !== removedTask[0].id;
+            });
+        });
+        var nextMainTasks = this.state.main.tasks;
+        nextMainTasks = _.filter(nextMainTasks, function(task) {
+            return task !== removedTask[0].id;
+        });
+        var nextGroups = this.state.main.groups;
+        nextGroups.forEach(function(group, index) {
+            group.tasks = _.filter(group.tasks, function(task) {
+                return task !== removedTask[0].id;
+            })
+        });
+        var nextMain = {
+            id: this.state.main.id,
+            tasks: nextMainTasks,
+            collections: this.state.main.collections,
+            groups: nextGroups
+        }
         this.setState({
-            tasks: nextTasks
+            tasks: nextTasks,
+            collections: nextCollections,
+            main: nextMain
         });
     },
 
