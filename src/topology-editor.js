@@ -231,9 +231,26 @@ var TopologyEditor = React.createClass({
 
     handleRemoveCollection: function(key) {
         var nextCollections = this.state.collections;
-        nextCollections.splice(key, 1);
+        var removedCollection = nextCollections.splice(key, 1);
+        var nextMainCollections = this.state.main.collections;
+        nextMainCollections = _.filter(nextMainCollections, function(collection) {
+            return collection !== removedCollection[0].id;
+        });
+        var nextGroups = this.state.main.groups;
+        nextGroups.forEach(function(group, index) {
+            group.collections = _.filter(group.collections, function(collection) {
+                return collection !== removedCollection[0].id;
+            })
+        });
+        var nextMain = {
+            id: this.state.main.id,
+            tasks: this.state.main.tasks,
+            collections: nextMainCollections,
+            groups: nextGroups
+        }
         this.setState({
-            collections: nextCollections
+            collections: nextCollections,
+            main: nextMain
         });
     },
 
