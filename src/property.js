@@ -14,7 +14,12 @@ var PropertyList = React.createClass({
         return (
             <div>
                 {this.props.properties.map(function(property, index) {
-                    return <Property property={property} key={index} onRemoveProperty={self.props.onRemoveProperty} onEditProperty={self.props.onEditProperty} />;
+                    return <Property
+                                property={property}
+                                onEditProperty={self.props.onEditProperty}
+                                onRemoveProperty={self.props.onRemoveProperty}
+                                key={index}
+                            />;
                 })}
             </div>
         );
@@ -43,10 +48,6 @@ var Property = React.createClass({
         }
     },
 
-    handleRemoveProperty: function() {
-        this.props.onRemoveProperty(this.props.key);
-    },
-
     handleEditProperty: function(e) {
         e.preventDefault();
         if(e.target[0].form[0].value === "") {
@@ -57,6 +58,10 @@ var Property = React.createClass({
         };
         this.toggleEditing();
         this.props.onEditProperty(this.props.key, updatedProperty);
+    },
+
+    handleRemoveProperty: function() {
+        this.props.onRemoveProperty(this.props.key);
     },
 
     render: function() {

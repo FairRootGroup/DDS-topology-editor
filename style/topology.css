@@ -414,10 +414,11 @@ li.groups {
     cursor: pointer;
 }
 .property .glyphicon-edit, .property .glyphicon-remove {
-    color: #8bc34a;
+    color: white;
+    opacity: 0;
 }
 .property:hover .glyphicon-edit, .property:hover .glyphicon-remove {
-    color: white;
+    opacity: 1;
 }
 .property li {
     list-style-type: none;
@@ -450,10 +451,11 @@ li.groups {
     cursor: pointer;
 }
 .task .glyphicon-edit, .task .glyphicon-remove {
-    color: #03a9f4;
+    color: white;
+    opacity: 0;
 }
 .task:hover .glyphicon-edit, .task:hover .glyphicon-remove {
-    color: white;
+    opacity: 1;
 }
 .task div span {
     border-radius: 2px;
@@ -501,10 +503,11 @@ li.groups {
     cursor: pointer;
 }
 .collection .glyphicon-edit, .collection .glyphicon-remove {
-    color: #607d8b;
+    color: white;
+    opacity: 0;
 }
 .collection:hover .glyphicon-edit, .collection:hover .glyphicon-remove {
-    color: white;
+    opacity: 1;
 }
 .collection div span {
     border-radius: 2px;
@@ -555,10 +558,12 @@ li.groups {
     cursor: pointer;
 }
 .group .glyphicon-edit, .group .glyphicon-remove {
-    color: #009688;
+    color: white;
+    opacity: 0;
 }
 .group:hover .glyphicon-edit, .group:hover .glyphicon-remove {
     color: white;
+    opacity: 1;
 }
 .group hr {
     margin: 2px;

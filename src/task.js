@@ -15,12 +15,12 @@ var TaskList = React.createClass({
             <div>
                 {this.props.tasks.map(function(task, index) {
                     return <Task
-                            properties={self.props.properties}
-                            task={task}
-                            key={index}
-                            onRemoveTask={self.props.onRemoveTask}
-                            onEditTask={self.props.onEditTask} 
-                            tasks={self.props.tasks} 
+                                task={task}
+                                tasks={self.props.tasks}
+                                properties={self.props.properties}
+                                onEditTask={self.props.onEditTask}
+                                onRemoveTask={self.props.onRemoveTask}
+                                key={index}
                             />;
                 })}
             </div>
@@ -43,7 +43,7 @@ var Task = React.createClass({
         });
     },
 
-    hideAddTaskButton: function(e) {
+    hideEditTaskButton: function(e) {
         e.preventDefault();
         this.setState({
             invalidInput: false
@@ -79,7 +79,7 @@ var Task = React.createClass({
                 selectedProperties.push({ id: property.id });
             }
         });
-        var newTask = {
+        var updatedTask = {
             id: e.target[0].form[0].value,
             exe: {
                 valueText: e.target[0].form[1].value
@@ -88,21 +88,19 @@ var Task = React.createClass({
         }
 
         if (e.target[0].form[2].checked === true) {
-            newTask.exe.reachable = "true";
+            updatedTask.exe.reachable = "true";
         }
 
         if (e.target[0].form[3].value !== "") {
-            newTask.env = {};
-            newTask.env.valueText = e.target[0].form[3].value;
+            updatedTask.env = {};
+            updatedTask.env.valueText = e.target[0].form[3].value;
             if (e.target[0].form[4].checked == true) {
-                newTask.env.reachable = "true";
+                updatedTask.env.reachable = "true";
             }
         }
 
-        var taskIndex = this.props.tasks.map(function(task) { return task.id; }).indexOf(this.props.task.id);
-
         var nextTasks = this.props.tasks;
-        nextTasks[taskIndex] = newTask;
+        nextTasks[this.props.key] = updatedTask;
 
         this.refs.editTaskBtn.toggle();
         this.props.onEditTask(nextTasks);
@@ -124,7 +122,7 @@ var Task = React.createClass({
         var self = this;
 
         this.props.properties.forEach(function(property, i) {
-            count = 0;
+            var count = 0;
             self.props.task.properties.forEach(function(currentProperty, i) {
                 if (property.id === currentProperty.id) {
                     count++;
@@ -183,7 +181,7 @@ var Task = React.createClass({
                                 <div className="row">
                                     <div className="col-xs-12">
                                         <Input className="add-cg-popover-btn" type="submit" bsSize="small" bsStyle="primary" value="add" />
-                                        <Button className="add-cg-popover-btn" bsSize="small" bsStyle="default" onClick={this.hideAddTaskButton}>cancel</Button>
+                                        <Button className="add-cg-popover-btn" bsSize="small" bsStyle="default" onClick={this.hideEditTaskButton}>cancel</Button>
                                     </div>
                                 </div>
                             </form>

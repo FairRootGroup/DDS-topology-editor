@@ -235,6 +235,12 @@ var TopologyEditor = React.createClass({
         });
     },
 
+    handleEditCollection: function(collections) {
+        this.setState({
+            collections: collections
+        });
+    },
+
     handleRemoveCollection: function(key) {
         var nextCollections = this.state.collections;
         var removedCollection = nextCollections.splice(key, 1);
@@ -279,12 +285,12 @@ var TopologyEditor = React.createClass({
         var tasksIndex = 0;
         this.state.tasks.forEach(function(task, index) {
             tasksIndex++;
-            for(var i = 0; i < e.target[0].form[index+1].value; i++) {
+            for(var i = 0; i < e.target[0].form[index+2].value; i++) {
                 selectedTasks.push(task.id);
             }
         });
         this.state.collections.forEach(function(collection, index) {
-            for(var i = 0; i < e.target[0].form[tasksIndex+index+1].value; i++) {
+            for(var i = 0; i < e.target[0].form[tasksIndex+index+2].value; i++) {
                 selectedCollections.push(collection.id);
             }
         });
@@ -304,6 +310,18 @@ var TopologyEditor = React.createClass({
             main: nextMain
         });
         this.refs.addGroupBtn.toggle();
+    },
+
+    handleEditGroup: function(groups) {
+        var nextMain = {
+            id: this.state.main.id,
+            tasks: this.state.main.tasks,
+            collections: this.state.main.collections,
+            groups: groups
+        }
+        this.setState({
+            main: nextMain
+        });
     },
 
     handleRemoveGroup: function(key) {
@@ -424,7 +442,11 @@ var TopologyEditor = React.createClass({
                                     </OverlayTrigger>
                                 </li>
                                 <li className="list-group-item properties">
-                                    <PropertyList properties={this.state.properties} onRemoveProperty={this.handleRemoveProperty} onEditProperty={this.handleEditProperty} />
+                                    <PropertyList
+                                        properties={this.state.properties}
+                                        onRemoveProperty={this.handleRemoveProperty}
+                                        onEditProperty={this.handleEditProperty}
+                                    />
                                 </li>
 
                                 <li className="list-group-item tasks-header">
@@ -452,7 +474,12 @@ var TopologyEditor = React.createClass({
                                     </OverlayTrigger>
                                 </li>
                                 <li className="list-group-item tasks">
-                                    <TaskList properties={this.state.properties} tasks={this.state.tasks} onRemoveTask={this.handleRemoveTask} onEditTask={this.handleEditTask} />
+                                    <TaskList
+                                        properties={this.state.properties}
+                                        tasks={this.state.tasks}
+                                        onRemoveTask={this.handleRemoveTask}
+                                        onEditTask={this.handleEditTask}
+                                    />
                                 </li>
 
                                 <li className="list-group-item collections-header">
@@ -476,7 +503,12 @@ var TopologyEditor = React.createClass({
                                     </OverlayTrigger>
                                 </li>
                                 <li className="list-group-item collections">
-                                    <CollectionList collections={this.state.collections} onRemoveCollection={this.handleRemoveCollection} />
+                                    <CollectionList
+                                        collections={this.state.collections}
+                                        tasks={this.state.tasks}
+                                        onRemoveCollection={this.handleRemoveCollection}
+                                        onEditCollection={this.handleEditCollection}
+                                    />
                                 </li>
 
                                 <li className="list-group-item groups-header">
@@ -486,7 +518,7 @@ var TopologyEditor = React.createClass({
                                             <form onSubmit={this.handleAddGroup}>
                                                 <Input type="text" addonBefore="id" onChange={this.handleInputChange} className={this.state.invalidInput ? "invalid-input" : "" } />
                                                 <div className="row">
-                                                    <div className="col-xs-4">
+                                                    <div className="col-xs-6">
                                                         <Input type="number" min="1" step="1" addonBefore="n" defaultValue="1" />
                                                     </div>
                                                 </div>
@@ -507,7 +539,13 @@ var TopologyEditor = React.createClass({
                                     </OverlayTrigger>
                                 </li>
                                 <li className="list-group-item groups">
-                                    <GroupList groups={this.state.main.groups} onRemoveGroup={this.handleRemoveGroup} />
+                                    <GroupList
+                                        groups={this.state.main.groups}
+                                        tasks={this.state.tasks}
+                                        collections={this.state.collections}
+                                        onRemoveGroup={this.handleRemoveGroup}
+                                        onEditGroup={this.handleEditGroup}
+                                    />
                                 </li>
 
                                 <li className="list-group-item">
