@@ -19,6 +19,10 @@ var TopBar = React.createClass({
         this.setState({ beeingEdited: !this.state.beeingEdited });
     },
 
+    handleToggleFluid: function() {
+        this.props.onToggleFluid();
+    },
+
     handleTopologyIdChange: function(e) {
         e.preventDefault();
         this.toggleEditing();
@@ -49,6 +53,9 @@ var TopBar = React.createClass({
                                     :
                                     <a href="#" onClick={this.toggleEditing}>{this.props.topologyId}</a>}
                             </li>
+                        </ul>
+                        <ul className="nav navbar-nav navbar-right">
+                            <li><a href="#" onClick={this.handleToggleFluid}><span className="glyphicon glyphicon-fullscreen"></span></a></li>
                         </ul>
                     </div>
                 </div>

@@ -148,13 +148,13 @@ var Task = React.createClass({
             envPresent = true;
             if (this.props.task.env.reachable) {
                 if (this.props.task.env.reachable === "true") {
-                    var envValue = <li><span className="default-cursor"><strong>env:</strong></span> <input className="code" readOnly value={this.props.task.env.valueText}></input><span className="reachable" title="executable is available on worker nodes">(reachable)</span></li>;
+                    var envValue = <li><span><strong>env:</strong></span> <input className="code" readOnly value={this.props.task.env.valueText}></input><span className="reachable" title="executable is available on worker nodes">(reachable)</span></li>;
                     envReachableCheckbox = true;
                 } else if (this.props.task.env.reachable === "false") {
-                    var envValue = <li><span className="default-cursor"><strong>env:</strong></span> <input className="code" readOnly value={this.props.task.env.valueText}></input><span className="reachable" title="executable is not available on worker nodes">(unreachable)</span></li>;
+                    var envValue = <li><span><strong>env:</strong></span> <input className="code" readOnly value={this.props.task.env.valueText}></input><span className="reachable" title="executable is not available on worker nodes">(unreachable)</span></li>;
                 }
             } else {
-                var envValue = <li><span className="default-cursor"><strong>env:</strong></span> <input className="code" readOnly value={this.props.task.env.valueText}></input></li>;
+                var envValue = <li><span><strong>env:</strong></span> <input className="code" readOnly value={this.props.task.env.valueText}></input></li>;
             }
         }
         return (
@@ -191,7 +191,7 @@ var Task = React.createClass({
                     </OverlayTrigger>
                 </h5>
                 <ul className={this.state.bodyVisible ? "visible-container" : "invisible-container"}>
-                    <li><span className="default-cursor"><strong>exe:</strong></span> <input className="code" readOnly value={this.props.task.exe.valueText}></input>{exeReachable}</li>
+                    <li><span><strong>exe:</strong></span> <input className="code" readOnly value={this.props.task.exe.valueText}></input>{exeReachable}</li>
                     {envValue}
                     <div>
                         {this.props.task.properties}

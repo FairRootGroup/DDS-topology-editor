@@ -149,7 +149,7 @@ var Group = React.createClass({
             <div className="group">
                 <h5>
                     <span className="glyphicon glyphicon-tasks"></span>
-                    {this.props.group.id} 
+                    {this.props.group.id}
                     <span
                         className={this.state.bodyVisible ? "glyphicon glyphicon-chevron-up" : "glyphicon glyphicon-chevron-down"}
                         title={this.state.bodyVisible ? "hide": "show"}

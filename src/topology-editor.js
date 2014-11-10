@@ -16,13 +16,18 @@ var TopologyEditor = React.createClass({
             tasks: [],
             collections: [],
             main: {
-                name: 'main',
+                id: 'main',
                 tasks: [],
                 collections: [],
                 groups: []
             },
-            invalidInput: false
+            invalidInput: false,
+            fluid: false
         };
+    },
+
+    toggleFluid: function() {
+        // this.setState({ fluid: !this.state.fluid });
     },
 
     resetState: function() {
@@ -32,7 +37,7 @@ var TopologyEditor = React.createClass({
             tasks: [],
             collections: [],
             main: {
-                name: 'main',
+                id: 'main',
                 tasks: [],
                 collections: [],
                 groups: []
@@ -338,6 +343,12 @@ var TopologyEditor = React.createClass({
         });
     },
 
+    handleEditMain: function(main) {
+        this.setState({
+            main: main
+        });
+    },
+
     hideAddPropertyButton: function(e) {
         e.preventDefault();
         this.setState({
@@ -408,9 +419,9 @@ var TopologyEditor = React.createClass({
 
         return (
             <div>
-                <TopBar topologyId={this.state.topologyId} onTopologyIdChange={this.handleTopologyIdChange} />
+                <TopBar topologyId={this.state.topologyId} onTopologyIdChange={this.handleTopologyIdChange} onToggleFluid={this.toggleFluid} />
 
-                <div className="container">
+                <div className={this.state.fluid ? "container-fluid" : "container"}>
                     <div className="row">
                         <div className="col-xs-3">
                             <ul className="list-group left-pane">
@@ -428,7 +439,7 @@ var TopologyEditor = React.createClass({
                                     <OverlayTrigger trigger="click" placement="right" ref="addPropertyBtn" onClick={this.handleInputChange} overlay={
                                         <Popover className="add-cg-popover" title="add new property">
                                             <form onSubmit={this.handleAddProperty}>
-                                                <Input type="text" addonBefore="id" onChange={this.handleInputChange} className={this.state.invalidInput ? "invalid-input" : "" } />
+                                                <Input type="text" addonBefore="id" onChange={this.handleInputChange} className={this.state.invalidInput ? "invalid-input" : ""} />
                                                 <div className="row">
                                                     <div className="col-xs-12">
                                                         <Input className="add-cg-popover-btn" type="submit" bsSize="small" bsStyle="primary" value="add" />
@@ -487,7 +498,7 @@ var TopologyEditor = React.createClass({
                                     <OverlayTrigger trigger="click" placement="right" ref="addCollectionBtn" onClick={this.handleInputChange} overlay={
                                         <Popover className="add-cg-popover" title="add new collection">
                                             <form onSubmit={this.handleAddCollection}>
-                                                <Input type="text" addonBefore="id" onChange={this.handleInputChange} className={this.state.invalidInput ? "invalid-input" : "" } />
+                                                <Input type="text" addonBefore="id" onChange={this.handleInputChange} className={this.state.invalidInput ? "invalid-input" : ""} />
                                                 <p>Tasks in this collection:</p>
                                                 {TaskCheckboxes}
                                                 <div className="row">
@@ -516,7 +527,7 @@ var TopologyEditor = React.createClass({
                                     <OverlayTrigger trigger="click" placement="right" ref="addGroupBtn" onClick={this.handleInputChange} overlay={
                                         <Popover className="add-cg-popover" title="add new group">
                                             <form onSubmit={this.handleAddGroup}>
-                                                <Input type="text" addonBefore="id" onChange={this.handleInputChange} className={this.state.invalidInput ? "invalid-input" : "" } />
+                                                <Input type="text" addonBefore="id" onChange={this.handleInputChange} className={this.state.invalidInput ? "invalid-input" : ""} />
                                                 <div className="row">
                                                     <div className="col-xs-6">
                                                         <Input type="number" min="1" step="1" addonBefore="n" defaultValue="1" />
@@ -550,28 +561,17 @@ var TopologyEditor = React.createClass({
 
                                 <li className="list-group-item">
                                     <button type="button" className="btn btn-sm btn-default" onClick={this.resetState}>
-                                        <span className="glyphicon glyphicon-remove"></span> reset
+                                        <span className="glyphicon glyphicon-remove" title="reset the topology"></span> reset
                                     </button>
                                 </li>
-
-                                <Commands />
                             </ul>
                         </div>
                         <div className="col-xs-9">
-                            <MainEditor tasks={this.state.tasks} collections={this.state.collections} main={this.state.main} />
+                            <MainEditor tasks={this.state.tasks} collections={this.state.collections} main={this.state.main} onEditMain={this.handleEditMain}/>
                         </div>
                     </div>
                 </div>
             </div>
-        );
-    }
-});
-
-var Commands = React.createClass({
-    render: function() {
-        return (
-            <li className="list-group-item">
-            </li>
         );
     }
 });

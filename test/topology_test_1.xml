@@ -52,6 +52,8 @@
 	</declcollection>
 	<main id="main">
 		<task>task1</task>
+		<task>task1</task>
+		<collection>collection1</collection>
 		<collection>collection1</collection>
 		<group id="group1" n="10">
 			<task>task1</task>

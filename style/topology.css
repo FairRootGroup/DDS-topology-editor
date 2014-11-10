@@ -2,6 +2,7 @@
 body {
     font-family: "Roboto", sans-serif;
     font-weight: 300;
+    cursor: default;
 }
 pre {
     background-color: white;
@@ -30,6 +31,9 @@ input[type="radio"], input[type="checkbox"] {
 .popover-title {
     text-align: center;
     text-transform: uppercase;
+}
+.centered {
+    text-align: center;
 }
 input[type=text], input[type=password], input[type=email], textarea, [type=text].form-control, [type=password].form-control, textarea.form-control {
     line-height: normal;
@@ -91,7 +95,6 @@ span.reachable {
     top: 2px;
     font-size: 10px;
     opacity: 0.75;
-    cursor: default;
 }
 .code {
     font-family: "Inconsolata", monospace;
@@ -109,10 +112,6 @@ span.reachable {
 input.mono {
     font-family: "Inconsolata", monospace;
     width: 195px !important;
-}
-
-.default-cursor {
-    cursor: default;
 }
 
 /* File Open Dialog */
@@ -176,6 +175,9 @@ pre.prettyprint {
 }
 .add-group-btn {
     color: #e0f2f1;
+}
+.edit-main-btn {
+    top: -9px;
 }
 
 /* Add Popovers */
@@ -264,6 +266,9 @@ pre.prettyprint {
 /* List of Tasks, Collections, Groups */
 .list-group-item {
     padding: 10px;
+}
+li.main-separator {
+    padding: 10px 10px 0 10px;
 }
 /* Headers */
 .properties-header, .tasks-header, .collections-header, .groups-header {
@@ -386,9 +391,6 @@ li.groups {
     text-overflow: ellipsis;
     display: block;
     width: 100%;
-}
-.left-pane h5 > span {
-    cursor: default;
 }
 
 /* Properties */
@@ -574,6 +576,68 @@ li.groups {
     padding: 0;
 }
 
+/* Main */
+
+#main-editor-body .row {
+
+}
+
+.main-element {
+    border-radius: 2px;
+    background-color: white;
+    color: black;
+    padding: 0;
+    margin-bottom: -15px;
+    padding-bottom: 15px;
+}
+.main-element div > span {
+    border-radius: 2px;
+    padding: 1px 3px;
+    margin: 2px 2px;
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    display: inline-block;
+}
+.main-element-tasks {
+    background-color: #E1F5FE;
+}
+.main-element-collections {
+    background-color: #ECEFF1;
+}
+.main-element-groups {
+    background-color: #E0F2F1;
+}
+.main-header {
+    font-weight: 300;
+    font-size: 13px;
+    text-transform: uppercase;
+    margin-top: -15px;
+    color: white;
+    padding: 6px 0;
+}
+.main-element-tasks .main-header{
+    background-color: #03a9f4;
+}
+.main-element-collections .main-header{
+    background-color: #607d8b;
+}
+.main-element-groups .main-header{
+    background-color: #009688;
+}
+.main-element div.group-tasks > span {
+    background-color: #03a9f4;
+    color: white;
+}
+.main-element div.group-collections > span {
+    background-color: #607d8b;
+    color: white;
+}
+.main-element div.group-groups {
+    display: inline-block;
+}
+.main-element div.group-groups > span {
+    background-color: #009688;
+    color: white;
+}
 
 .visible-container {
     display: block;
