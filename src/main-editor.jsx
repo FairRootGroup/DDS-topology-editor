@@ -1,5 +1,3 @@
-/** @jsx React.DOM */
-
 /********************************************************************************
  *    Copyright (C) 2014 GSI Helmholtzzentrum fuer Schwerionenforschung GmbH    *
  *                                                                              *
@@ -93,6 +91,7 @@ var MainEditor = React.createClass({
         var Popover = ReactBootstrap.Popover;
         var Button = ReactBootstrap.Button;
         var Input = ReactBootstrap.Input;
+        var ButtonInput = ReactBootstrap.ButtonInput;
         var TaskCheckboxes = [];
         var CollectionCheckboxes = [];
         var self = this;
@@ -152,7 +151,7 @@ var MainEditor = React.createClass({
                                             {TaskCheckboxes}
                                             <div className="row">
                                                 <div className="col-xs-12">
-                                                    <Input className="add-cg-popover-btn" type="submit" bsSize="small" bsStyle="primary" value="add" />
+                                                    <ButtonInput className="add-cg-popover-btn" type="submit" bsSize="small" bsStyle="primary" value="add" />
                                                     <Button className="add-cg-popover-btn" bsSize="small" bsStyle="default" onClick={this.hideEditTasksInMainBtn}>cancel</Button>
                                                 </div>
                                             </div>
@@ -174,7 +173,7 @@ var MainEditor = React.createClass({
                                             {CollectionCheckboxes}
                                             <div className="row">
                                                 <div className="col-xs-12">
-                                                    <Input className="add-cg-popover-btn" type="submit" bsSize="small" bsStyle="primary" value="add" />
+                                                    <ButtonInput className="add-cg-popover-btn" type="submit" bsSize="small" bsStyle="primary" value="add" />
                                                     <Button className="add-cg-popover-btn" bsSize="small" bsStyle="default" onClick={this.hideEditCollectionsInMainBtn}>cancel</Button>
                                                 </div>
                                             </div>

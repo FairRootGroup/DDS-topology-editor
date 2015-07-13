@@ -26,7 +26,7 @@ input[type="radio"], input[type="checkbox"] {
     margin: 5px 0 0;
 }
 .popover {
-    max-width: 250px;
+    max-width: 300px;
 }
 .popover-title {
     text-align: center;

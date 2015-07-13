@@ -16,22 +16,21 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <script src="vendor/jquery-1.11.1.min.js"></script>
+    <script src="vendor/jquery-1.11.3.min.js"></script>
     <script src="vendor/FileSaver.js"></script>
     <script src="vendor/lodash.js"></script>
-    <script src="vendor/react-with-addons-0.11.2.js"></script>
-    <script src="vendor/JSXTransformer-0.11.2.js"></script>
+    <script src="vendor/react-with-addons-0.13.3.js"></script>
+    <script src="vendor/JSXTransformer-0.13.3.js"></script>
     <script src="vendor/react-bootstrap.js"></script>
-    <script src="vendor/vkbeautify.0.99.00.beta.js"></script>
 
-    <script type="text/jsx" src="src/topology-editor.js"></script>
-    <script type="text/jsx" src="src/top-bar.js"></script>
-    <script type="text/jsx" src="src/main-editor.js"></script>
-    <script type="text/jsx" src="src/file-actions.js"></script>
-    <script type="text/jsx" src="src/property.js"></script>
-    <script type="text/jsx" src="src/task.js"></script>
-    <script type="text/jsx" src="src/collection.js"></script>
-    <script type="text/jsx" src="src/group.js"></script>
+    <script type="text/jsx" src="src/topology-editor.jsx"></script>
+    <script type="text/jsx" src="src/top-bar.jsx"></script>
+    <script type="text/jsx" src="src/main-editor.jsx"></script>
+    <script type="text/jsx" src="src/file-actions.jsx"></script>
+    <script type="text/jsx" src="src/property.jsx"></script>
+    <script type="text/jsx" src="src/task.jsx"></script>
+    <script type="text/jsx" src="src/collection.jsx"></script>
+    <script type="text/jsx" src="src/group.jsx"></script>
 
     <link rel="stylesheet" href="style/bootstrap.css">
     <link rel="stylesheet" href="style/topology.css">
@@ -42,9 +41,7 @@
 </head>
 <body>
     <script type="text/jsx">
-        /** @jsx React.DOM */
-
-        React.renderComponent(<TopologyEditor />, document.body);
+        React.render(<TopologyEditor />, document.body);
     </script>
 </body>
 </html>

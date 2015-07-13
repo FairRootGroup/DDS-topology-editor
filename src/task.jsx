@@ -1,5 +1,3 @@
-/** @jsx React.DOM */
-
 /********************************************************************************
  *    Copyright (C) 2014 GSI Helmholtzzentrum fuer Schwerionenforschung GmbH    *
  *                                                                              *
@@ -21,6 +19,7 @@ var TaskList = React.createClass({
                                 onEditTask={self.props.onEditTask}
                                 onRemoveTask={self.props.onRemoveTask}
                                 key={index}
+                                elementKey={index}
                             />;
                 })}
             </div>
@@ -100,14 +99,14 @@ var Task = React.createClass({
         }
 
         var nextTasks = this.props.tasks;
-        nextTasks[this.props.key] = updatedTask;
+        nextTasks[this.props.elementKey] = updatedTask;
 
         this.refs.editTaskBtn.toggle();
         this.props.onEditTask(nextTasks);
     },
 
     handleRemoveTask: function() {
-        this.props.onRemoveTask(this.props.key);
+        this.props.onRemoveTask(this.props.elementKey);
     },
 
     render: function() {
@@ -115,6 +114,7 @@ var Task = React.createClass({
         var Popover = ReactBootstrap.Popover;
         var Button = ReactBootstrap.Button;
         var Input = ReactBootstrap.Input;
+        var ButtonInput = ReactBootstrap.ButtonInput;
         var PropertyCheckboxes = [];
         var exeReachableCheckbox = false;
         var envReachableCheckbox = false;
@@ -180,7 +180,7 @@ var Task = React.createClass({
                                 {PropertyCheckboxes}
                                 <div className="row">
                                     <div className="col-xs-12">
-                                        <Input className="add-cg-popover-btn" type="submit" bsSize="small" bsStyle="primary" value="add" />
+                                        <ButtonInput className="add-cg-popover-btn" type="submit" bsSize="small" bsStyle="primary" value="add" />
                                         <Button className="add-cg-popover-btn" bsSize="small" bsStyle="default" onClick={this.hideEditTaskButton}>cancel</Button>
                                     </div>
                                 </div>

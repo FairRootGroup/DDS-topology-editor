@@ -1,5 +1,3 @@
-/** @jsx React.DOM */
-
 /********************************************************************************
  *    Copyright (C) 2014 GSI Helmholtzzentrum fuer Schwerionenforschung GmbH    *
  *                                                                              *

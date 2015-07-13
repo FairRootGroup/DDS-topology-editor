@@ -1,5 +1,3 @@
-/** @jsx React.DOM */
-
 /********************************************************************************
  *    Copyright (C) 2014 GSI Helmholtzzentrum fuer Schwerionenforschung GmbH    *
  *                                                                              *
@@ -22,6 +20,7 @@ var GroupList = React.createClass({
                                 onEditGroup={self.props.onEditGroup}
                                 onRemoveGroup={self.props.onRemoveGroup}
                                 key={index}
+                                elementKey={index}
                             />;
                 })}
             </div>
@@ -96,14 +95,14 @@ var Group = React.createClass({
         };
 
         var nextGroups = this.props.groups;
-        nextGroups[this.props.key] = newGroup;
+        nextGroups[this.props.elementKey] = newGroup;
 
         this.refs.editGroupBtn.toggle();
         this.props.onEditGroup(nextGroups);
     },
 
     handleRemoveGroup: function() {
-        this.props.onRemoveGroup(this.props.key);
+        this.props.onRemoveGroup(this.props.elementKey);
     },
 
     render: function() {
@@ -111,6 +110,7 @@ var Group = React.createClass({
         var Popover = ReactBootstrap.Popover;
         var Button = ReactBootstrap.Button;
         var Input = ReactBootstrap.Input;
+        var ButtonInput = ReactBootstrap.ButtonInput;
         var TaskCheckboxes = [];
         var CollectionCheckboxes = [];
         var self = this;
@@ -171,7 +171,7 @@ var Group = React.createClass({
                                 {CollectionCheckboxes}
                                 <div className="row">
                                     <div className="col-xs-12">
-                                        <Input className="add-cg-popover-btn" type="submit" bsSize="small" bsStyle="primary" value="add" />
+                                        <ButtonInput className="add-cg-popover-btn" type="submit" bsSize="small" bsStyle="primary" value="add" />
                                         <Button className="add-cg-popover-btn" bsSize="small" bsStyle="default" onClick={this.hideEditGroupButton}>cancel</Button>
                                     </div>
                                 </div>

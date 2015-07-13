@@ -1,5 +1,3 @@
-/** @jsx React.DOM */
-
 /********************************************************************************
  *    Copyright (C) 2014 GSI Helmholtzzentrum fuer Schwerionenforschung GmbH    *
  *                                                                              *
@@ -19,6 +17,7 @@ var PropertyList = React.createClass({
                                 onEditProperty={self.props.onEditProperty}
                                 onRemoveProperty={self.props.onRemoveProperty}
                                 key={index}
+                                elementKey={index}
                             />;
                 })}
             </div>
@@ -57,11 +56,11 @@ var Property = React.createClass({
             id: e.target[0].form[0].value
         };
         this.toggleEditing();
-        this.props.onEditProperty(this.props.key, updatedProperty);
+        this.props.onEditProperty(this.props.elementKey, updatedProperty);
     },
 
     handleRemoveProperty: function() {
-        this.props.onRemoveProperty(this.props.key);
+        this.props.onRemoveProperty(this.props.elementKey);
     },
 
     render: function() {

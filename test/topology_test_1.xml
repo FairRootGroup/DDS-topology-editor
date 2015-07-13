@@ -1,70 +1,92 @@
 <topology id="myTopology">
-	<property id="property1" />
-	<property id="property2" />
-	<property id="property3" />
-	<property id="property4" />
-	<decltask id="task1">
-		<exe reachable="true">app1 -l -n</exe>
-		<env reachable="false">env1</env>
-		<properties>
-			<id>property1</id>
-			<id>property4</id>
-			<id>property1</id>
-		</properties>
-	</decltask>
-	<decltask id="task2">
-		<exe>app2</exe>
-		<properties>
-			<id>property1</id>
-			<id>property2</id>
-		</properties>
-	</decltask>
-	<decltask id="task3">
-		<exe reachable="true">app3</exe>
-		<properties>
-			<id>property2</id>
-			<id>property3</id>
-		</properties>
-	</decltask>
-	<decltask id="task4">
-		<exe>app4</exe>
-		<properties>
-			<id>property3</id>
-			<id>property4</id>
-		</properties>
-	</decltask>
-	<decltask id="task5">
-		<exe reachable="false">app5</exe>
-		<properties>
-			<id>property1</id>
-		</properties>
-	</decltask>
-	<declcollection id="collection1">
-		<task>task1</task>
-		<task>task2</task>
-		<task>task2</task>
-		<task>task3</task>
-	</declcollection>
-	<declcollection id="collection2">
-		<task>task4</task>
-		<task>task4</task>
-		<task>task5</task>
-	</declcollection>
-	<main id="main">
-		<task>task1</task>
-		<task>task1</task>
-		<collection>collection1</collection>
-		<collection>collection1</collection>
-		<group id="group1" n="10">
-			<task>task1</task>
-			<collection>collection1</collection>
-			<collection>collection2</collection>
-		</group>
-		<group id="group2" n="15">
-			<task>task3</task>
-			<task>task4</task>
-			<collection>collection1</collection>
-			<collection>collection2</collection>
-		</group>
-	</main>
+
+    <var id="requirementVar" value=".+.gsi.de"/>
+    <var id="appNameVar" value="app1 -l -n"/>
+    <var id="nofGroups" value="10"/>
+
+    <property id="property1"/>
+    <property id="property2"/>
+    <property id="property3"/>
+    <property id="property4"/>
+
+    <declrequirement id="requirement1">
+        <hostPattern type="hostname" value="${requirementVar}"/>
+    </declrequirement>
+
+    <decltask id="task1">
+        <requirement>requirement1</requirement>
+        <exe reachable="true">${appNameVar}</exe>
+        <env reachable="false">env1</env>
+        <properties>
+            <id access="read">property1</id>
+            <id access="write">property4</id>
+            <id access="readwrite">property1</id>
+        </properties>
+    </decltask>
+
+    <decltask id="task2">
+        <exe>app2</exe>
+        <properties>
+            <id access="read">property1</id>
+            <id access="read">property2</id>
+        </properties>
+    </decltask>
+
+    <decltask id="task3">
+        <exe reachable="true">app3</exe>
+        <properties>
+            <id access="read">property2</id>
+            <id access="read">property3</id>
+        </properties>
+    </decltask>
+
+    <decltask id="task4">
+        <exe>app4</exe>
+        <properties>
+            <id access="read">property3</id>
+            <id access="read">property4</id>
+        </properties>
+    </decltask>
+
+    <decltask id="task5">
+        <exe reachable="false">app5</exe>
+        <properties>
+            <id access="read">property1</id>
+        </properties>
+    </decltask>
+
+    <declcollection id="collection1">
+        <requirement>requirement1</requirement>
+        <tasks>
+            <id>task1</id>
+            <id>task2</id>
+            <id>task2</id>
+            <id>task3</id>
+        </tasks>
+    </declcollection>
+
+    <declcollection id="collection2">
+        <tasks>
+            <id>task4</id>
+            <id>task4</id>
+            <id>task5</id>
+        </tasks>
+    </declcollection>
+
+    <main id="main">
+        <task>task1</task>
+        <collection>collection1</collection>
+        <group id="group1" n="${nofGroups}">
+            <task>task1</task>
+            <collection>collection1</collection>
+            <collection>collection2</collection>
+        </group>
+        <group id="group2" n="15">
+            <task>task3</task>
+            <task>task4</task>
+            <collection>collection1</collection>
+            <collection>collection2</collection>
+        </group>
+    </main>
+
 </topology>
