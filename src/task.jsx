@@ -7,19 +7,25 @@
  ********************************************************************************/
 
 var TaskList = React.createClass({
+    propTypes: {
+        properties: React.PropTypes.array.isRequired,
+        tasks: React.PropTypes.array.isRequired,
+        onRemoveTask: React.PropTypes.func.isRequired,
+        onEditTask: React.PropTypes.func.isRequired
+    },
+
     render: function() {
         var self = this;
         return (
             <div>
                 {this.props.tasks.map(function(task, index) {
-                    return <Task
-                                task={task}
-                                tasks={self.props.tasks}
-                                properties={self.props.properties}
-                                onEditTask={self.props.onEditTask}
-                                onRemoveTask={self.props.onRemoveTask}
-                                key={index}
-                                elementKey={index}
+                    return <Task task={task}
+                                 properties={self.props.properties}
+                                 tasks={self.props.tasks}
+                                 onRemoveTask={self.props.onRemoveTask}
+                                 onEditTask={self.props.onEditTask}
+                                 key={index}
+                                 elementKey={index}
                             />;
                 })}
             </div>
@@ -28,25 +34,39 @@ var TaskList = React.createClass({
 });
 
 var Task = React.createClass({
+    propTypes: {
+        task: React.PropTypes.object.isRequired,
+        properties: React.PropTypes.array.isRequired,
+        tasks: React.PropTypes.array.isRequired,
+        onRemoveTask: React.PropTypes.func.isRequired,
+        onEditTask: React.PropTypes.func.isRequired,
+        elementKey: React.PropTypes.number.isRequired
+    },
+
     getInitialState: function() {
         return {
             bodyVisible: false,
-            invalidInput: false
+            invalidInput: false,
+            showDeleteModal: false
         }
+    },
+
+    closeDeleteModal: function() {
+        this.setState({ showDeleteModal: false });
+    },
+
+    openDeleteModal: function() {
+        this.setState({ showDeleteModal: true });
     },
 
     handleInputChange: function(e) {
         e.preventDefault();
-        this.setState({
-            invalidInput: false
-        });
+        this.setState({ invalidInput: false });
     },
 
     hideEditTaskButton: function(e) {
         e.preventDefault();
-        this.setState({
-            invalidInput: false
-        });
+        this.setState({ invalidInput: false });
         this.refs.editTaskBtn.toggle();
     },
 
@@ -74,8 +94,12 @@ var Task = React.createClass({
         }
         var selectedProperties = [];
         this.props.properties.forEach(function(property, index) {
-            for(var i = 0; i < e.target[0].form[index+5].value; i++) {
-                selectedProperties.push({ id: property.id });
+            if (e.target[0].form[index+5].value === "read") {
+                selectedProperties.push({ id: property.id, access: "read" });
+            } else if (e.target[0].form[index+5].value === "write") {
+                selectedProperties.push({ id: property.id, access: "write" });
+            } else if (e.target[0].form[index+5].value === "readwrite") {
+                selectedProperties.push({ id: property.id, access: "readwrite" });
             }
         });
         var updatedTask = {
@@ -83,7 +107,8 @@ var Task = React.createClass({
             exe: {
                 valueText: e.target[0].form[1].value
             },
-            properties: selectedProperties
+            properties: selectedProperties,
+            requirement: this.props.task.requirement
         }
 
         if (e.target[0].form[2].checked === true) {
@@ -98,14 +123,12 @@ var Task = React.createClass({
             }
         }
 
-        var nextTasks = this.props.tasks;
-        nextTasks[this.props.elementKey] = updatedTask;
-
         this.refs.editTaskBtn.toggle();
-        this.props.onEditTask(nextTasks);
+        this.props.onEditTask(this.props.elementKey, updatedTask);
     },
 
     handleRemoveTask: function() {
+        this.setState({ showDeleteModal: false });
         this.props.onRemoveTask(this.props.elementKey);
     },
 
@@ -115,6 +138,7 @@ var Task = React.createClass({
         var Button = ReactBootstrap.Button;
         var Input = ReactBootstrap.Input;
         var ButtonInput = ReactBootstrap.ButtonInput;
+        var Modal = ReactBootstrap.Modal;
         var PropertyCheckboxes = [];
         var exeReachableCheckbox = false;
         var envReachableCheckbox = false;
@@ -122,16 +146,21 @@ var Task = React.createClass({
         var self = this;
 
         this.props.properties.forEach(function(property, i) {
-            var count = 0;
+            var access = "";
             self.props.task.properties.forEach(function(currentProperty, i) {
                 if (property.id === currentProperty.id) {
-                    count++;
+                    access = currentProperty.access;
                 }
             });
             PropertyCheckboxes.push(
                 <div className="ct-box ct-box-property" key={"t-box" + i}>
                     <div className="element-name" title={property.id}>{property.id}</div>
-                    <Input className="add-cg-tc-counter" type="number" min="0" defaultValue={count} />
+                    <Input type="select" defaultValue={access} className="accessSelect">
+                        <option value="">-</option>
+                        <option value="read">read</option>
+                        <option value="write">write</option>
+                        <option value="readwrite">readwrite</option>
+                    </Input>
                 </div>
             );
         });
@@ -167,7 +196,21 @@ var Task = React.createClass({
                         title={this.state.bodyVisible ? "hide": "show"}
                         onClick={this.toggleBodyVisibility}>
                     </span>
-                    <span className="glyphicon glyphicon-remove" title="remove" onClick={this.handleRemoveTask}></span>
+
+                    <span className="glyphicon glyphicon-trash" title="delete" onClick={this.openDeleteModal}></span>
+                    <Modal show={this.state.showDeleteModal} onHide={this.closeDeleteModal}>
+                        <Modal.Header closeButton>
+                            <Modal.Title>Delete <strong>{this.props.task.id}</strong>?</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            <p>Are you sure you want to delete the task <strong>{this.props.task.id}?</strong></p>
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <Button bsStyle="danger" onClick={this.handleRemoveTask}>Delete</Button>
+                            <Button onClick={this.closeDeleteModal}>Cancel</Button>
+                        </Modal.Footer>
+                    </Modal>
+
                     <OverlayTrigger trigger="click" placement="right" ref="editTaskBtn" onClick={this.handleInputChange} overlay={
                         <Popover className="add-cg-popover" title="edit task">
                             <form onSubmit={this.handleEditTask}>
@@ -180,7 +223,7 @@ var Task = React.createClass({
                                 {PropertyCheckboxes}
                                 <div className="row">
                                     <div className="col-xs-12">
-                                        <ButtonInput className="add-cg-popover-btn" type="submit" bsSize="small" bsStyle="primary" value="add" />
+                                        <ButtonInput className="add-cg-popover-btn" type="submit" bsSize="small" bsStyle="primary" value="edit" />
                                         <Button className="add-cg-popover-btn" bsSize="small" bsStyle="default" onClick={this.hideEditTaskButton}>cancel</Button>
                                     </div>
                                 </div>
@@ -191,10 +234,18 @@ var Task = React.createClass({
                     </OverlayTrigger>
                 </h5>
                 <ul className={this.state.bodyVisible ? "visible-container" : "invisible-container"}>
-                    <li><span><strong>exe:</strong></span> <input className="code" readOnly value={this.props.task.exe.valueText}></input>{exeReachable}</li>
+                    <li><span><strong>exe:</strong></span> <input className="code" readOnly value={this.props.task.exe.valueText} title={this.props.task.exe.valueText}></input>{exeReachable}</li>
                     {envValue}
                     <div>
-                        {this.props.task.properties}
+                        {this.props.task.properties.map(function(property) {
+                            return (<span title={property.id} key={property.id}>
+                                        &nbsp;
+                                        <span className="prop-access" title={ (property.access === "write") ? "write" : "" }>{ (property.access === "write") ? "W " : "" }</span>
+                                        <span className="prop-access" title={ (property.access === "read") ? "read" : "" }>{ (property.access === "read") ? "R " : "" }</span>
+                                        <span className="prop-access" title={ (property.access === "readwrite") ? "read & write" : "" }>{ (property.access === "readwrite") ? "RW " : "" }</span>
+                                        {property.id}
+                                    </span>);
+                        })}
                     </div>
                 </ul>
             </div>

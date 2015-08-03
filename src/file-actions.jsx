@@ -7,6 +7,17 @@
  ********************************************************************************/
 
 var FileActions = React.createClass({
+    propTypes: {
+        onFileLoad: React.PropTypes.func.isRequired,
+        topologyId: React.PropTypes.string.isRequired,
+        variables: React.PropTypes.array.isRequired,
+        properties: React.PropTypes.array.isRequired,
+        requirements: React.PropTypes.array.isRequired,
+        tasks: React.PropTypes.array.isRequired,
+        collections: React.PropTypes.array.isRequired,
+        main: React.PropTypes.object.isRequired
+    },
+
     handleFileLoad: function(event) {
         var parser = new DOMParser(),
             reader = new FileReader(),
@@ -151,8 +162,13 @@ var FileActions = React.createClass({
         var root = xmlDoc.createElement('topology');
         root.setAttribute('id', this.props.topologyId);
 
-        var brbr = xmlDoc.createTextNode('\r\n\r\n');
+        var brbr = xmlDoc.createTextNode('\r\n');
         root.appendChild(brbr);
+
+        if (this.props.variables.length > 0) {
+            var brbr = xmlDoc.createTextNode('\r\n');
+            root.appendChild(brbr);
+        }
 
         // variables
         this.props.variables.forEach(function(variable) {

@@ -7,33 +7,11 @@
  ********************************************************************************/
 
 var MainEditor = React.createClass({
-    getInitialState: function() {
-        return {
-            IdBeeingEdited: false
-        }
-    },
-
-    toggleEditing: function() {
-        this.setState({ beeingEdited: !this.state.beeingEdited })
-    },
-
-    handleEditId: function(e) {
-        e.preventDefault();
-        if(e.target[0].form[0].value === "") {
-            return;
-        }
-        var updatedProperty = {
-            id: e.target[0].form[0].value
-        };
-        var nextMain = {
-            id: e.target[0].form[0].value,
-            tasks: this.props.main.tasks,
-            collections: this.props.main.collections,
-            groups: this.props.main.groups
-        };
-
-        this.toggleEditing();
-        this.props.onEditMain(nextMain);
+    propTypes: {
+        tasks: React.PropTypes.array.isRequired,
+        collections: React.PropTypes.array.isRequired,
+        main: React.PropTypes.object.isRequired,
+        onEditMain: React.PropTypes.func.isRequired
     },
 
     hideEditTasksInMainBtn: function(e) {
@@ -129,15 +107,7 @@ var MainEditor = React.createClass({
         return (
             <div className="panel panel-default">
                 <div className="panel-heading">
-                    {this.state.beeingEdited ?
-                        <form onSubmit={this.handleEditId}>
-                            <strong>id: </strong>
-                            <input className="form-control" type="text" autoFocus defaultValue={this.props.main.id}></input>
-                            <button className="btn btn-xs btn-primary" type="submit">ok</button>
-                        </form>
-                        :
-                        <p className="panel-title" onClick={this.toggleEditing}>{this.props.main.id}</p>
-                    }
+                    <p className="panel-title">{this.props.main.id}</p>
                 </div>
                 <div id="main-editor-body" className="panel-body">
                     <div className="row">
@@ -151,7 +121,7 @@ var MainEditor = React.createClass({
                                             {TaskCheckboxes}
                                             <div className="row">
                                                 <div className="col-xs-12">
-                                                    <ButtonInput className="add-cg-popover-btn" type="submit" bsSize="small" bsStyle="primary" value="add" />
+                                                    <ButtonInput className="add-cg-popover-btn" type="submit" bsSize="small" bsStyle="primary" value="edit" />
                                                     <Button className="add-cg-popover-btn" bsSize="small" bsStyle="default" onClick={this.hideEditTasksInMainBtn}>cancel</Button>
                                                 </div>
                                             </div>
@@ -173,7 +143,7 @@ var MainEditor = React.createClass({
                                             {CollectionCheckboxes}
                                             <div className="row">
                                                 <div className="col-xs-12">
-                                                    <ButtonInput className="add-cg-popover-btn" type="submit" bsSize="small" bsStyle="primary" value="add" />
+                                                    <ButtonInput className="add-cg-popover-btn" type="submit" bsSize="small" bsStyle="primary" value="edit" />
                                                     <Button className="add-cg-popover-btn" bsSize="small" bsStyle="default" onClick={this.hideEditCollectionsInMainBtn}>cancel</Button>
                                                 </div>
                                             </div>
@@ -188,7 +158,7 @@ var MainEditor = React.createClass({
                         <div className="col-xs-4 centered main-element main-element-groups">
                             <h5 className="main-header">groups</h5>
                             {this.props.main.groups.map(function(group, index) {
-                                return <div className="group-groups" key={index}><span>{group.id} ({group.n})</span></div>;
+                                return <div className="group-groups" key={index}><span>{group.id} [{group.n}]</span></div>;
                             })}
                         </div>
                     </div>

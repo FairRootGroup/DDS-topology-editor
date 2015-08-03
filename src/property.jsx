@@ -7,17 +7,22 @@
  ********************************************************************************/
 
 var PropertyList = React.createClass({
+    propTypes: {
+        properties: React.PropTypes.array.isRequired,
+        onRemoveProperty: React.PropTypes.func.isRequired,
+        onEditProperty: React.PropTypes.func.isRequired
+    },
+
     render: function() {
         var self = this;
         return (
             <div>
                 {this.props.properties.map(function(property, index) {
-                    return <Property
-                                property={property}
-                                onEditProperty={self.props.onEditProperty}
-                                onRemoveProperty={self.props.onRemoveProperty}
-                                key={index}
-                                elementKey={index}
+                    return <Property property={property}
+                                     onRemoveProperty={self.props.onRemoveProperty}
+                                     onEditProperty={self.props.onEditProperty}
+                                     key={index}
+                                     elementKey={index}
                             />;
                 })}
             </div>
@@ -26,11 +31,27 @@ var PropertyList = React.createClass({
 });
 
 var Property = React.createClass({
+    propTypes: {
+        property: React.PropTypes.object.isRequired,
+        onRemoveProperty: React.PropTypes.func.isRequired,
+        onEditProperty: React.PropTypes.func.isRequired,
+        elementKey: React.PropTypes.number.isRequired
+    },
+
     getInitialState: function() {
         return {
             bodyVisible: false,
-            beeingEdited: false
+            beeingEdited: false,
+            showDeleteModal: false
         }
+    },
+
+    closeDeleteModal: function() {
+        this.setState({ showDeleteModal: false });
+    },
+
+    openDeleteModal: function() {
+        this.setState({ showDeleteModal: true });
     },
 
     toggleBodyVisibility: function() {
@@ -60,10 +81,14 @@ var Property = React.createClass({
     },
 
     handleRemoveProperty: function() {
+        this.setState({ showDeleteModal: false });
         this.props.onRemoveProperty(this.props.elementKey);
     },
 
     render: function() {
+        var Modal = ReactBootstrap.Modal;
+        var Button = ReactBootstrap.Button;
+
         return (
             <div className="property">
                 <h5>
@@ -74,7 +99,21 @@ var Property = React.createClass({
                         title={this.state.bodyVisible ? "hide": "show"}
                         onClick={this.toggleBodyVisibility}>
                     </span>
-                    <span className="glyphicon glyphicon-remove" title="remove" onClick={this.handleRemoveProperty}></span>
+
+                    <span className="glyphicon glyphicon-trash" title="delete" onClick={this.openDeleteModal}></span>
+                    <Modal show={this.state.showDeleteModal} onHide={this.closeDeleteModal}>
+                        <Modal.Header closeButton>
+                            <Modal.Title>Delete <strong>{this.props.property.id}</strong>?</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            <p>Are you sure you want to delete the property <strong>{this.props.property.id}?</strong></p>
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <Button bsStyle="danger" onClick={this.handleRemoveProperty}>Delete</Button>
+                            <Button onClick={this.closeDeleteModal}>Cancel</Button>
+                        </Modal.Footer>
+                    </Modal>
+
                     <span className="glyphicon glyphicon-edit" title="edit" onClick={this.toggleEditing}></span>
                 </h5>
                 <ul className={this.state.bodyVisible ? "visible-container" : "invisible-container"}>
@@ -86,7 +125,7 @@ var Property = React.createClass({
                                 <button className="btn btn-xs btn-primary" type="submit">ok</button>
                             </form>
                             :
-                            <span><strong>id:</strong> {this.props.property.id}</span>
+                            <span title={this.props.property.id}><strong>id:</strong> {this.props.property.id}</span>
                         }
                     </div>
                 </ul>

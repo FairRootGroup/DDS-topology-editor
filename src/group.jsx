@@ -7,20 +7,27 @@
  ********************************************************************************/
 
 var GroupList = React.createClass({
+    propTypes: {
+        groups: React.PropTypes.array.isRequired,
+        tasks: React.PropTypes.array.isRequired,
+        collections: React.PropTypes.array.isRequired,
+        onRemoveGroup: React.PropTypes.func.isRequired,
+        onEditGroup: React.PropTypes.func.isRequired
+    },
+
     render: function() {
         var self = this;
         return (
             <div>
                 {this.props.groups.map(function(group, index) {
-                    return <Group
-                                group={group}
-                                groups={self.props.groups}
-                                collections={self.props.collections}
-                                tasks={self.props.tasks}
-                                onEditGroup={self.props.onEditGroup}
-                                onRemoveGroup={self.props.onRemoveGroup}
-                                key={index}
-                                elementKey={index}
+                    return <Group group={group}
+                                  groups={self.props.groups}
+                                  tasks={self.props.tasks}
+                                  collections={self.props.collections}
+                                  onRemoveGroup={self.props.onRemoveGroup}
+                                  onEditGroup={self.props.onEditGroup}
+                                  key={index}
+                                  elementKey={index}
                             />;
                 })}
             </div>
@@ -29,11 +36,30 @@ var GroupList = React.createClass({
 });
 
 var Group = React.createClass({
+    propTypes: {
+        group: React.PropTypes.object.isRequired,
+        groups: React.PropTypes.array.isRequired,
+        tasks: React.PropTypes.array.isRequired,
+        collections: React.PropTypes.array.isRequired,
+        onRemoveGroup: React.PropTypes.func.isRequired,
+        onEditGroup: React.PropTypes.func.isRequired,
+        elementKey: React.PropTypes.number.isRequired
+    },
+
     getInitialState: function() {
         return {
             bodyVisible: false,
-            invalidInput: false
+            invalidInput: false,
+            showDeleteModal: false
         }
+    },
+
+    closeDeleteModal: function() {
+        this.setState({ showDeleteModal: false });
+    },
+
+    openDeleteModal: function() {
+        this.setState({ showDeleteModal: true });
     },
 
     handleInputChange: function(e) {
@@ -102,6 +128,7 @@ var Group = React.createClass({
     },
 
     handleRemoveGroup: function() {
+        this.setState({ showDeleteModal: false });
         this.props.onRemoveGroup(this.props.elementKey);
     },
 
@@ -111,6 +138,7 @@ var Group = React.createClass({
         var Button = ReactBootstrap.Button;
         var Input = ReactBootstrap.Input;
         var ButtonInput = ReactBootstrap.ButtonInput;
+        var Modal = ReactBootstrap.Modal;
         var TaskCheckboxes = [];
         var CollectionCheckboxes = [];
         var self = this;
@@ -155,7 +183,21 @@ var Group = React.createClass({
                         title={this.state.bodyVisible ? "hide": "show"}
                         onClick={this.toggleBodyVisibility}>
                     </span>
-                    <span className="glyphicon glyphicon-remove" title="remove" onClick={this.handleRemoveGroup}></span>
+
+                    <span className="glyphicon glyphicon-trash" title="remove" onClick={this.openDeleteModal}></span>
+                    <Modal show={this.state.showDeleteModal} onHide={this.closeDeleteModal}>
+                        <Modal.Header closeButton>
+                            <Modal.Title>Delete <strong>{this.props.group.id}</strong>?</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            <p>Are you sure you want to delete the group <strong>{this.props.group.id}?</strong></p>
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <Button bsStyle="danger" onClick={this.handleRemoveGroup}>Delete</Button>
+                            <Button onClick={this.closeDeleteModal}>Cancel</Button>
+                        </Modal.Footer>
+                    </Modal>
+
                     <OverlayTrigger trigger="click" placement="right" ref="editGroupBtn" onClick={this.handleInputChange} overlay={
                         <Popover className="add-cg-popover" title="edit group">
                             <form onSubmit={this.handleEditGroup}>
@@ -171,7 +213,7 @@ var Group = React.createClass({
                                 {CollectionCheckboxes}
                                 <div className="row">
                                     <div className="col-xs-12">
-                                        <ButtonInput className="add-cg-popover-btn" type="submit" bsSize="small" bsStyle="primary" value="add" />
+                                        <ButtonInput className="add-cg-popover-btn" type="submit" bsSize="small" bsStyle="primary" value="edit" />
                                         <Button className="add-cg-popover-btn" bsSize="small" bsStyle="default" onClick={this.hideEditGroupButton}>cancel</Button>
                                     </div>
                                 </div>

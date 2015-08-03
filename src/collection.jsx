@@ -7,19 +7,25 @@
  ********************************************************************************/
 
 var CollectionList = React.createClass({
+    propTypes: {
+        collections: React.PropTypes.array.isRequired,
+        tasks: React.PropTypes.array.isRequired,
+        onRemoveCollection: React.PropTypes.func.isRequired,
+        onEditCollection: React.PropTypes.func.isRequired
+    },
+
     render: function() {
         var self = this;
         return (
             <div>
                 {this.props.collections.map(function(collection, index) {
-                    return <Collection
-                                collection={collection}
-                                collections={self.props.collections}
-                                tasks={self.props.tasks}
-                                onEditCollection={self.props.onEditCollection}
-                                onRemoveCollection={self.props.onRemoveCollection}
-                                key={index}
-                                elementKey={index}
+                    return <Collection collection={collection}
+                                       collections={self.props.collections}
+                                       tasks={self.props.tasks}
+                                       onRemoveCollection={self.props.onRemoveCollection}
+                                       onEditCollection={self.props.onEditCollection}
+                                       key={index}
+                                       elementKey={index}
                             />;
                 })}
             </div>
@@ -28,11 +34,29 @@ var CollectionList = React.createClass({
 });
 
 var Collection = React.createClass({
+    propTypes: {
+        collection: React.PropTypes.object.isRequired,
+        collections: React.PropTypes.array.isRequired,
+        tasks: React.PropTypes.array.isRequired,
+        onRemoveCollection: React.PropTypes.func.isRequired,
+        onEditCollection: React.PropTypes.func.isRequired,
+        elementKey: React.PropTypes.number.isRequired
+    },
+
     getInitialState: function() {
         return {
             bodyVisible: false,
-            invalidInput: false
+            invalidInput: false,
+            showDeleteModal: false
         }
+    },
+
+    closeDeleteModal: function() {
+        this.setState({ showDeleteModal: false });
+    },
+
+    openDeleteModal: function() {
+        this.setState({ showDeleteModal: true });
     },
 
     handleInputChange: function(e) {
@@ -80,26 +104,26 @@ var Collection = React.createClass({
         });
         var updatedCollection = {
             id: e.target[0].form[0].value,
+            requirement: self.props.collection.requirement,
             tasks: selectedTasks
         }
 
-        var nextCollections = this.props.collections;
-        nextCollections[this.props.elementKey] = updatedCollection;
-
         this.refs.editCollectionBtn.toggle();
-        this.props.onEditCollection(nextCollections);
+        this.props.onEditCollection(this.props.elementKey, updatedCollection);
     },
 
     handleRemoveCollection: function() {
+        this.setState({ showDeleteModal: false });
         this.props.onRemoveCollection(this.props.elementKey);
     },
 
     render: function() {
+        var Modal = ReactBootstrap.Modal;
         var OverlayTrigger = ReactBootstrap.OverlayTrigger;
         var Popover = ReactBootstrap.Popover;
         var Button = ReactBootstrap.Button;
         var Input = ReactBootstrap.Input;
-        var ButtonInput = ReactBootstrap.Input;
+        var ButtonInput = ReactBootstrap.ButtonInput;
         var TaskCheckboxes = [];
         var self = this;
 
@@ -128,7 +152,21 @@ var Collection = React.createClass({
                         title={this.state.bodyVisible ? "hide": "show"}
                         onClick={this.toggleBodyVisibility}>
                     </span>
-                    <span className="glyphicon glyphicon-remove" title="remove" onClick={this.handleRemoveCollection}></span>
+
+                    <span className="glyphicon glyphicon-trash" title="remove" onClick={this.openDeleteModal}></span>
+                    <Modal show={this.state.showDeleteModal} onHide={this.closeDeleteModal}>
+                        <Modal.Header closeButton>
+                            <Modal.Title>Delete <strong>{this.props.collection.id}</strong>?</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            <p>Are you sure you want to delete the collection <strong>{this.props.collection.id}?</strong></p>
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <Button bsStyle="danger" onClick={this.handleRemoveCollection}>Delete</Button>
+                            <Button onClick={this.closeDeleteModal}>Cancel</Button>
+                        </Modal.Footer>
+                    </Modal>
+
                     <OverlayTrigger trigger="click" placement="right" ref="editCollectionBtn" onClick={this.handleInputChange} overlay={
                         <Popover className="add-cg-popover" title="edit collection">
                             <form onSubmit={this.handleEditCollection}>
@@ -137,7 +175,7 @@ var Collection = React.createClass({
                                 {TaskCheckboxes}
                                 <div className="row">
                                     <div className="col-xs-12">
-                                        <ButtonInput className="add-cg-popover-btn" type="submit" bsSize="small" bsStyle="primary" value="add" />
+                                        <ButtonInput className="add-cg-popover-btn" type="submit" bsSize="small" bsStyle="primary" value="edit" />
                                         <Button className="add-cg-popover-btn" bsSize="small" bsStyle="default" onClick={this.hideEditCollectionButton}>cancel</Button>
                                     </div>
                                 </div>

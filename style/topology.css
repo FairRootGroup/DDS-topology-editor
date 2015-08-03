@@ -2,7 +2,14 @@
 body {
     font-family: "Roboto", sans-serif;
     font-weight: 300;
+    text-shadow: 1px 1px 0px rgba(0,0,0,0.2);
     cursor: default;
+    min-width: 920px;
+}
+@media (min-width: 768px) {
+  .container {
+    width: 920px;
+  }
 }
 pre {
     background-color: white;
@@ -27,6 +34,7 @@ input[type="radio"], input[type="checkbox"] {
 }
 .popover {
     max-width: 300px;
+    box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.3);
 }
 .popover-title {
     text-align: center;
@@ -41,10 +49,21 @@ input[type=text], input[type=password], input[type=email], textarea, [type=text]
 .form-control {
     height: 30px;
 }
-
+.popover .form-control {
+    height: 26px;
+}
+select, select.form-control {
+  font-size: 12px;
+  height: 24px;
+  padding: 0;
+  background-color: #f1f8e9;
+}
 .radio, .checkbox {
     margin-top: 5px;
     margin-bottom: 0px;
+}
+.modal-body p {
+    font-size: 14px;
 }
 
 /* Name Change Form */
@@ -81,8 +100,8 @@ form.name-change input[type=submit] {
     color: #FFF;
     font-size: 13px;
     margin: 0 2px;
-    border-top-right-radius: 3px;
-    border-bottom-right-radius: 3px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
     padding: 0 3px;
     box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.25);
 }
@@ -97,7 +116,7 @@ span.reachable {
     opacity: 0.75;
 }
 .code {
-    font-family: "Inconsolata", monospace;
+    font-family: monospace;
     font-size: 12px;
     background-color: #e1f5fe;
     padding: 0px 4px;
@@ -110,8 +129,11 @@ span.reachable {
     width: 100%
 }
 input.mono {
-    font-family: "Inconsolata", monospace;
-    width: 195px !important;
+    font-family: monospace;
+    width: 240px !important;
+}
+textarea, textarea.form-control, input.form-control, input[type=text], input[type=password], input[type=email], input[type=number], [type=text].form-control, [type=password].form-control, [type=email].form-control, [type=tel].form-control, [contenteditable].form-control {
+    font-size: 13px;
 }
 
 /* File Open Dialog */
@@ -163,6 +185,7 @@ pre.prettyprint {
 }
 .add-property-btn:hover, .add-task-btn:hover, .add-collection-btn:hover, .add-group-btn:hover {
     text-shadow: 0px 0px 5px #555;
+    color: white;
 }
 .add-property-btn {
     color: #f1f8e9;
@@ -184,14 +207,16 @@ pre.prettyprint {
 /* cg - collection+group */
 .popover-content {
     padding: 9px 9px;
+    background-color: #F7F7F7;
 }
 .ct-box {
     color: #FFF;
     display: inline-block;
     margin: 1px;
-    border-radius: 2px;
-    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    border-radius: 0px;
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
     font-size: 12px;
+    width: 100%;
 }
 .ct-box-property {
     background-color: #8bc34a;
@@ -213,6 +238,9 @@ pre.prettyprint {
     display: inline-block;
     vertical-align: middle;
 }
+.ct-box .form-group {
+    float: right;
+}
 .add-cg-popover input[type=number] {
     padding: 0 0 0 6px;
 }
@@ -229,7 +257,7 @@ pre.prettyprint {
     overflow: hidden;
     text-overflow: ellipsis;
     display: inline-block;
-    height: 28px;
+    height: 23px;
     line-height: normal;
     vertical-align: middle;
     padding: 5px 4px 0 4px;
@@ -278,6 +306,7 @@ li.main-separator {
     text-transform: uppercase;
     border-bottom: 0;
     font-size: 12px;
+    border: 0;
 }
 .properties-header {
     color: white;
@@ -297,21 +326,38 @@ li.main-separator {
 }
 
 /* List Elements */
+.list-group-item:first-child {
+    border: 0;
+    border-top-right-radius: 0px;
+    border-top-left-radius: 0px;
+}
+li.file-actions {
+    margin-bottom: 4px;
+}
 li.properties {
     background-color: #f1f8e9;
     border-top: 0;
+    margin-bottom: 4px;
 }
 li.tasks {
     background-color: #e1f5fe;
     border-top: 0;
+    margin-bottom: 4px;
 }
 li.collections {
     background-color: #eceff1;
     border-top: 0;
+    margin-bottom: 4px;
 }
 li.groups {
     background-color: #e0f2f1;
     border-top: 0;
+    margin-bottom: 4px;
+}
+.list-group-item:last-child {
+    border: 0;
+    border-bottom-right-radius: 0px;
+    border-bottom-left-radius: 0px;
 }
 
 /* individual Elements */
@@ -340,7 +386,7 @@ li.groups {
     top: 4px;
     right: 38px;
 }
-.property .glyphicon-remove, .task .glyphicon-remove, .collection .glyphicon-remove, .group .glyphicon-remove {
+.property .glyphicon-trash, .task .glyphicon-trash, .collection .glyphicon-trash, .group .glyphicon-trash {
     position: absolute;
     top: 5px;
     right: 21px;
@@ -350,7 +396,7 @@ li.groups {
 }
 .property .form-control {
     display: inline-block;
-    width: 78%;
+    width: 70%;
     margin-right: 4px;
     font-size: 13px;
     height: 24px;
@@ -363,8 +409,8 @@ li.groups {
     margin: 0;
     font-weight: 300;
     font-size: 14px;
-    border-top-left-radius: 2px;
-    border-top-right-radius: 2px;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -395,12 +441,12 @@ li.groups {
 
 /* Properties */
 .property {
-    border-radius: 2px;
+    border-radius: 0px;
     background-color: white;
     color: black;
     padding: 0;
     margin: 3px 2px;
-    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
     white-space: nowrap;
     overflow: hidden;
     /*display: inline-block;*/
@@ -415,11 +461,11 @@ li.groups {
     color: white;
     cursor: pointer;
 }
-.property .glyphicon-edit, .property .glyphicon-remove {
+.property .glyphicon-edit, .property .glyphicon-trash {
     color: white;
     opacity: 0;
 }
-.property:hover .glyphicon-edit, .property:hover .glyphicon-remove {
+.property:hover .glyphicon-edit, .property:hover .glyphicon-trash {
     opacity: 1;
 }
 .property li {
@@ -434,12 +480,12 @@ li.groups {
 
 /* Tasks */
 .task {
-    border-radius: 2px;
+    border-radius: 0px;
     background-color: white;
     color: black;
     padding: 0;
     margin: 3px 2px;
-    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
     /*display: inline-block;*/
 }
 .task .glyphicon-chevron-up {
@@ -452,21 +498,30 @@ li.groups {
     color: white;
     cursor: pointer;
 }
-.task .glyphicon-edit, .task .glyphicon-remove {
+.task .glyphicon-edit, .task .glyphicon-trash {
     color: white;
     opacity: 0;
 }
-.task:hover .glyphicon-edit, .task:hover .glyphicon-remove {
+.task:hover .glyphicon-edit, .task:hover .glyphicon-trash {
     opacity: 1;
 }
-.task div span {
-    border-radius: 2px;
+.task div > span {
+    border-radius: 0px;
     background-color: #8bc34a;
     color: white;
     padding: 1px 3px;
-    margin: 2px 2px;
-    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    margin: 2px 0px;
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
     display: inline-block;
+    width: 100%;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    vertical-align: top;
+}
+.prop-access {
+    font-weight: 800;
+    font-size: 10px;
 }
 .task div {
     margin: 2px 0;
@@ -486,12 +541,12 @@ li.groups {
 
 /* Collections */
 .collection {
-    border-radius: 2px;
+    border-radius: 0px;
     background-color: white;
     color: black;
     padding: 0;
     margin: 4px 2px;
-    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
     /*display: inline-block;*/
 }
 .collection .glyphicon-chevron-up {
@@ -504,20 +559,20 @@ li.groups {
     color: white;
     cursor: pointer;
 }
-.collection .glyphicon-edit, .collection .glyphicon-remove {
+.collection .glyphicon-edit, .collection .glyphicon-trash {
     color: white;
     opacity: 0;
 }
-.collection:hover .glyphicon-edit, .collection:hover .glyphicon-remove {
+.collection:hover .glyphicon-edit, .collection:hover .glyphicon-trash {
     opacity: 1;
 }
 .collection div span {
-    border-radius: 2px;
+    border-radius: 0px;
     background-color: #03a9f4;
     color: white;
     padding: 1px 3px;
     margin: 2px 2px;
-    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
     display: inline-block;
 }
 .collection div {
@@ -526,19 +581,19 @@ li.groups {
 
 /* Groups */
 .group {
-    border-radius: 2px;
+    border-radius: 0px;
     background-color: white;
     color: black;
     padding: 0;
     margin: 2px 2px;
-    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
     /*display: inline-block;*/
 }
 .group div span {
-    border-radius: 2px;
+    border-radius: 0px;
     padding: 1px 3px;
     margin: 2px 2px;
-    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
     display: inline-block;
 }
 .group div.group-tasks span {
@@ -559,11 +614,11 @@ li.groups {
     color: white;
     cursor: pointer;
 }
-.group .glyphicon-edit, .group .glyphicon-remove {
+.group .glyphicon-edit, .group .glyphicon-trash {
     color: white;
     opacity: 0;
 }
-.group:hover .glyphicon-edit, .group:hover .glyphicon-remove {
+.group:hover .glyphicon-edit, .group:hover .glyphicon-trash {
     color: white;
     opacity: 1;
 }
@@ -583,7 +638,7 @@ li.groups {
 }
 
 .main-element {
-    border-radius: 2px;
+    border-radius: 0px;
     background-color: white;
     color: black;
     padding: 0;
@@ -591,10 +646,10 @@ li.groups {
     padding-bottom: 15px;
 }
 .main-element div > span {
-    border-radius: 2px;
+    border-radius: 0px;
     padding: 1px 3px;
     margin: 2px 2px;
-    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
     display: inline-block;
 }
 .main-element-tasks {

@@ -7,6 +7,13 @@
  ********************************************************************************/
 
 var TopBar = React.createClass({
+    propTypes: {
+        topologyId: React.PropTypes.string.isRequired,
+        onTopologyIdChange: React.PropTypes.func.isRequired,
+        fluid: React.PropTypes.bool.isRequired,
+        onToggleFluid: React.PropTypes.func.isRequired
+    },
+
     getInitialState: function() {
         return {
             beeingEdited: false
@@ -53,7 +60,15 @@ var TopBar = React.createClass({
                             </li>
                         </ul>
                         <ul className="nav navbar-nav navbar-right">
-                            <li><a href="#" onClick={this.handleToggleFluid}><span className="glyphicon glyphicon-fullscreen"></span></a></li>
+                            <li>
+                                <a href="#" onClick={this.handleToggleFluid}>
+                                    {this.props.fluid ?
+                                        <span className="glyphicon glyphicon-resize-small"></span>
+                                        :
+                                        <span className="glyphicon glyphicon-resize-full"></span>
+                                    }
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </div>
