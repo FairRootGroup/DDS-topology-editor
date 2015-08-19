@@ -8,10 +8,20 @@
 
 var MainEditor = React.createClass({
     propTypes: {
+        properties: React.PropTypes.array.isRequired,
         tasks: React.PropTypes.array.isRequired,
         collections: React.PropTypes.array.isRequired,
         main: React.PropTypes.object.isRequired,
         onEditMain: React.PropTypes.func.isRequired
+    },
+
+    getInitialState: function() {
+        return {
+            IdBeeingEdited: false,
+            paper: null,
+            graphScale: 1,
+            interactive: true
+        }
     },
 
     hideEditTasksInMainBtn: function(e) {
@@ -64,6 +74,73 @@ var MainEditor = React.createClass({
         this.props.onEditMain(nextMain);
     },
 
+    handlePaperVis: function(paper)  {
+        this.setState({
+            paper: paper
+        });
+    },
+
+    handleZoomIn: function() {
+        this.setState({
+            graphScale: (this.state.graphScale + 0.1)
+        });
+        this.state.paper.scale(this.state.graphScale + 0.1, this.state.graphScale + 0.1);
+        this.state.paper.fitToContent();
+        this.state.paper.scaleContentToFit();
+    },
+
+    handleZoomOut: function() {
+        this.setState({
+            graphScale: (this.state.graphScale - 0.1)
+        });
+        this.state.paper.scale(this.state.graphScale - 0.1, this.state.graphScale -0.1);
+        this.state.paper.fitToContent();
+        this.state.paper.fitToContent();
+    },
+
+    handleReset: function() {
+        this.setState({
+            graphScale: 1
+        });
+        this.state.paper.scale(1, 1);
+        this.state.paper.fitToContent();
+    },
+
+    handleInteraction: function() {
+        if (this.state.interactive) {
+            this.state.interactive = false;
+            $('#adjust').html('<span class="glyphicon-pushpin"></span>');
+        } else {
+            this.state.interactive = true;
+            $('#adjust').html('<span class="glyphicon glyphicon-move"></span>');
+        }
+
+        this.forceUpdate();
+    },
+
+    handlePropertyMenu: function(event) {
+        if (this.state.paper !== null) {
+            var propLines = V(this.state.paper.viewport).find('line');
+            for (var i = 0; i < propLines.length; i++) {
+                V(propLines[i]).attr('visibility', 'visible');
+            }
+            if (event.target.value !== 'all') {
+                for (var i = 0; i < propLines.length; i++) {
+                    for (var j = 0; j < propLines[i].attributes.length; j++) {
+                        if (propLines[i].attributes[j].name === 'title') {
+                            if (propLines[i].attributes[j].value !== event.target.value) {
+                                console.log(propLines[i].attributes[j].value);
+                                console.log(event.target.value);
+                                V(propLines[i]).attr('visibility', 'hidden');
+                            }
+                        }
+                    }
+                    
+                }
+            }
+        }
+    },
+
     render: function() {
         var OverlayTrigger = ReactBootstrap.OverlayTrigger;
         var Popover = ReactBootstrap.Popover;
@@ -72,7 +149,17 @@ var MainEditor = React.createClass({
         var ButtonInput = ReactBootstrap.ButtonInput;
         var TaskCheckboxes = [];
         var CollectionCheckboxes = [];
+        var PropertiesMenu = [];
         var self = this;
+
+        PropertiesMenu.push(
+                <option value="all" key={"p-vis-menu-all"}>all</option>
+        );
+        this.props.properties.forEach(function (property, i) {
+            PropertiesMenu.push(
+                <option value={property.id} key={"p-vis-menu"+i}>{property.id}</option>
+            );
+        });
 
         this.props.tasks.forEach(function(task, i) {
             var count = 0;
@@ -161,6 +248,33 @@ var MainEditor = React.createClass({
                                 return <div className="group-groups" key={index}><span>{group.id} [{group.n}]</span></div>;
                             })}
                         </div>
+                    <div className="centered main-element-vis">
+                        <TopologyGraph tasks={this.props.tasks} collections={this.props.collections} main={this.props.main} interactive={this.state.interactive} onPaperChange={this.handlePaperVis}/>
+                    </div>
+                    <div className="row visual-menu">
+                        <div className="col-xs-12">
+                            <div className="col-xs-3">
+                                <Button className="zoom-in glyphicon glyphicon-zoom-in" centered type="submit" bsSize="small" bsStyle="primary" onClick={this.handleZoomIn}> Zoom in </Button>
+                            </div>
+                            <div className="col-xs-3">
+                                <Button className="zoom-out glyphicon glyphicon-zoom-out" centered type="submit" bsSize="small" bsStyle="primary" onClick={this.handleZoomOut}> Zoom out </Button>
+                            </div>
+                            <div className="col-xs-3">
+                                <Button className="reset-view glyphicon glyphicon-refresh" centered type="submit" bsSize="small" bsStyle="primary" onClick={this.handleReset}> Reset </Button>
+                            </div>
+                            <div className="col-xs-3">
+                                <Button id="adjust" className="interactive-view glyphicon glyphicon-adjust" centered type="submit" bsSize="small" bsStyle="primary" onClick={this.handleInteraction}></Button>
+                            </div>
+                        </div>
+                    </div> <br />
+                    <div className="row">
+                        <div className="centered col-xs-12">
+                            <span className="glyphicon glyphicon-align-justify ct-box-property" title="Properties"></span> Properties
+                            <select onChange={this.handlePropertyMenu}>
+                                {PropertiesMenu}
+                            </select>
+                        </div>
+                    </div>
                     </div>
                 </div>
             </div>

@@ -704,3 +704,18 @@ li.groups {
 .connection {
     border-top: 1px dotted #2a36b1;
 }
+
+/* Main  visual graph */
+.main-element-vis {
+    overflow: auto;
+    height: 500px;
+    width: 500px;
+    margin-right:auto;
+    margin-left:auto;
+}
+.link-tools .tool-remove {
+    display: none
+}
+.link-tools .tool-options {
+    display: none
+}

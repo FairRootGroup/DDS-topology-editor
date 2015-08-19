@@ -666,7 +666,8 @@ var TopologyEditor = React.createClass({
                             </ul>
                         </div>
                         <div className="col-xs-9">
-                            <MainEditor tasks={this.state.tasks}
+                            <MainEditor properties={this.state.properties}
+                                        tasks={this.state.tasks}
                                         collections={this.state.collections}
                                         main={this.state.main}
                                         onEditMain={this.handleEditMain} />
