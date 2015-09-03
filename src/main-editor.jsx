@@ -248,33 +248,33 @@ var MainEditor = React.createClass({
                                 return <div className="group-groups" key={index}><span>{group.id} [{group.n}]</span></div>;
                             })}
                         </div>
-                    <div className="centered main-element-vis">
-                        <TopologyGraph tasks={this.props.tasks} collections={this.props.collections} main={this.props.main} interactive={this.state.interactive} onPaperChange={this.handlePaperVis}/>
+                    </div>
+                    <div className="row centered main-element-vis">
+                        <div className="col-xs-12">
+                            <TopologyGraph tasks={this.props.tasks} collections={this.props.collections} main={this.props.main} interactive={this.state.interactive} onPaperChange={this.handlePaperVis}/>
+                        </div>
                     </div>
                     <div className="row visual-menu">
-                        <div className="col-xs-12">
-                            <div className="col-xs-3">
-                                <Button className="zoom-in glyphicon glyphicon-zoom-in" centered type="submit" bsSize="small" bsStyle="primary" onClick={this.handleZoomIn}> Zoom in </Button>
-                            </div>
-                            <div className="col-xs-3">
-                                <Button className="zoom-out glyphicon glyphicon-zoom-out" centered type="submit" bsSize="small" bsStyle="primary" onClick={this.handleZoomOut}> Zoom out </Button>
-                            </div>
-                            <div className="col-xs-3">
-                                <Button className="reset-view glyphicon glyphicon-refresh" centered type="submit" bsSize="small" bsStyle="primary" onClick={this.handleReset}> Reset </Button>
-                            </div>
-                            <div className="col-xs-3">
-                                <Button id="adjust" className="interactive-view glyphicon glyphicon-adjust" centered type="submit" bsSize="small" bsStyle="primary" onClick={this.handleInteraction}></Button>
-                            </div>
+                        <div className="col-xs-3 centered">
+                            <Button className="zoom-in glyphicon glyphicon-zoom-in" centered type="submit" bsSize="small" bsStyle="primary" onClick={this.handleZoomIn}> zoom in</Button>
                         </div>
-                    </div> <br />
-                    <div className="row">
+                        <div className="col-xs-3 centered">
+                            <Button className="zoom-out glyphicon glyphicon-zoom-out" centered type="submit" bsSize="small" bsStyle="primary" onClick={this.handleZoomOut}> zoom out</Button>
+                        </div>
+                        <div className="col-xs-3 centered">
+                            <Button className="reset-view glyphicon glyphicon-refresh" centered type="submit" bsSize="small" bsStyle="primary" onClick={this.handleReset}> reset</Button>
+                        </div>
+                        <div className="col-xs-3 centered">
+                            <Button id="adjust" className="interactive-view glyphicon glyphicon-adjust" centered type="submit" bsSize="small" bsStyle="primary" onClick={this.handleInteraction}></Button>
+                        </div>
+                    </div>
+                    <div className="row visual-properties">
                         <div className="centered col-xs-12">
-                            <span className="glyphicon glyphicon-align-justify ct-box-property" title="Properties"></span> Properties
+                            <span className="glyphicon glyphicon-align-justify ct-box-property" title="Properties"></span> Properties&nbsp;
                             <select onChange={this.handlePropertyMenu}>
                                 {PropertiesMenu}
                             </select>
                         </div>
-                    </div>
                     </div>
                 </div>
             </div>
