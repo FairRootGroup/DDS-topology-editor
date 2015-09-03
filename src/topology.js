@@ -146,6 +146,24 @@ var TITLE = new joint.shapes.basic.Text({
         }
 });
 
+/* making  a group */
+var GroupElement = new joint.shapes.basic.Rect({
+    position: { 
+        x: GROUP_METRICS.x,
+        y: GROUP_METRICS.y
+    },
+    size: {
+        width: GROUP_METRICS.widthMin,
+        height: GROUP_METRICS.height
+    },
+    attrs: {
+        rect: { 
+            fill: '#009688',
+            rx: 2,
+            ry: 2
+        }
+    }
+});
 /* Utility functions
 collection requires the number of tasks to know its height*
 group requires collections and tasks to know height
@@ -545,22 +563,3 @@ function setPropertyList(properties) {
     });
     sel.appendChild(fragment);
 }
-
-/* making  a group */
-var GroupElement = new joint.shapes.basic.Rect({
-    position: { 
-        x: GROUP_METRICS.x,
-        y: GROUP_METRICS.y
-    },
-    size: {
-        width: GROUP_METRICS.widthMin,
-        height: GROUP_METRICS.height
-    },
-    attrs: {
-        rect: { 
-            fill: '#009688',
-            rx: 2,
-            ry: 2
-        }
-    }
-});
