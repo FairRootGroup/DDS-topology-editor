@@ -101,7 +101,7 @@ var TopologyGraph = React.createClass({
         cellQueue[0].push(cell);
         for (var i = 0; i < cellQueue[0].length; i ++) {
             if (cellQueue[0][i].get('properties') !== undefined) {
-                var links = mapLinksForTask(this.state.graph, cellQueue[0][i]);
+                var links = graphDraw.mapLinksForTask(this.state.graph, cellQueue[0][i]);
                 links.forEach(function (link, i) {
                     if (this.state.visibleProperties[link.attr('title')] === false) {
                         link.attr('visibility', 'hidden');
@@ -203,8 +203,8 @@ var TopologyGraph = React.createClass({
             }).bind(this));
             group.multiplicity = nextProps.main.groups[i].n;
         }).bind(this));
-        mapTemplate(visMain, this.state.graph);
-        var links = mapLinks(this.state.graph, this.state.paper);
+        graphDraw.mapTemplate(visMain, this.state.graph);
+        var links = graphDraw.mapLinks(this.state.graph, this.state.paper);
         links.forEach( function (link, i) {
             V(this.state.paper.viewport).append(link);
         }.bind(this));

@@ -121,6 +121,12 @@ var MainEditor = React.createClass({
     handlePropertyMenu: function(event) {
         if (this.state.paper !== null) {
             var propLines = V(this.state.paper.viewport).find('line');
+            if (event.target.value === "none") {
+                for (var i = 0; i < propLines.length; i++) {
+                    V(propLines[i]).attr('visibility', 'hidden');
+                }
+                return;
+            }
             for (var i = 0; i < propLines.length; i++) {
                 V(propLines[i]).attr('visibility', 'visible');
             }
@@ -129,8 +135,6 @@ var MainEditor = React.createClass({
                     for (var j = 0; j < propLines[i].attributes.length; j++) {
                         if (propLines[i].attributes[j].name === 'title') {
                             if (propLines[i].attributes[j].value !== event.target.value) {
-                                console.log(propLines[i].attributes[j].value);
-                                console.log(event.target.value);
                                 V(propLines[i]).attr('visibility', 'hidden');
                             }
                         }
@@ -152,6 +156,9 @@ var MainEditor = React.createClass({
         var PropertiesMenu = [];
         var self = this;
 
+        PropertiesMenu.push(
+                <option value="none" key={"p-vis-menu-none"}>none</option>
+        );
         PropertiesMenu.push(
                 <option value="all" key={"p-vis-menu-all"}>all</option>
         );
