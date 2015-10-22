@@ -7,7 +7,9 @@
  ********************************************************************************/
 
 import React from 'react';
+import _ from 'lodash';
 import { OverlayTrigger, Popover, Button, Input, ButtonInput, Modal } from 'react-bootstrap';
+import LocalStorageMixin from 'react-localstorage';
 
 import TopBar from './TopBar';
 import FileActions from './FileActions';
@@ -18,6 +20,10 @@ import TaskList from './TaskList';
 import MainEditor from './MainEditor';
 
 var TopologyEditor = React.createClass({
+    displayName: 'TopologyEditor',
+
+    mixins: [LocalStorageMixin],
+
     getInitialState() {
         return {
             topologyId: 'new topology',
@@ -65,6 +71,7 @@ var TopologyEditor = React.createClass({
                 groups: []
             },
             invalidInput: false,
+            fluid: false,
             showResetModal: false
         });
     },
