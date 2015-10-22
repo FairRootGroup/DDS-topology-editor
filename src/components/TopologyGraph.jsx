@@ -93,11 +93,11 @@ var TopologyGraph = React.createClass({
                 var cellOrigin = cellQueue[0][i].getBBox().origin();
                 var cellCorner = cellQueue[0][i].getBBox().corner();
                 var lines = joint.V(this.state.paper.viewport).find('line');
-                for (var j = 0; j < lines.length; j ++) {
-                    if (((lines[j].x1.baseVal.value >= cellOrigin.x && lines[j].x1.baseVal.value <= cellCorner.x)
-                        && (lines[j].y1.baseVal.value >= cellOrigin.y && lines[j].y1.baseVal.value <= cellCorner.y))
-                        || ((lines[j].x2.baseVal.value >= cellOrigin.x && lines[j].x2.baseVal.value <= cellCorner.x)
-                        && (lines[j].y2.baseVal.value >= cellOrigin.y - 6 && lines[j].y2.baseVal.value <= cellCorner.y + 6))) {
+                for (var j = 0; j < lines.length; j++) {
+                    if (((lines[j].node.x1.baseVal.value >= cellOrigin.x && lines[j].node.x1.baseVal.value <= cellCorner.x)
+                        && (lines[j].node.y1.baseVal.value >= cellOrigin.y && lines[j].node.y1.baseVal.value <= cellCorner.y))
+                        || ((lines[j].node.x2.baseVal.value >= cellOrigin.x && lines[j].node.x2.baseVal.value <= cellCorner.x)
+                        && (lines[j].node.y2.baseVal.value >= cellOrigin.y - 6 && lines[j].node.y2.baseVal.value <= cellCorner.y + 6))) {
                         if (joint.V(lines[j]).attr('visibility') == 'hidden') {
                             this.state.visibleProperties[joint.V(lines[j]).attr('title')] = false;
                         } else {

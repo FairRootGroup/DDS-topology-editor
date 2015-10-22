@@ -8,6 +8,7 @@
 
 import React from 'react';
 import joint from 'jointjs';
+import $ from 'jquery';
 import { OverlayTrigger, Popover, Button, Input, ButtonInput } from 'react-bootstrap';
 
 import TopologyGraph from './TopologyGraph';
