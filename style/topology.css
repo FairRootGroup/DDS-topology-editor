@@ -1,0 +1,730 @@
+/* General */
+body {
+    font-family: "Roboto", sans-serif;
+    font-weight: 300;
+    text-shadow: 1px 1px 0px rgba(0,0,0,0.2);
+    cursor: default;
+    min-width: 920px;
+}
+@media (min-width: 768px) {
+  .container {
+    width: 920px;
+  }
+}
+pre {
+    background-color: white;
+    border: 0;
+    padding: 0;
+    font-family: 'PT Mono', monospace;
+}
+.btn:focus, .btn:active:focus, .btn.active:focus {
+    outline: none;
+}
+.btn:active, .btn.active {
+    text-shadow: 0px 0px 3px rgba(255, 255, 255, 0.5);
+}
+a:focus, a:active:focus {
+    outline: none;
+}
+.navbar {
+    border-radius: 0px;
+}
+input[type="radio"], input[type="checkbox"] {
+    margin: 5px 0 0;
+}
+.popover {
+    max-width: 300px;
+    box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.3);
+}
+.popover-title {
+    text-align: center;
+    text-transform: uppercase;
+}
+.centered {
+    text-align: center;
+}
+input[type=text], input[type=password], input[type=email], textarea, [type=text].form-control, [type=password].form-control, textarea.form-control {
+    line-height: normal;
+}
+.form-control {
+    height: 30px;
+}
+.popover .form-control {
+    height: 26px;
+}
+select, select.form-control {
+  font-size: 12px;
+  height: 24px;
+  padding: 0;
+  background-color: #f1f8e9;
+}
+.radio, .checkbox {
+    margin-top: 5px;
+    margin-bottom: 0px;
+}
+.modal-body p {
+    font-size: 14px;
+}
+
+/* Name Change Form */
+form.name-change {
+    position: relative;
+    display: block;
+    padding: 10px 15px;
+    padding-top: 20.5px;
+    padding-bottom: 20.5px;
+    line-height: 23px;
+    color: #FFF;
+    background-color: #0C7CD5;
+}
+form.name-change input {
+    height: 23px;
+    padding: 0;
+    margin: 0;
+    border: 0;
+}
+form.name-change input[type=text] {
+    background-color: #2196F3;
+    color: #FFF;
+    font-size: 13px;
+    width: 100px;
+    padding: 0 0 0 3px;
+}
+form.name-change input[type=text]:focus {
+    box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.25);
+    border: 0;
+    outline: none;
+}
+form.name-change input[type=submit] {
+    background-color: #2196F3;
+    color: #FFF;
+    font-size: 13px;
+    margin: 0 2px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+    padding: 0 3px;
+    box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.25);
+}
+form.name-change input[type=submit]:hover {
+    text-shadow: 0px 0px 2px rgba(255,255,255,0.5);
+}
+span.reachable {
+    position: absolute;
+    right: 0px;
+    top: 2px;
+    font-size: 10px;
+    opacity: 0.75;
+}
+.code {
+    font-family: monospace;
+    font-size: 12px;
+    background-color: #e1f5fe;
+    padding: 0px 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+    margin-bottom: 2px;
+    border: 1px solid #03a9f4;
+    width: 100%
+}
+input.mono {
+    font-family: monospace;
+    width: 240px !important;
+}
+textarea, textarea.form-control, input.form-control, input[type=text], input[type=password], input[type=email], input[type=number], [type=text].form-control, [type=password].form-control, [type=email].form-control, [type=tel].form-control, [contenteditable].form-control {
+    font-size: 13px;
+}
+
+/* File Open Dialog */
+.btn-file {
+    position: relative;
+    overflow: hidden;
+}
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
+
+/* Pretty Print Modifications */
+pre.prettyprint {
+    padding: 0;
+    border: 0;
+}
+
+/* File Action Buttons */
+.file-actions .btn {
+    width: 100%;
+}
+
+.file-actions .btn-load {
+    padding-right: 6px;
+}
+
+.file-actions .btn-save {
+    padding-left: 6px;
+}
+
+/* Add Buttons */
+.add-property-btn, .add-task-btn, .add-collection-btn, .add-group-btn {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    cursor: pointer;
+}
+.add-property-btn:hover, .add-task-btn:hover, .add-collection-btn:hover, .add-group-btn:hover {
+    text-shadow: 0px 0px 5px #555;
+    color: white;
+}
+.add-property-btn {
+    color: #f1f8e9;
+}
+.add-task-btn {
+    color: #e1f5fe;
+}
+.add-collection-btn {
+    color: #eceff1;
+}
+.add-group-btn {
+    color: #e0f2f1;
+}
+.edit-main-btn {
+    top: -9px;
+}
+
+/* Add Popovers */
+/* cg - collection+group */
+.popover-content {
+    padding: 9px 9px;
+    background-color: #F7F7F7;
+}
+.ct-box {
+    color: #FFF;
+    display: inline-block;
+    margin: 1px;
+    border-radius: 0px;
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    font-size: 12px;
+    width: 100%;
+}
+.ct-box-property {
+    background-color: #8bc34a;
+}
+.ct-box-task {
+    background-color: #03A9F4;
+}
+.ct-box-collection {
+    background-color: #607D8B;
+}
+.add-cg-popover span.input-group-addon {
+    padding: 2px 5px 0 0;
+    font-size: 14px;
+    font-weight: 300;
+    width: 32px;
+}
+.add-cg-popover .form-group {
+    margin: 2px;
+    display: inline-block;
+    vertical-align: middle;
+}
+.ct-box .form-group {
+    float: right;
+}
+.add-cg-popover input[type=number] {
+    padding: 0 0 0 6px;
+}
+.add-cg-popover .col-xs-4 {
+    padding-right: 2px;
+}
+.add-cg-popover .col-xs-8 {
+    padding-left: 2px;
+}
+.add-cg-popover .col-xs-12 {
+    text-align: center;
+}
+.add-cg-popover .element-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+    height: 23px;
+    line-height: normal;
+    vertical-align: middle;
+    padding: 5px 4px 0 4px;
+}
+.add-cg-popover p {
+    text-align: center;
+    background-color: #F7F7F7;
+    margin: 7px 0 5px 0;
+}
+.add-cg-tc-counter {
+    padding: 0 0 0 6px;
+    height: 25px;
+    width: 42px;
+    color: #000;
+    font-size: 12px !important;
+}
+.ct-box-property .add-cg-tc-counter {
+    background-color: #f1f8e9;
+}
+.ct-box-task .add-cg-tc-counter {
+    background-color: #E1F5FE;
+}
+.ct-box-collection .add-cg-tc-counter {
+    background-color: #ECEFF1;
+}
+.add-cg-popover-btn {
+    margin: 15px 5px 0 5px;
+}
+
+.invalid-input {
+    background-color: #FF9B9F;
+}
+
+/* List of Tasks, Collections, Groups */
+.list-group-item {
+    padding: 10px;
+}
+li.main-separator {
+    padding: 10px 10px 0 10px;
+}
+/* Headers */
+.properties-header, .tasks-header, .collections-header, .groups-header {
+    position: relative;
+    margin: 0;
+    padding: 2px 10px;
+    text-transform: uppercase;
+    border-bottom: 0;
+    font-size: 12px;
+    border: 0;
+}
+.properties-header {
+    color: white;
+    background-color: #8bc34a;
+}
+.tasks-header {
+    color: white;
+    background-color: #03a9f4;
+}
+.collections-header {
+    color: white;
+    background-color: #607d8b;
+}
+.groups-header {
+    color: white;
+    background-color: #009688;
+}
+
+/* List Elements */
+.list-group-item:first-child {
+    border: 0;
+    border-top-right-radius: 0px;
+    border-top-left-radius: 0px;
+}
+li.file-actions {
+    margin-bottom: 4px;
+}
+li.properties {
+    background-color: #f1f8e9;
+    border-top: 0;
+    margin-bottom: 4px;
+}
+li.tasks {
+    background-color: #e1f5fe;
+    border-top: 0;
+    margin-bottom: 4px;
+}
+li.collections {
+    background-color: #eceff1;
+    border-top: 0;
+    margin-bottom: 4px;
+}
+li.groups {
+    background-color: #e0f2f1;
+    border-top: 0;
+    margin-bottom: 4px;
+}
+.list-group-item:last-child {
+    border: 0;
+    border-bottom-right-radius: 0px;
+    border-bottom-left-radius: 0px;
+}
+
+/* individual Elements */
+.property > *, .task > *, .collection > *, .group > * {
+    padding: 2px 5px;
+}
+
+/* Glyphicons */
+.property .glyphicon-tasks, .task .glyphicon-tasks, .collection .glyphicon-tasks, .group .glyphicon-tasks {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+}
+.property .glyphicon-chevron-up, .task .glyphicon-chevron-up, .collection .glyphicon-chevron-up, .group .glyphicon-chevron-up {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+}
+.property .glyphicon-chevron-down, .task .glyphicon-chevron-down, .collection .glyphicon-chevron-down, .group .glyphicon-chevron-down {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}
+.property .glyphicon-edit, .task .glyphicon-edit, .collection .glyphicon-edit, .group .glyphicon-edit {
+    position: absolute;
+    top: 4px;
+    right: 38px;
+}
+.property .glyphicon-trash, .task .glyphicon-trash, .collection .glyphicon-trash, .group .glyphicon-trash {
+    position: absolute;
+    top: 5px;
+    right: 21px;
+}
+.property form {
+    padding-bottom: 3px;
+}
+.property .form-control {
+    display: inline-block;
+    width: 70%;
+    margin-right: 4px;
+    font-size: 13px;
+    height: 24px;
+}
+
+/* Element Headers */
+.property h5, .task h5, .collection h5, .group h5 {
+    color: white;
+    padding: 4px 38px 4px 22px;
+    margin: 0;
+    font-weight: 300;
+    font-size: 14px;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    position: relative;
+    height: 23px;
+}
+.property h5 {
+    background-color: #8bc34a;
+}
+.task h5 {
+    background-color: #03a9f4;
+}
+.collection h5 {
+    background-color: #607d8b;
+}
+.group h5 {
+    background-color: #009688;
+}
+.element-title {
+    left: 22px;
+    margin-right: -32px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+    width: 100%;
+}
+
+/* Properties */
+.property {
+    border-radius: 0px;
+    background-color: white;
+    color: black;
+    padding: 0;
+    margin: 3px 2px;
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    white-space: nowrap;
+    overflow: hidden;
+    /*display: inline-block;*/
+}
+.property .glyphicon-chevron-up {
+    color: white;
+}
+.property .glyphicon-chevron-down {
+    color: white;
+}
+.property .glyphicon {
+    color: white;
+    cursor: pointer;
+}
+.property .glyphicon-edit, .property .glyphicon-trash {
+    color: white;
+    opacity: 0;
+}
+.property:hover .glyphicon-edit, .property:hover .glyphicon-trash {
+    opacity: 1;
+}
+.property li {
+    list-style-type: none;
+    font-size: 12px;
+    font-family: "Open Sans", sans-serif;
+    border-bottom: 1px dotted #2a36b1;
+}
+.property li:last-child {
+    border-bottom: none;
+}
+
+/* Tasks */
+.task {
+    border-radius: 0px;
+    background-color: white;
+    color: black;
+    padding: 0;
+    margin: 3px 2px;
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    /*display: inline-block;*/
+}
+.task .glyphicon-chevron-up {
+    color: white;
+}
+.task .glyphicon-chevron-down {
+    color: white;
+}
+.task .glyphicon {
+    color: white;
+    cursor: pointer;
+}
+.task .glyphicon-edit, .task .glyphicon-trash {
+    color: white;
+    opacity: 0;
+}
+.task:hover .glyphicon-edit, .task:hover .glyphicon-trash {
+    opacity: 1;
+}
+.task div > span {
+    border-radius: 0px;
+    background-color: #8bc34a;
+    color: white;
+    padding: 1px 3px;
+    margin: 2px 0px;
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    display: inline-block;
+    width: 100%;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    vertical-align: top;
+}
+.prop-access {
+    font-weight: 800;
+    font-size: 10px;
+}
+.task div {
+    margin: 2px 0;
+}
+.task li {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    position: relative;
+    white-space: nowrap;
+    list-style-type: none;
+    font-size: 12px;
+    font-family: "Open Sans", sans-serif;
+/*    border-bottom: 1px dotted #2a36b1;*/
+}
+.task li:last-child {
+}
+
+/* Collections */
+.collection {
+    border-radius: 0px;
+    background-color: white;
+    color: black;
+    padding: 0;
+    margin: 4px 2px;
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    /*display: inline-block;*/
+}
+.collection .glyphicon-chevron-up {
+    color: white;
+}
+.collection .glyphicon-chevron-down {
+    color: white;
+}
+.collection .glyphicon {
+    color: white;
+    cursor: pointer;
+}
+.collection .glyphicon-edit, .collection .glyphicon-trash {
+    color: white;
+    opacity: 0;
+}
+.collection:hover .glyphicon-edit, .collection:hover .glyphicon-trash {
+    opacity: 1;
+}
+.collection div span {
+    border-radius: 0px;
+    background-color: #03a9f4;
+    color: white;
+    padding: 1px 3px;
+    margin: 2px 2px;
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    display: inline-block;
+}
+.collection div {
+    margin: 2px 0;
+}
+
+/* Groups */
+.group {
+    border-radius: 0px;
+    background-color: white;
+    color: black;
+    padding: 0;
+    margin: 2px 2px;
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    /*display: inline-block;*/
+}
+.group div span {
+    border-radius: 0px;
+    padding: 1px 3px;
+    margin: 2px 2px;
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    display: inline-block;
+}
+.group div.group-tasks span {
+    background-color: #03a9f4;
+    color: white;
+}
+.group div.group-collections span {
+    background-color: #607d8b;
+    color: white;
+}
+.group .glyphicon-chevron-up {
+    color: white;
+}
+.group .glyphicon-chevron-down {
+    color: white;
+}
+.group .glyphicon {
+    color: white;
+    cursor: pointer;
+}
+.group .glyphicon-edit, .group .glyphicon-trash {
+    color: white;
+    opacity: 0;
+}
+.group:hover .glyphicon-edit, .group:hover .glyphicon-trash {
+    color: white;
+    opacity: 1;
+}
+.group hr {
+    margin: 2px;
+}
+.group span.plain {
+    box-shadow: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* Main */
+
+#main-editor-body .row {
+
+}
+
+.main-element {
+    border-radius: 0px;
+    background-color: white;
+    color: black;
+    padding: 0;
+    margin-bottom: -15px;
+    padding-bottom: 15px;
+}
+.main-element div > span {
+    border-radius: 0px;
+    padding: 1px 3px;
+    margin: 2px 2px;
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    display: inline-block;
+}
+.main-element-tasks {
+    background-color: #E1F5FE;
+}
+.main-element-collections {
+    background-color: #ECEFF1;
+}
+.main-element-groups {
+    background-color: #E0F2F1;
+}
+.main-header {
+    font-weight: 300;
+    font-size: 13px;
+    text-transform: uppercase;
+    margin-top: -15px;
+    color: white;
+    padding: 6px 0;
+}
+.main-element-tasks .main-header{
+    background-color: #03a9f4;
+}
+.main-element-collections .main-header{
+    background-color: #607d8b;
+}
+.main-element-groups .main-header{
+    background-color: #009688;
+}
+.main-element div.group-tasks > span {
+    background-color: #03a9f4;
+    color: white;
+}
+.main-element div.group-collections > span {
+    background-color: #607d8b;
+    color: white;
+}
+.main-element div.group-groups {
+    display: inline-block;
+}
+.main-element div.group-groups > span {
+    background-color: #009688;
+    color: white;
+}
+
+.visible-container {
+    display: block;
+}
+.invisible-container {
+    display: none;
+}
+
+.connection {
+    border-top: 1px dotted #2a36b1;
+}
+
+/* Main  visual graph */
+.main-element-vis {
+    overflow: auto;
+/*    height: 500px;
+    width: 500px;*/
+    margin-right: auto;
+    margin-left: auto;
+}
+.link-tools .tool-remove {
+    display: none
+}
+.link-tools .tool-options {
+    display: none
+}
+.visual-properties {
+    margin-top: 15px;
+}
+.visual-properties select {
+    min-width: 50px;
+}
+.visual-menu button {
+    width: 110px;
+}
