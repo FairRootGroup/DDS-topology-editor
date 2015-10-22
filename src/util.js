@@ -1,10 +1,9 @@
 /* returns array of @property  values from @objArray*/
-function extractProperties(objArr, property) {
-	return objArr.map( function(element) {
-		return element[property];
-	});
+export function extractProperties(objArr, property) {
+    return objArr.map( function(element) {
+        return element[property];
+    });
 }
-
 
 /* Returns every joint element from elements array x 
  * that has a defined property.
@@ -13,14 +12,14 @@ function extractProperties(objArr, property) {
  * @param elementsArray {Array>@Joint.dia.Element} array where it is searched at.
  * @param property {String} prroperty we are searching for. 
  */
-function sieveByProperty(elementsArray, property) {
-	var result = [];
-	elementsArray.forEach( function(element) {
-		if (element.prop(property) !== undefined) {
-			result.push(element);
-		}
-	});
-	return result;
+export function sieveByProperty(elementsArray, property) {
+    var result = [];
+    elementsArray.forEach( function(element) {
+        if (element.prop(property) !== undefined) {
+            result.push(element);
+        }
+    });
+    return result;
 }
 
 /* Returns all the properties shared between two tasks
@@ -31,7 +30,7 @@ function sieveByProperty(elementsArray, property) {
  * @param {number} firstIndex
  * @param {number} secondIndex 
  */
-function findTasksLinks(taskProps, secondTaskProps, firstIndex, secondIndex) {
+export function findTasksLinks(taskProps, secondTaskProps, firstIndex, secondIndex) {
     var result = [];
     for (var i = 0; i < taskProps.length; i ++) {
         for ( var j = 0; j < secondTaskProps.length; j ++) {
@@ -58,7 +57,7 @@ function findTasksLinks(taskProps, secondTaskProps, firstIndex, secondIndex) {
 
 // Event Functions 
 
-function initiateDragging(evt, x, y) {
+export function initiateDragging(evt, x, y) {
     dragging = true;
     paperPointerX = x;
     paperPointerY = y;

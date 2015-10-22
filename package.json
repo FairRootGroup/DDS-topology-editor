@@ -1,0 +1,38 @@
+{
+  "name": "dds-topology-editor",
+  "version": "0.0.1",
+  "description": "Experimental editor for DDS topology files",
+  "main": "index.jsx",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "devbuild": "browserify -t babelify src/index.jsx --extension=.jsx -d -o dist/bundle.js",
+    "build": "browserify -t babelify src/index.jsx --extension=.jsx | uglifyjs > dist/bundle.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rbx/DDS-topology-editor.git"
+  },
+  "author": "Alexey Rybalchenko, Alexandar Rusinov",
+  "license": "LGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/rbx/DDS-topology-editor/issues"
+  },
+  "homepage": "https://github.com/rbx/DDS-topology-editor#readme",
+  "dependencies": {
+    "filesaver.js": "^0.2.0",
+    "jointjs": "^0.9.5",
+    "jquery": "^2.1.4",
+    "lodash": "^3.10.1",
+    "react": "^0.14.0",
+    "react-bootstrap": "^0.27.2",
+    "react-dom": "^0.14.0"
+  },
+  "devDependencies": {
+    "babelify": "^6.4.0",
+    "browserify": "^11.2.0",
+    "uglify-js": "^2.5.0"
+  }
+}

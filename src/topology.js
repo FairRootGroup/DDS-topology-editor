@@ -1,3 +1,7 @@
+import joint from 'jointjs';
+import $ from 'jquery';
+import { extractProperties, sieveByProperty, findTasksLinks } from './util';
+
 /* topology input */
 var graphDraw = (function(){
     function Property(propertyId) {
@@ -295,7 +299,7 @@ var graphDraw = (function(){
         var collectionSet = [];
         lowerEndLeft = groupBox.get('position').y + PADDING;
         lowerEndRight = lowerEndLeft;
-        rightEnd = groupBox.getBBox().corner().x + PADDING;
+        var rightEnd = groupBox.getBBox().corner().x + PADDING;
     /*  if (infoGroup.collections.length > 1) {
             groupBox.set('size', {
                 width: GROUP_METRICS.widthMax,
@@ -476,7 +480,7 @@ var graphDraw = (function(){
                         var destinationBBox = plotTasks[_property.destination].getBBox();
                         var link;
                         if (sourceBBox.origin().y > destinationBBox.origin().y) {
-                            link = V('line', {
+                            link = joint.V('line', {
                                 x1: sourceBBox.bottomLeft().x + ((sourceBBox.corner().x - sourceBBox.bottomLeft().x) / (interSection.length + 1)) * (i + 1), 
                                 y1: sourceBBox.origin().y,
                                 x2: destinationBBox.origin().x + ((destinationBBox.topRight().x - destinationBBox.origin().x) / (interSection.length +1)) * (i + 1),
@@ -489,7 +493,7 @@ var graphDraw = (function(){
                                 'visibility': "hidden"
                             });
                         } else {
-                            link = V('line', {
+                            link = joint.V('line', {
                                 x1: sourceBBox.bottomLeft().x + ((sourceBBox.corner().x - sourceBBox.bottomLeft().x) / (interSection.length + 1)) * (i + 1), 
                                 y1: sourceBBox.corner().y,
                                 x2: destinationBBox.origin().x + ((destinationBBox.topRight().x - destinationBBox.origin().x) / (interSection.length + 1)) * (i + 1),
@@ -523,7 +527,7 @@ var graphDraw = (function(){
                         var destinationBBox = graphTasks[_property.destination].getBBox();
                         var link;
                         if (sourceBBox.origin().y > destinationBBox.origin().y) {
-                            link = V('line', {
+                            link = joint.V('line', {
                                 x1: sourceBBox.bottomLeft().x + ((sourceBBox.corner().x - sourceBBox.bottomLeft().x) / (interSection.length + 1)) * (i + 1), 
                                 y1: sourceBBox.origin().y,
                                 x2: destinationBBox.origin().x + ((destinationBBox.topRight().x - destinationBBox.origin().x) / (interSection.length +1)) * (i + 1),
@@ -535,7 +539,7 @@ var graphDraw = (function(){
                                 'marker-end': "url(#arrowMarker)"
                             });
                         } else {
-                            link = V('line', {
+                            link = joint.V('line', {
                                 x1: sourceBBox.bottomLeft().x + ((sourceBBox.corner().x - sourceBBox.bottomLeft().x) / (interSection.length + 1)) * (i + 1), 
                                 y1: sourceBBox.corner().y,
                                 x2: destinationBBox.origin().x + ((destinationBBox.topRight().x - destinationBBox.origin().x) / (interSection.length + 1)) * (i + 1),
@@ -573,3 +577,5 @@ var graphDraw = (function(){
         mapLinks: mapLinks
     }
 })();
+
+export default graphDraw;

@@ -6,32 +6,9 @@
  *                  copied verbatim in the file "LICENSE"                       *
  ********************************************************************************/
 
-var CollectionList = React.createClass({
-    propTypes: {
-        collections: React.PropTypes.array.isRequired,
-        tasks: React.PropTypes.array.isRequired,
-        onRemoveCollection: React.PropTypes.func.isRequired,
-        onEditCollection: React.PropTypes.func.isRequired
-    },
-
-    render: function() {
-        var self = this;
-        return (
-            <div>
-                {this.props.collections.map(function(collection, index) {
-                    return <Collection collection={collection}
-                                       collections={self.props.collections}
-                                       tasks={self.props.tasks}
-                                       onRemoveCollection={self.props.onRemoveCollection}
-                                       onEditCollection={self.props.onEditCollection}
-                                       key={index}
-                                       elementKey={index}
-                            />;
-                })}
-            </div>
-        );
-    }
-});
+import React from 'react';
+import _ from 'lodash';
+import { OverlayTrigger, Popover, Button, Input, ButtonInput, Modal } from 'react-bootstrap';
 
 var Collection = React.createClass({
     propTypes: {
@@ -43,7 +20,7 @@ var Collection = React.createClass({
         elementKey: React.PropTypes.number.isRequired
     },
 
-    getInitialState: function() {
+    getInitialState() {
         return {
             bodyVisible: false,
             invalidInput: false,
@@ -51,22 +28,22 @@ var Collection = React.createClass({
         }
     },
 
-    closeDeleteModal: function() {
+    closeDeleteModal() {
         this.setState({ showDeleteModal: false });
     },
 
-    openDeleteModal: function() {
+    openDeleteModal() {
         this.setState({ showDeleteModal: true });
     },
 
-    handleInputChange: function(e) {
+    handleInputChange(e) {
         e.preventDefault();
         this.setState({
             invalidInput: false
         });
     },
 
-    hideEditCollectionButton: function(e) {
+    hideEditCollectionButton(e) {
         e.preventDefault();
         this.setState({
             invalidInput: false
@@ -74,11 +51,11 @@ var Collection = React.createClass({
         this.refs.editCollectionBtn.toggle();
     },
 
-    toggleBodyVisibility: function() {
+    toggleBodyVisibility() {
         this.setState({ bodyVisible: !this.state.bodyVisible });
     },
 
-    handleEditCollection: function(e) {
+    handleEditCollection(e) {
         e.preventDefault();
         var self = this;
         if (e.target[0].form[0].value === "") {
@@ -112,18 +89,12 @@ var Collection = React.createClass({
         this.props.onEditCollection(this.props.elementKey, updatedCollection);
     },
 
-    handleRemoveCollection: function() {
+    handleRemoveCollection() {
         this.setState({ showDeleteModal: false });
         this.props.onRemoveCollection(this.props.elementKey);
     },
 
-    render: function() {
-        var Modal = ReactBootstrap.Modal;
-        var OverlayTrigger = ReactBootstrap.OverlayTrigger;
-        var Popover = ReactBootstrap.Popover;
-        var Button = ReactBootstrap.Button;
-        var Input = ReactBootstrap.Input;
-        var ButtonInput = ReactBootstrap.ButtonInput;
+    render() {
         var TaskCheckboxes = [];
         var self = this;
 
@@ -168,7 +139,7 @@ var Collection = React.createClass({
                     </Modal>
 
                     <OverlayTrigger trigger="click" placement="right" ref="editCollectionBtn" onClick={this.handleInputChange} overlay={
-                        <Popover className="add-cg-popover" title="edit collection">
+                        <Popover className="add-cg-popover" title="edit collection" id={this.props.collection.id}>
                             <form onSubmit={this.handleEditCollection}>
                                 <Input type="text" addonBefore="id" onChange={this.handleInputChange} className={this.state.invalidInput ? "invalid-input" : "" } defaultValue={this.props.collection.id} />
                                 <p>Tasks in this collection:</p>
@@ -192,3 +163,5 @@ var Collection = React.createClass({
         );
     }
 });
+
+export default Collection;

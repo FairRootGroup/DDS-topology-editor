@@ -6,6 +6,8 @@
  *                  copied verbatim in the file "LICENSE"                       *
  ********************************************************************************/
 
+import React from 'react';
+
 var TopBar = React.createClass({
     propTypes: {
         topologyId: React.PropTypes.string.isRequired,
@@ -14,27 +16,27 @@ var TopBar = React.createClass({
         onToggleFluid: React.PropTypes.func.isRequired
     },
 
-    getInitialState: function() {
+    getInitialState() {
         return {
             beeingEdited: false
         };
     },
 
-    toggleEditing: function() {
+    toggleEditing() {
         this.setState({ beeingEdited: !this.state.beeingEdited });
     },
 
-    handleToggleFluid: function() {
+    handleToggleFluid() {
         this.props.onToggleFluid();
     },
 
-    handleTopologyIdChange: function(e) {
+    handleTopologyIdChange(e) {
         e.preventDefault();
         this.toggleEditing();
         this.props.onTopologyIdChange(e.target[0].form[0].value);
     },
 
-    render: function() {
+    render() {
         return (
             <nav className="navbar navbar-inverse" role="navigation">
                 <div className="container">
@@ -76,3 +78,5 @@ var TopBar = React.createClass({
         );
     }
 });
+
+export default TopBar;

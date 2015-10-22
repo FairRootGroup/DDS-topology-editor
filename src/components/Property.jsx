@@ -6,29 +6,8 @@
  *                  copied verbatim in the file "LICENSE"                       *
  ********************************************************************************/
 
-var PropertyList = React.createClass({
-    propTypes: {
-        properties: React.PropTypes.array.isRequired,
-        onRemoveProperty: React.PropTypes.func.isRequired,
-        onEditProperty: React.PropTypes.func.isRequired
-    },
-
-    render: function() {
-        var self = this;
-        return (
-            <div>
-                {this.props.properties.map(function(property, index) {
-                    return <Property property={property}
-                                     onRemoveProperty={self.props.onRemoveProperty}
-                                     onEditProperty={self.props.onEditProperty}
-                                     key={index}
-                                     elementKey={index}
-                            />;
-                })}
-            </div>
-        );
-    }
-});
+import React from 'react';
+import { Button, Modal } from 'react-bootstrap';
 
 var Property = React.createClass({
     propTypes: {
@@ -38,7 +17,7 @@ var Property = React.createClass({
         elementKey: React.PropTypes.number.isRequired
     },
 
-    getInitialState: function() {
+    getInitialState() {
         return {
             bodyVisible: false,
             beeingEdited: false,
@@ -46,21 +25,21 @@ var Property = React.createClass({
         }
     },
 
-    closeDeleteModal: function() {
+    closeDeleteModal() {
         this.setState({ showDeleteModal: false });
     },
 
-    openDeleteModal: function() {
+    openDeleteModal() {
         this.setState({ showDeleteModal: true });
     },
 
-    toggleBodyVisibility: function() {
+    toggleBodyVisibility() {
         if (!this.state.beeingEdited) {
             this.setState({ bodyVisible: !this.state.bodyVisible });
         }
     },
 
-    toggleEditing: function() {
+    toggleEditing() {
         if (!this.state.beeingEdited) {
             this.setState({ beeingEdited: true, bodyVisible: true });
         } else {
@@ -68,7 +47,7 @@ var Property = React.createClass({
         }
     },
 
-    handleEditProperty: function(e) {
+    handleEditProperty(e) {
         e.preventDefault();
         if(e.target[0].form[0].value === "") {
             return;
@@ -80,15 +59,12 @@ var Property = React.createClass({
         this.props.onEditProperty(this.props.elementKey, updatedProperty);
     },
 
-    handleRemoveProperty: function() {
+    handleRemoveProperty() {
         this.setState({ showDeleteModal: false });
         this.props.onRemoveProperty(this.props.elementKey);
     },
 
-    render: function() {
-        var Modal = ReactBootstrap.Modal;
-        var Button = ReactBootstrap.Button;
-
+    render() {
         return (
             <div className="property">
                 <h5>
@@ -133,3 +109,5 @@ var Property = React.createClass({
         );
     }
 });
+
+export default Property;

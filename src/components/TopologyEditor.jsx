@@ -6,8 +6,19 @@
  *                  copied verbatim in the file "LICENSE"                       *
  ********************************************************************************/
 
+import React from 'react';
+import { OverlayTrigger, Popover, Button, Input, ButtonInput, Modal } from 'react-bootstrap';
+
+import TopBar from './TopBar';
+import FileActions from './FileActions';
+import CollectionList from './CollectionList';
+import GroupList from './GroupList';
+import PropertyList from './PropertyList';
+import TaskList from './TaskList';
+import MainEditor from './MainEditor';
+
 var TopologyEditor = React.createClass({
-    getInitialState: function() {
+    getInitialState() {
         return {
             topologyId: 'new topology',
             variables: [],
@@ -27,19 +38,19 @@ var TopologyEditor = React.createClass({
         };
     },
 
-    closeResetModal: function() {
+    closeResetModal() {
         this.setState({ showResetModal: false });
     },
 
-    openResetModal: function() {
+    openResetModal() {
         this.setState({ showResetModal: true });
     },
 
-    toggleFluid: function() {
+    toggleFluid() {
         this.setState({ fluid: !this.state.fluid });
     },
 
-    resetState: function() {
+    resetState() {
         this.replaceState({
             topologyId: 'new topology',
             variables: [],
@@ -58,7 +69,7 @@ var TopologyEditor = React.createClass({
         });
     },
 
-    handleTopologyChange: function(topologyId, variables, properties, requirements, tasks, collections, main) {
+    handleTopologyChange(topologyId, variables, properties, requirements, tasks, collections, main) {
         this.setState({
             topologyId: topologyId,
             variables: variables,
@@ -70,20 +81,20 @@ var TopologyEditor = React.createClass({
         });
     },
 
-    handleTopologyIdChange: function(topologyId) {
+    handleTopologyIdChange(topologyId) {
         this.setState({
             topologyId: topologyId
         });
     },
 
-    handleInputChange: function(e) {
+    handleInputChange(e) {
         e.preventDefault();
         this.setState({
             invalidInput: false
         });
     },
 
-    handleAddProperty: function(e) {
+    handleAddProperty(e) {
         e.preventDefault();
         if (e.target[0].form[0].value === "") {
             this.setState({
@@ -104,7 +115,7 @@ var TopologyEditor = React.createClass({
         });
     },
 
-    handleRemoveProperty: function(key) {
+    handleRemoveProperty(key) {
         var nextProperties = this.state.properties;
         var removedProperty = nextProperties.splice(key, 1);
         var nextTasks = this.state.tasks;
@@ -119,7 +130,7 @@ var TopologyEditor = React.createClass({
         });
     },
 
-    handleEditProperty: function(key, updatedProperty) {
+    handleEditProperty(key, updatedProperty) {
         if (_.some(this.state.properties, { 'id': updatedProperty.id })) {
             return;
         }
@@ -140,7 +151,7 @@ var TopologyEditor = React.createClass({
         });
     },
 
-    handleAddTask: function(e) {
+    handleAddTask(e) {
         e.preventDefault();
         if (e.target[0].form[0].value === "" || e.target[0].form[1].value === "") {
             this.setState({
@@ -191,7 +202,7 @@ var TopologyEditor = React.createClass({
         });
     },
 
-    handleEditTask: function(key, updatedTask) {
+    handleEditTask(key, updatedTask) {
         var nextTasks = this.state.tasks;
         var oldId = nextTasks[key].id;
         nextTasks[key] = updatedTask;
@@ -233,7 +244,7 @@ var TopologyEditor = React.createClass({
         });
     },
 
-    handleRemoveTask: function(key) {
+    handleRemoveTask(key) {
         var nextTasks = this.state.tasks;
         var removedTask = nextTasks.splice(key, 1);
         var nextCollections = this.state.collections;
@@ -265,7 +276,7 @@ var TopologyEditor = React.createClass({
         });
     },
 
-    handleAddCollection: function(e) {
+    handleAddCollection(e) {
         e.preventDefault();
         if(e.target[0].form[0].value === "") {
             this.setState({
@@ -295,7 +306,7 @@ var TopologyEditor = React.createClass({
         });
     },
 
-    handleEditCollection: function(key, updatedCollection) {
+    handleEditCollection(key, updatedCollection) {
         var nextCollections = this.state.collections;
         var oldId = nextCollections[key].id;
         nextCollections[key] = updatedCollection;
@@ -326,7 +337,7 @@ var TopologyEditor = React.createClass({
         });
     },
 
-    handleRemoveCollection: function(key) {
+    handleRemoveCollection(key) {
         var nextCollections = this.state.collections;
         var removedCollection = nextCollections.splice(key, 1);
         var nextMainCollections = this.state.main.collections;
@@ -351,7 +362,7 @@ var TopologyEditor = React.createClass({
         });
     },
 
-    handleAddGroup: function(e) {
+    handleAddGroup(e) {
         e.preventDefault();
         if(e.target[0].form[0].value === "") {
             this.setState({
@@ -397,7 +408,7 @@ var TopologyEditor = React.createClass({
         this.refs.addGroupBtn.toggle();
     },
 
-    handleEditGroup: function(groups) {
+    handleEditGroup(groups) {
         var nextMain = {
             id: this.state.main.id,
             tasks: this.state.main.tasks,
@@ -409,7 +420,7 @@ var TopologyEditor = React.createClass({
         });
     },
 
-    handleRemoveGroup: function(key) {
+    handleRemoveGroup(key) {
         var nextGroups = this.state.main.groups;
         nextGroups.splice(key, 1);
         var nextMain = {
@@ -423,13 +434,13 @@ var TopologyEditor = React.createClass({
         });
     },
 
-    handleEditMain: function(main) {
+    handleEditMain(main) {
         this.setState({
             main: main
         });
     },
 
-    hideAddPropertyButton: function(e) {
+    hideAddPropertyButton(e) {
         e.preventDefault();
         this.setState({
             invalidInput: false
@@ -437,7 +448,7 @@ var TopologyEditor = React.createClass({
         this.refs.addPropertyBtn.toggle();
     },
 
-    hideAddTaskButton: function(e) {
+    hideAddTaskButton(e) {
         e.preventDefault();
         this.setState({
             invalidInput: false
@@ -445,7 +456,7 @@ var TopologyEditor = React.createClass({
         this.refs.addTaskBtn.toggle();
     },
 
-    hideAddCollectionButton: function(e) {
+    hideAddCollectionButton(e) {
         e.preventDefault();
         this.setState({
             invalidInput: false
@@ -453,7 +464,7 @@ var TopologyEditor = React.createClass({
         this.refs.addCollectionBtn.toggle();
     },
 
-    hideAddGroupButton: function(e) {
+    hideAddGroupButton(e) {
         e.preventDefault();
         this.setState({
             invalidInput: false
@@ -461,16 +472,10 @@ var TopologyEditor = React.createClass({
         this.refs.addGroupBtn.toggle();
     },
 
-    render: function() {
-        var OverlayTrigger = ReactBootstrap.OverlayTrigger;
-        var Popover = ReactBootstrap.Popover;
-        var Button = ReactBootstrap.Button;
-        var Input = ReactBootstrap.Input;
-        var ButtonInput = ReactBootstrap.ButtonInput;
-        var Modal = ReactBootstrap.Modal;
-        var PropertyCheckboxes = [];
-        var TaskCheckboxes = [];
-        var CollectionCheckboxes = [];
+    render() {
+        let PropertyCheckboxes = [];
+        let TaskCheckboxes = [];
+        let CollectionCheckboxes = [];
 
         this.state.properties.forEach(function(property, i) {
             PropertyCheckboxes.push(
@@ -528,7 +533,7 @@ var TopologyEditor = React.createClass({
                                 <li className="list-group-item tasks-header">
                                     tasks
                                     <OverlayTrigger trigger="click" placement="right" ref="addTaskBtn" onClick={this.handleInputChange} overlay={
-                                        <Popover className="add-cg-popover" title="add new task">
+                                        <Popover className="add-cg-popover" title="add new task" id="addnewtask">
                                             <form onSubmit={this.handleAddTask}>
                                                 <Input type="text" addonBefore="id" autoFocus onChange={this.handleInputChange} className={this.state.invalidInput ? "invalid-input" : "" } />
                                                 <Input type="text" addonBefore="exe" onChange={this.handleInputChange} className={this.state.invalidInput ? "mono invalid-input" : "mono" } />
@@ -559,7 +564,7 @@ var TopologyEditor = React.createClass({
                                 <li className="list-group-item properties-header">
                                     properties
                                     <OverlayTrigger trigger="click" placement="right" ref="addPropertyBtn" onClick={this.handleInputChange} overlay={
-                                        <Popover className="add-cg-popover" title="add new property">
+                                        <Popover className="add-cg-popover" title="add new property" id="addnewproperty">
                                             <form onSubmit={this.handleAddProperty}>
                                                 <Input type="text" addonBefore="id" autoFocus onChange={this.handleInputChange} className={this.state.invalidInput ? "invalid-input" : ""} />
                                                 <div className="row">
@@ -580,35 +585,10 @@ var TopologyEditor = React.createClass({
                                                   onEditProperty={this.handleEditProperty} />
                                 </li>
 
-                                <li className="list-group-item properties-header">
-                                    properties
-                                    <OverlayTrigger trigger="click" placement="right" ref="addPropertyBtn" onClick={this.handleInputChange} overlay={
-                                        <Popover className="add-cg-popover" title="add new property">
-                                            <form onSubmit={this.handleAddProperty}>
-                                                <Input type="text" addonBefore="id" onChange={this.handleInputChange} className={this.state.invalidInput ? "invalid-input" : ""} />
-                                                <div className="row">
-                                                    <div className="col-xs-12">
-                                                        <ButtonInput className="add-cg-popover-btn" type="submit" bsSize="small" bsStyle="primary" value="add" />
-                                                        <Button className="add-cg-popover-btn" bsSize="small" bsStyle="default" onClick={this.hideAddPropertyButton}>cancel</Button>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </Popover>
-                                    }>
-                                        <span className="glyphicon glyphicon-plus add-property-btn" title="add new property"></span>
-                                    </OverlayTrigger>
-                                </li>
-                                <li className="list-group-item properties">
-                                    <PropertyList
-                                        properties={this.state.properties}
-                                        onRemoveProperty={this.handleRemoveProperty}
-                                        onEditProperty={this.handleEditProperty} />
-                                </li>
-
                                 <li className="list-group-item collections-header">
                                     collections
                                     <OverlayTrigger trigger="click" placement="right" ref="addCollectionBtn" onClick={this.handleInputChange} overlay={
-                                        <Popover className="add-cg-popover" title="add new collection">
+                                        <Popover className="add-cg-popover" title="add new collection" id="addnewcollection">
                                             <form onSubmit={this.handleAddCollection}>
                                                 <Input type="text" addonBefore="id" autoFocus onChange={this.handleInputChange} className={this.state.invalidInput ? "invalid-input" : ""} />
                                                 <p>Tasks in this collection:</p>
@@ -636,7 +616,7 @@ var TopologyEditor = React.createClass({
                                 <li className="list-group-item groups-header">
                                     groups
                                     <OverlayTrigger trigger="click" placement="right" ref="addGroupBtn" onClick={this.handleInputChange} overlay={
-                                        <Popover className="add-cg-popover" title="add new group">
+                                        <Popover className="add-cg-popover" title="add new group" id="addnewgroup">
                                             <form onSubmit={this.handleAddGroup}>
                                                 <Input type="text" addonBefore="id" autoFocus onChange={this.handleInputChange} className={this.state.invalidInput ? "invalid-input" : ""} />
                                                 <div className="row">
@@ -703,3 +683,5 @@ var TopologyEditor = React.createClass({
         );
     }
 });
+
+export default TopologyEditor;

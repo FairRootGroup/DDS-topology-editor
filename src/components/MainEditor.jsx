@@ -6,6 +6,12 @@
  *                  copied verbatim in the file "LICENSE"                       *
  ********************************************************************************/
 
+import React from 'react';
+import joint from 'jointjs';
+import { OverlayTrigger, Popover, Button, Input, ButtonInput } from 'react-bootstrap';
+
+import TopologyGraph from './TopologyGraph';
+
 var MainEditor = React.createClass({
     propTypes: {
         properties: React.PropTypes.array.isRequired,
@@ -15,7 +21,7 @@ var MainEditor = React.createClass({
         onEditMain: React.PropTypes.func.isRequired
     },
 
-    getInitialState: function() {
+    getInitialState() {
         return {
             IdBeeingEdited: false,
             paper: null,
@@ -24,17 +30,17 @@ var MainEditor = React.createClass({
         }
     },
 
-    hideEditTasksInMainBtn: function(e) {
+    hideEditTasksInMainBtn(e) {
         e.preventDefault();
         this.refs.editTasksInMainBtn.toggle();
     },
 
-    hideEditCollectionsInMainBtn: function(e) {
+    hideEditCollectionsInMainBtn(e) {
         e.preventDefault();
         this.refs.editCollectionsInMainBtn.toggle();
     },
 
-    handleEditTasksInMain: function(e) {
+    handleEditTasksInMain(e) {
         e.preventDefault();
 
         var selectedTasks = [];
@@ -54,7 +60,7 @@ var MainEditor = React.createClass({
         this.props.onEditMain(nextMain);
     },
 
-    handleEditCollectionsInMain: function(e) {
+    handleEditCollectionsInMain(e) {
         e.preventDefault();
 
         var selectedCollections = [];
@@ -74,13 +80,13 @@ var MainEditor = React.createClass({
         this.props.onEditMain(nextMain);
     },
 
-    handlePaperVis: function(paper)  {
+    handlePaperVis(paper)  {
         this.setState({
             paper: paper
         });
     },
 
-    handleZoomIn: function() {
+    handleZoomIn() {
         this.setState({
             graphScale: (this.state.graphScale + 0.1)
         });
@@ -89,7 +95,7 @@ var MainEditor = React.createClass({
         this.state.paper.scaleContentToFit();
     },
 
-    handleZoomOut: function() {
+    handleZoomOut() {
         this.setState({
             graphScale: (this.state.graphScale - 0.1)
         });
@@ -98,7 +104,7 @@ var MainEditor = React.createClass({
         this.state.paper.fitToContent();
     },
 
-    handleReset: function() {
+    handleReset() {
         this.setState({
             graphScale: 1
         });
@@ -106,7 +112,7 @@ var MainEditor = React.createClass({
         this.state.paper.fitToContent();
     },
 
-    handleInteraction: function() {
+    handleInteraction() {
         if (this.state.interactive) {
             this.state.interactive = false;
             $('#adjust').html('<span class="glyphicon-pushpin"></span>');
@@ -118,24 +124,24 @@ var MainEditor = React.createClass({
         this.forceUpdate();
     },
 
-    handlePropertyMenu: function(event) {
+    handlePropertyMenu(event) {
         if (this.state.paper !== null) {
-            var propLines = V(this.state.paper.viewport).find('line');
+            var propLines = joint.V(this.state.paper.viewport).find('line');
             if (event.target.value === "none") {
                 for (var i = 0; i < propLines.length; i++) {
-                    V(propLines[i]).attr('visibility', 'hidden');
+                    joint.V(propLines[i]).attr('visibility', 'hidden');
                 }
                 return;
             }
             for (var i = 0; i < propLines.length; i++) {
-                V(propLines[i]).attr('visibility', 'visible');
+                joint.V(propLines[i]).attr('visibility', 'visible');
             }
             if (event.target.value !== 'all') {
                 for (var i = 0; i < propLines.length; i++) {
                     for (var j = 0; j < propLines[i].attributes.length; j++) {
                         if (propLines[i].attributes[j].name === 'title') {
                             if (propLines[i].attributes[j].value !== event.target.value) {
-                                V(propLines[i]).attr('visibility', 'hidden');
+                                joint.V(propLines[i]).attr('visibility', 'hidden');
                             }
                         }
                     }
@@ -145,12 +151,7 @@ var MainEditor = React.createClass({
         }
     },
 
-    render: function() {
-        var OverlayTrigger = ReactBootstrap.OverlayTrigger;
-        var Popover = ReactBootstrap.Popover;
-        var Button = ReactBootstrap.Button;
-        var Input = ReactBootstrap.Input;
-        var ButtonInput = ReactBootstrap.ButtonInput;
+    render() {
         var TaskCheckboxes = [];
         var CollectionCheckboxes = [];
         var PropertiesMenu = [];
@@ -209,7 +210,7 @@ var MainEditor = React.createClass({
                             <h5 className="main-header">
                                 tasks in main
                                 <OverlayTrigger trigger="click" placement="bottom" ref="editTasksInMainBtn" overlay={
-                                    <Popover className="add-cg-popover" title="modify tasks in main">
+                                    <Popover className="add-cg-popover" title="modify tasks in main" id="tasksinmain">
                                         <form onSubmit={this.handleEditTasksInMain}>
                                             <p>Tasks in main:</p>
                                             {TaskCheckboxes}
@@ -231,7 +232,7 @@ var MainEditor = React.createClass({
                             <h5 className="main-header">
                                 collections in main
                                 <OverlayTrigger trigger="click" placement="bottom" ref="editCollectionsInMainBtn" overlay={
-                                    <Popover className="add-cg-popover" title="modify collections in main">
+                                    <Popover className="add-cg-popover" title="modify collections in main" id="collectionsinmain">
                                         <form onSubmit={this.handleEditCollectionsInMain}>
                                             <p>Collections in main:</p>
                                             {CollectionCheckboxes}
@@ -289,3 +290,4 @@ var MainEditor = React.createClass({
     }
 });
 
+export default MainEditor;

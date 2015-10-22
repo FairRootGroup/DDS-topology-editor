@@ -1,3 +1,19 @@
+/********************************************************************************
+ *    Copyright (C) 2014 GSI Helmholtzzentrum fuer Schwerionenforschung GmbH    *
+ *                                                                              *
+ *              This software is distributed under the terms of the             *
+ *         GNU Lesser General Public Licence version 3 (LGPL) version 3,        *
+ *                  copied verbatim in the file "LICENSE"                       *
+ ********************************************************************************/
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+import joint from 'jointjs';
+import $ from 'jquery';
+
+import { initiateDragging } from '../util';
+import graphDraw from '../topology';
+
 var TopologyGraph = React.createClass({
     propTypes: {
         tasks: React.PropTypes.array.isRequired,
@@ -7,32 +23,32 @@ var TopologyGraph = React.createClass({
         onPaperChange: React.PropTypes.func.isRequired
     },
 
-	getInitialState: function() {
-		return {
-			graph: new joint.dia.Graph,
-			paper: null,
+    getInitialState() {
+        return {
+            graph: new joint.dia.Graph,
+            paper: null,
             oldHistTasks: "",
             oldHistCollections: "",
             oldHistGroups: "",
             oldInteractive: false,
             visibleProperties: {}
-		};
-	},
+        };
+    },
 
-	render: function() {
-		return <div></div>;
-	},
+    render() {
+        return <div></div>;
+    },
 
-	componentDidMount: function() {
+    componentDidMount() {
         this.state.paper = new joint.dia.Paper({
-            el: React.findDOMNode(this),
+            el: ReactDOM.findDOMNode(this),
             width: 100,
             height: 100,
             model: this.state.graph,
             gridSize: 1,
             interactive: this.props.interactive
         });
-    	/* event handlers */
+        /* event handlers */
 
         // deleting and redrawing links when in interactive
         this.state.paper.on('cell:pointerdown', this.deleteLinks);
@@ -43,8 +59,8 @@ var TopologyGraph = React.createClass({
 
         this.state.paper.on('blank:pointerdown', initiateDragging);
         this.state.paper.fitToContent();
-        //---------------------------------
-        var arrowMarker = V('marker', {
+
+        var arrowMarker = joint.V('marker', {
             id: 'arrowMarker',
             viewBox: '0 0 10 10',
             refX: 1,
@@ -54,12 +70,12 @@ var TopologyGraph = React.createClass({
             markerWidth: 4,
             markerHeight:4
         });
-        var polyline = V('polyline', {
+        var polyline = joint.V('polyline', {
             points: '0,0 10,5 0,10 1,5',
             fill: 'darkblue'
         })
         arrowMarker.prepend(polyline);
-        V(this.state.paper.viewport).append(arrowMarker);
+        joint.V(this.state.paper.viewport).append(arrowMarker);
         this.state.oldHistTasks = JSON.stringify(this.props.tasks);
         this.state.oldHistCollections = JSON.stringify(this.props.collections);
         this.state.oldHistGroups = JSON.stringify(this.props.main.groups);
@@ -67,7 +83,7 @@ var TopologyGraph = React.createClass({
         this.props.onPaperChange(this.state.paper);
     },
 
-    deleteLinks: function(cellView, evt, x, y) {
+    deleteLinks(cellView, evt, x, y) {
         var cell = cellView.model;
         var cellQueue = [];
         cellQueue.push(cell.getEmbeddedCells({deep: true}));
@@ -76,16 +92,16 @@ var TopologyGraph = React.createClass({
             if (cellQueue[0][i].get('properties') !== undefined) {
                 var cellOrigin = cellQueue[0][i].getBBox().origin();
                 var cellCorner = cellQueue[0][i].getBBox().corner();
-                lines = V(this.state.paper.viewport).find('line');
+                var lines = joint.V(this.state.paper.viewport).find('line');
                 for (var j = 0; j < lines.length; j ++) {
                     if (((lines[j].x1.baseVal.value >= cellOrigin.x && lines[j].x1.baseVal.value <= cellCorner.x)
                         && (lines[j].y1.baseVal.value >= cellOrigin.y && lines[j].y1.baseVal.value <= cellCorner.y))
                         || ((lines[j].x2.baseVal.value >= cellOrigin.x && lines[j].x2.baseVal.value <= cellCorner.x)
                         && (lines[j].y2.baseVal.value >= cellOrigin.y - 6 && lines[j].y2.baseVal.value <= cellCorner.y + 6))) {
-                        if (V(lines[j]).attr('visibility') == 'hidden') {
-                            this.state.visibleProperties[V(lines[j]).attr('title')] = false;
+                        if (joint.V(lines[j]).attr('visibility') == 'hidden') {
+                            this.state.visibleProperties[joint.V(lines[j]).attr('title')] = false;
                         } else {
-                            this.state.visibleProperties[V(lines[j]).attr('title')] = true;
+                            this.state.visibleProperties[joint.V(lines[j]).attr('title')] = true;
                         }
                         lines[j].remove();
                     }
@@ -94,7 +110,7 @@ var TopologyGraph = React.createClass({
         }
     },
 
-    redrawLinks: function(cellView, evt, x, y) {
+    redrawLinks(cellView, evt, x, y) {
         var cell = cellView.model;
         var cellQueue = [];
         cellQueue.push(cell.getEmbeddedCells({deep: true}));
@@ -106,7 +122,7 @@ var TopologyGraph = React.createClass({
                     if (this.state.visibleProperties[link.attr('title')] === false) {
                         link.attr('visibility', 'hidden');
                     }
-                    V(this.state.paper.viewport).append(link);
+                    joint.V(this.state.paper.viewport).append(link);
                 }.bind(this));
             }
         }
@@ -114,7 +130,7 @@ var TopologyGraph = React.createClass({
         this.state.paper.fitToContent();
     },
 
-    changePosition: function(cell) {
+    changePosition(cell) {
         var parentId = cell.get('parent');
         if (!parentId) return;
 
@@ -137,7 +153,7 @@ var TopologyGraph = React.createClass({
         cell.set('position', cell.previous('position'));
     },
 
-    shouldComponentUpdate: function(nextProps) {
+    shouldComponentUpdate(nextProps) {
         var noDataChange = ( JSON.stringify(nextProps.main) === JSON.stringify(this.props.main) 
                 && JSON.stringify(nextProps.tasks) === this.state.oldHistTasks
                 && JSON.stringify(nextProps.collections) === this.state.oldHistCollections 
@@ -151,9 +167,9 @@ var TopologyGraph = React.createClass({
         this.state.oldHistCollections = JSON.stringify(nextProps.collections);
         this.state.oldHistGroups = JSON.stringify(nextProps.main.groups);
         this.state.oldInteractive = nextProps.interactive;
-        
+
         this.state.paper.options.interactive = nextProps.interactive;
-        var previousLines = V(this.state.paper.viewport).find('line');
+        var previousLines = joint.V(this.state.paper.viewport).find('line');
         for(var i = 0; i < previousLines.length; i ++) {
             previousLines[i].remove();
         }
@@ -206,12 +222,13 @@ var TopologyGraph = React.createClass({
         graphDraw.mapTemplate(visMain, this.state.graph);
         var links = graphDraw.mapLinks(this.state.graph, this.state.paper);
         links.forEach( function (link, i) {
-            V(this.state.paper.viewport).append(link);
+            joint.V(this.state.paper.viewport).append(link);
         }.bind(this));
 
-		//---------------------------------
         this.state.paper.fitToContent();
         this.props.onPaperChange(this.state.paper);
         return false;
-	}
+    }
 });
+
+export default TopologyGraph;

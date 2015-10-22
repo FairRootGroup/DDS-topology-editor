@@ -6,34 +6,9 @@
  *                  copied verbatim in the file "LICENSE"                       *
  ********************************************************************************/
 
-var GroupList = React.createClass({
-    propTypes: {
-        groups: React.PropTypes.array.isRequired,
-        tasks: React.PropTypes.array.isRequired,
-        collections: React.PropTypes.array.isRequired,
-        onRemoveGroup: React.PropTypes.func.isRequired,
-        onEditGroup: React.PropTypes.func.isRequired
-    },
-
-    render: function() {
-        var self = this;
-        return (
-            <div>
-                {this.props.groups.map(function(group, index) {
-                    return <Group group={group}
-                                  groups={self.props.groups}
-                                  tasks={self.props.tasks}
-                                  collections={self.props.collections}
-                                  onRemoveGroup={self.props.onRemoveGroup}
-                                  onEditGroup={self.props.onEditGroup}
-                                  key={index}
-                                  elementKey={index}
-                            />;
-                })}
-            </div>
-        );
-    }
-});
+import React from 'react';
+import _ from 'lodash';
+import { OverlayTrigger, Popover, Button, Input, ButtonInput, Modal } from 'react-bootstrap';
 
 var Group = React.createClass({
     propTypes: {
@@ -46,7 +21,7 @@ var Group = React.createClass({
         elementKey: React.PropTypes.number.isRequired
     },
 
-    getInitialState: function() {
+    getInitialState() {
         return {
             bodyVisible: false,
             invalidInput: false,
@@ -54,22 +29,22 @@ var Group = React.createClass({
         }
     },
 
-    closeDeleteModal: function() {
+    closeDeleteModal() {
         this.setState({ showDeleteModal: false });
     },
 
-    openDeleteModal: function() {
+    openDeleteModal() {
         this.setState({ showDeleteModal: true });
     },
 
-    handleInputChange: function(e) {
+    handleInputChange(e) {
         e.preventDefault();
         this.setState({
             invalidInput: false
         });
     },
 
-    hideEditGroupButton: function(e) {
+    hideEditGroupButton(e) {
         e.preventDefault();
         this.setState({
             invalidInput: false
@@ -77,11 +52,11 @@ var Group = React.createClass({
         this.refs.editGroupBtn.toggle();
     },
 
-    toggleBodyVisibility: function() {
+    toggleBodyVisibility() {
         this.setState({ bodyVisible: !this.state.bodyVisible });
     },
 
-    handleEditGroup: function(e) {
+    handleEditGroup(e) {
         e.preventDefault();
         var self = this;
         if (e.target[0].form[0].value === "") {
@@ -127,18 +102,12 @@ var Group = React.createClass({
         this.props.onEditGroup(nextGroups);
     },
 
-    handleRemoveGroup: function() {
+    handleRemoveGroup() {
         this.setState({ showDeleteModal: false });
         this.props.onRemoveGroup(this.props.elementKey);
     },
 
-    render: function() {
-        var OverlayTrigger = ReactBootstrap.OverlayTrigger;
-        var Popover = ReactBootstrap.Popover;
-        var Button = ReactBootstrap.Button;
-        var Input = ReactBootstrap.Input;
-        var ButtonInput = ReactBootstrap.ButtonInput;
-        var Modal = ReactBootstrap.Modal;
+    render() {
         var TaskCheckboxes = [];
         var CollectionCheckboxes = [];
         var self = this;
@@ -199,7 +168,7 @@ var Group = React.createClass({
                     </Modal>
 
                     <OverlayTrigger trigger="click" placement="right" ref="editGroupBtn" onClick={this.handleInputChange} overlay={
-                        <Popover className="add-cg-popover" title="edit group">
+                        <Popover className="add-cg-popover" title="edit group" id={this.props.group.id}>
                             <form onSubmit={this.handleEditGroup}>
                                 <Input type="text" addonBefore="id" onChange={this.handleInputChange} className={this.state.invalidInput ? "invalid-input" : ""} defaultValue={this.props.group.id} />
                                 <div className="row">
@@ -237,3 +206,5 @@ var Group = React.createClass({
         );
     }
 });
+
+export default Group;

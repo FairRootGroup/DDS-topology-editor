@@ -6,32 +6,10 @@
  *                  copied verbatim in the file "LICENSE"                       *
  ********************************************************************************/
 
-var TaskList = React.createClass({
-    propTypes: {
-        properties: React.PropTypes.array.isRequired,
-        tasks: React.PropTypes.array.isRequired,
-        onRemoveTask: React.PropTypes.func.isRequired,
-        onEditTask: React.PropTypes.func.isRequired
-    },
+import React from 'react';
+import _ from 'lodash';
 
-    render: function() {
-        var self = this;
-        return (
-            <div>
-                {this.props.tasks.map(function(task, index) {
-                    return <Task task={task}
-                                 properties={self.props.properties}
-                                 tasks={self.props.tasks}
-                                 onRemoveTask={self.props.onRemoveTask}
-                                 onEditTask={self.props.onEditTask}
-                                 key={index}
-                                 elementKey={index}
-                            />;
-                })}
-            </div>
-        );
-    }
-});
+import { OverlayTrigger, Popover, Button, Input, ButtonInput, Modal } from 'react-bootstrap';
 
 var Task = React.createClass({
     propTypes: {
@@ -43,7 +21,7 @@ var Task = React.createClass({
         elementKey: React.PropTypes.number.isRequired
     },
 
-    getInitialState: function() {
+    getInitialState() {
         return {
             bodyVisible: false,
             invalidInput: false,
@@ -51,30 +29,30 @@ var Task = React.createClass({
         }
     },
 
-    closeDeleteModal: function() {
+    closeDeleteModal() {
         this.setState({ showDeleteModal: false });
     },
 
-    openDeleteModal: function() {
+    openDeleteModal() {
         this.setState({ showDeleteModal: true });
     },
 
-    handleInputChange: function(e) {
+    handleInputChange(e) {
         e.preventDefault();
         this.setState({ invalidInput: false });
     },
 
-    hideEditTaskButton: function(e) {
+    hideEditTaskButton(e) {
         e.preventDefault();
         this.setState({ invalidInput: false });
         this.refs.editTaskBtn.toggle();
     },
 
-    toggleBodyVisibility: function() {
+    toggleBodyVisibility() {
         this.setState({ bodyVisible: !this.state.bodyVisible });
     },
 
-    handleEditTask: function(e) {
+    handleEditTask(e) {
         e.preventDefault();
         var self = this;
         if (e.target[0].form[0].value === "" || e.target[0].form[1].value === "") {
@@ -127,18 +105,12 @@ var Task = React.createClass({
         this.props.onEditTask(this.props.elementKey, updatedTask);
     },
 
-    handleRemoveTask: function() {
+    handleRemoveTask() {
         this.setState({ showDeleteModal: false });
         this.props.onRemoveTask(this.props.elementKey);
     },
 
-    render: function() {
-        var OverlayTrigger = ReactBootstrap.OverlayTrigger;
-        var Popover = ReactBootstrap.Popover;
-        var Button = ReactBootstrap.Button;
-        var Input = ReactBootstrap.Input;
-        var ButtonInput = ReactBootstrap.ButtonInput;
-        var Modal = ReactBootstrap.Modal;
+    render() {
         var PropertyCheckboxes = [];
         var exeReachableCheckbox = false;
         var envReachableCheckbox = false;
@@ -212,7 +184,7 @@ var Task = React.createClass({
                     </Modal>
 
                     <OverlayTrigger trigger="click" placement="right" ref="editTaskBtn" onClick={this.handleInputChange} overlay={
-                        <Popover className="add-cg-popover" title="edit task">
+                        <Popover className="add-cg-popover" title="edit task" id={this.props.task.id}>
                             <form onSubmit={this.handleEditTask}>
                                 <Input type="text" addonBefore="id" onChange={this.handleInputChange} className={this.state.invalidInput ? "invalid-input" : "" } defaultValue={this.props.task.id} />
                                 <Input type="text" addonBefore="exe" onChange={this.handleInputChange} className={this.state.invalidInput ? "mono invalid-input" : "mono" } defaultValue={this.props.task.exe.valueText || ""} />
@@ -252,3 +224,5 @@ var Task = React.createClass({
         );
     }
 });
+
+export default Task;

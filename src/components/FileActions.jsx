@@ -6,6 +6,10 @@
  *                  copied verbatim in the file "LICENSE"                       *
  ********************************************************************************/
 
+import React from 'react';
+import $ from 'jquery';
+import saveAs from 'filesaver.js';
+
 var FileActions = React.createClass({
     propTypes: {
         onFileLoad: React.PropTypes.func.isRequired,
@@ -18,7 +22,7 @@ var FileActions = React.createClass({
         main: React.PropTypes.object.isRequired
     },
 
-    handleFileLoad: function(event) {
+    handleFileLoad(event) {
         var parser = new DOMParser(),
             reader = new FileReader(),
             topologyId = '',
@@ -120,7 +124,7 @@ var FileActions = React.createClass({
             });
 
             // main
-            $main = $xml.find('topology>main');
+            var $main = $xml.find('topology>main');
             main.id = $main.attr('id');
             main.tasks = [];
             main.collections = [];
@@ -157,7 +161,7 @@ var FileActions = React.createClass({
         reader.readAsText(event.target.files[0]);
     },
 
-    handleFileSave: function() {
+    handleFileSave() {
         var xmlDoc = document.implementation.createDocument('', '', null);
         var root = xmlDoc.createElement('topology');
         root.setAttribute('id', this.props.topologyId);
@@ -407,7 +411,7 @@ var FileActions = React.createClass({
         saveAs(blob, this.props.topologyId + ".xml");
     },
 
-    render: function() {
+    render() {
         return (
             <li className="list-group-item file-actions">
                 <div className="row">
@@ -427,6 +431,4 @@ var FileActions = React.createClass({
     }
 });
 
-                // <button type="button" className="btn btn-sm btn-default" onclick="showXML()" data-toggle='modal' data-target='#codeModal'>
-                //     <span className="glyphicon glyphicon-file"></span> Show
-                // </button>
+export default FileActions;
