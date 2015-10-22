@@ -8,7 +8,7 @@
 
 import React from 'react';
 import $ from 'jquery';
-import saveAs from 'filesaver.js';
+import { saveAs } from 'filesaver.js';
 
 var FileActions = React.createClass({
     propTypes: {
