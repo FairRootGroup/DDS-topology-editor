@@ -26,7 +26,7 @@ var TopologyEditor = React.createClass({
 
     getInitialState() {
         return {
-            topologyId: 'new topology',
+            topologyId: 'new',
             variables: [],
             properties: [],
             requirements: [],
@@ -58,7 +58,7 @@ var TopologyEditor = React.createClass({
 
     resetState() {
         this.replaceState({
-            topologyId: 'new topology',
+            topologyId: 'new',
             variables: [],
             properties: [],
             requirements: [],
