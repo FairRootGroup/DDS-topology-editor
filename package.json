@@ -7,8 +7,8 @@
     "test": "test"
   },
   "scripts": {
-    "devbuild": "browserify -t babelify src/index.jsx --extension=.jsx -d -o dist/bundle.js",
-    "build": "browserify -t babelify src/index.jsx --extension=.jsx | uglifyjs > dist/bundle.js",
+    "devbuild": "browserify -t [ babelify --presets [ es2015 react ] ] src/index.jsx --extension=.jsx -d -o dist/bundle.js",
+    "build": "browserify -t [ babelify --presets [ es2015 react ] ] src/index.jsx --extension=.jsx | uglifyjs > dist/bundle.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -23,17 +23,17 @@
   "homepage": "https://github.com/rbx/DDS-topology-editor#readme",
   "dependencies": {
     "filesaver.js": "^0.2.0",
-    "jointjs": "^0.9.5",
-    "jquery": "^2.1.4",
-    "lodash": "^3.10.1",
-    "react": "^0.14.0",
-    "react-bootstrap": "^0.27.2",
-    "react-dom": "^0.14.0",
-    "react-localstorage": "^0.2.8"
+    "jquery": "^2.2.3",
+    "lodash": "^4.8.2",
+    "react": "~15.0.0",
+    "react-bootstrap": "~0.28.5",
+    "react-dom": "~15.0.0",
+    "react-localstorage": "~0.2.8"
   },
   "devDependencies": {
-    "babelify": "^6.4.0",
-    "browserify": "^11.2.0",
+    "babel-preset-react": "^6.5.0",
+    "babelify": "^7.2.0",
+    "browserify": "^13.0.0",
     "uglifyjs": "^2.4.10"
   }
 }
