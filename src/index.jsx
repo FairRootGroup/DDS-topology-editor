@@ -6,6 +6,7 @@
  *                  copied verbatim in the file "LICENSE"                       *
  ********************************************************************************/
 
+import React from 'react';
 import ReactDOM from 'react-dom';
 import TopologyEditor from './components/TopologyEditor';
 

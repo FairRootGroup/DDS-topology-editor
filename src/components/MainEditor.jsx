@@ -19,15 +19,6 @@ var MainEditor = React.createClass({
         onEditMain: React.PropTypes.func.isRequired
     },
 
-    getInitialState() {
-        return {
-            IdBeeingEdited: false,
-            paper: null,
-            graphScale: 1,
-            interactive: true
-        }
-    },
-
     hideEditTasksInMainBtn(e) {
         e.preventDefault();
         this.refs.editTasksInMainBtn.toggle();
@@ -78,94 +69,10 @@ var MainEditor = React.createClass({
         this.props.onEditMain(nextMain);
     },
 
-    handlePaperVis(paper)  {
-        this.setState({
-            paper: paper
-        });
-    },
-
-    handleZoomIn() {
-        this.setState({
-            graphScale: (this.state.graphScale + 0.1)
-        });
-        this.state.paper.scale(this.state.graphScale + 0.1, this.state.graphScale + 0.1);
-        this.state.paper.fitToContent();
-        this.state.paper.scaleContentToFit();
-    },
-
-    handleZoomOut() {
-        this.setState({
-            graphScale: (this.state.graphScale - 0.1)
-        });
-        this.state.paper.scale(this.state.graphScale - 0.1, this.state.graphScale -0.1);
-        this.state.paper.fitToContent();
-        this.state.paper.fitToContent();
-    },
-
-    handleReset() {
-        this.setState({
-            graphScale: 1
-        });
-        this.state.paper.scale(1, 1);
-        this.state.paper.fitToContent();
-    },
-
-    handleInteraction() {
-        if (this.state.interactive) {
-            this.state.interactive = false;
-            $('#adjust').html('<span class="glyphicon-pushpin"></span>');
-        } else {
-            this.state.interactive = true;
-            $('#adjust').html('<span class="glyphicon glyphicon-move"></span>');
-        }
-
-        this.forceUpdate();
-    },
-
-    handlePropertyMenu(event) {
-        if (this.state.paper !== null) {
-            var propLines = joint.V(this.state.paper.viewport).find('line');
-            if (event.target.value === "none") {
-                for (var i = 0; i < propLines.length; i++) {
-                    joint.V(propLines[i]).attr('visibility', 'hidden');
-                }
-                return;
-            }
-            for (var i = 0; i < propLines.length; i++) {
-                joint.V(propLines[i]).attr('visibility', 'visible');
-            }
-            if (event.target.value !== 'all') {
-                for (var i = 0; i < propLines.length; i++) {
-                    for (var j = 0; j < propLines[i].attributes.length; j++) {
-                        if (propLines[i].attributes[j].name === 'title') {
-                            if (propLines[i].attributes[j].value !== event.target.value) {
-                                joint.V(propLines[i]).attr('visibility', 'hidden');
-                            }
-                        }
-                    }
-                    
-                }
-            }
-        }
-    },
-
     render() {
         var TaskCheckboxes = [];
         var CollectionCheckboxes = [];
-        var PropertiesMenu = [];
         var self = this;
-
-        PropertiesMenu.push(
-                <option value="none" key={"p-vis-menu-none"}>none</option>
-        );
-        PropertiesMenu.push(
-                <option value="all" key={"p-vis-menu-all"}>all</option>
-        );
-        this.props.properties.forEach(function (property, i) {
-            PropertiesMenu.push(
-                <option value={property.id} key={"p-vis-menu"+i}>{property.id}</option>
-            );
-        });
 
         this.props.tasks.forEach(function(task, i) {
             var count = 0;
