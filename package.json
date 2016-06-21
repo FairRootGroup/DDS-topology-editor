@@ -1,43 +1,47 @@
 {
-    "name": "dds-topology-editor",
-    "version": "0.0.1",
-    "description": "Experimental editor for DDS topology files",
-    "main": "index.jsx",
-    "directories": {
-        "test": "test"
-    },
-    "scripts": {
-        "build": "NODE_ENV=production webpack -p --config webpack.production.config.js --progress --profile --colors",
-        "dev": "webpack-dev-server --progress --profile --colors --hot"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/rbx/DDS-topology-editor.git"
-    },
-    "author": "Alexey Rybalchenko, Alexandar Rusinov",
-    "license": "LGPL-3.0",
-    "bugs": {
-        "url": "https://github.com/rbx/DDS-topology-editor/issues"
-    },
-    "homepage": "https://github.com/rbx/DDS-topology-editor#readme",
-    "dependencies": {
-        "filesaver.js": "^0.2.0",
-        "jquery": "^3.0.0",
-        "jsx-loader": "^0.13.2",
-        "lodash": "^4.13.1",
-        "react": "~15.1.0",
-        "react-bootstrap": "~0.29.5",
-        "react-dom": "~15.1.0",
-        "react-localstorage": "~0.3.0"
-    },
-    "devDependencies": {
-        "babel-core": "6.9.1",
-        "babel-loader": "6.2.4",
-        "babel-preset-es2015": "6.9.0",
-        "babel-preset-react": "6.5.0",
-        "babel-preset-react-hmre": "^1.1.1",
-        "babel-preset-stage-0": "^6.5.0",
-        "webpack": "1.13.1",
-        "webpack-dev-server": "1.14.1"
-    }
+  "name": "dds-topology-editor",
+  "version": "0.0.1",
+  "description": "Experimental editor for DDS topology files",
+  "main": "index.jsx",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "build": "NODE_ENV=production webpack -p --config webpack.production.config.js --progress --profile --colors",
+    "dev": "webpack-dev-server --progress --profile --colors --hot",
+    "test:lint": "eslint . --ext .js --ext .jsx --cache --ignore-path .gitignore --ignore-pattern dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rbx/DDS-topology-editor.git"
+  },
+  "author": "Alexey Rybalchenko, Alexandar Rusinov",
+  "license": "LGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/rbx/DDS-topology-editor/issues"
+  },
+  "homepage": "https://github.com/rbx/DDS-topology-editor#readme",
+  "dependencies": {
+    "filesaver.js": "^0.2.0",
+    "jquery": "^3.0.0",
+    "jsx-loader": "^0.13.2",
+    "lodash": "^4.13.1",
+    "react": "~15.1.0",
+    "react-bootstrap": "~0.29.5",
+    "react-dom": "~15.1.0",
+    "react-localstorage": "~0.3.0"
+  },
+  "devDependencies": {
+    "babel-core": "6.9.1",
+    "babel-loader": "6.2.4",
+    "babel-preset-es2015": "6.9.0",
+    "babel-preset-react": "6.5.0",
+    "babel-preset-react-hmre": "^1.1.1",
+    "babel-preset-stage-0": "^6.5.0",
+    "eslint": "^2.13.1",
+    "eslint-loader": "^1.3.0",
+    "eslint-plugin-react": "^5.2.2",
+    "webpack": "1.13.1",
+    "webpack-dev-server": "1.14.1"
+  }
 }

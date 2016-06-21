@@ -15,7 +15,11 @@ module.exports = {
         extensions: ['', '.js', '.jsx']
     },
     module: {
-        loaders: loaders
+        loaders: loaders,
+        preLoaders: [{
+            test: /\.jsx?$/,
+            loaders: ['eslint']
+        }],
     },
     devServer: {
         contentBase: "./dist",
