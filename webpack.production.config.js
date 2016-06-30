@@ -17,7 +17,16 @@ module.exports = {
         loaders: loaders
     },
     plugins: [
-        new webpack.optimize.UglifyJsPlugin({ minimize: true }),
+        new webpack.DefinePlugin({
+            'process.env': {
+                'NODE_ENV': JSON.stringify('production')
+            }
+        }),
+        new webpack.optimize.UglifyJsPlugin({
+            compress: {
+                warnings: true
+            }
+        }),
         new webpack.optimize.OccurrenceOrderPlugin()
     ]
 };
