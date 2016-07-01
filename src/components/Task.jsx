@@ -26,7 +26,7 @@ var Task = React.createClass({
             bodyVisible: false,
             invalidInput: false,
             showDeleteModal: false
-        }
+        };
     },
 
     closeDeleteModal() {
@@ -87,7 +87,7 @@ var Task = React.createClass({
             },
             properties: selectedProperties,
             requirement: this.props.task.requirement
-        }
+        };
 
         if (e.target[0].form[2].checked === true) {
             updatedTask.exe.reachable = "true";
@@ -141,10 +141,10 @@ var Task = React.createClass({
 
         if (this.props.task.exe.reachable) {
             if (this.props.task.exe.reachable === "true") {
-                exeReachable = <span className="reachable" title="executable is available on worker nodes">(reachable)</span>
+                exeReachable = <span className="reachable" title="executable is available on worker nodes">(reachable)</span>;
                 exeReachableCheckbox = true;
             } else if (this.props.task.exe.reachable === "false") {
-                exeReachable = <span className="reachable" title="executable is not available on worker nodes">(unreachable)</span>
+                exeReachable = <span className="reachable" title="executable is not available on worker nodes">(unreachable)</span>;
             }
         }
         if (this.props.task.env) {

@@ -156,7 +156,7 @@ var FileActions = React.createClass({
             self.props.onFileLoad(topologyId, variables, properties, requirements, tasks, collections, main);
 
             target.value = "";
-        }
+        };
 
         reader.readAsText(event.target.files[0]);
     },

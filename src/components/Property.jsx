@@ -22,7 +22,7 @@ var Property = React.createClass({
             bodyVisible: false,
             beeingEdited: false,
             showDeleteModal: false
-        }
+        };
     },
 
     closeDeleteModal() {

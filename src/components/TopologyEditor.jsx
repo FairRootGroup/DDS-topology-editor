@@ -129,7 +129,7 @@ var TopologyEditor = React.createClass({
         nextTasks.forEach(function(task) {
             task.properties = _.filter(task.properties, function(property) {
                 return property.id !== removedProperty[0].id;
-            })
+            });
         });
         this.setState({
             properties: nextProperties,
@@ -144,13 +144,13 @@ var TopologyEditor = React.createClass({
         var nextProperties = this.state.properties;
         var oldId = nextProperties[key].id;
         nextProperties[key] = updatedProperty;
-        var nextTasks = this.state.tasks
+        var nextTasks = this.state.tasks;
         nextTasks.forEach(function(task) {
             task.properties.forEach(function(property) {
                 if (property.id === oldId) {
                     property.id = updatedProperty.id;
                 }
-            })
+            });
         });
         this.setState({
             properties: nextProperties,
@@ -188,7 +188,7 @@ var TopologyEditor = React.createClass({
                 valueText: e.target[0].form[1].value
             },
             properties: selectedProperties
-        }
+        };
 
         if (e.target[0].form[2].checked === true) {
             newTask.exe.reachable = "true";
@@ -221,7 +221,7 @@ var TopologyEditor = React.createClass({
                 if (task === oldId) {
                     nextCollections[colIndex].tasks[index] = updatedTask.id;
                 }
-            })
+            });
         });
 
         // update groups with new task info
@@ -231,7 +231,7 @@ var TopologyEditor = React.createClass({
                 if (task === oldId) {
                     nextGroups[groupIndex].tasks[index] = updatedTask.id;
                 }
-            })
+            });
         });
 
         // update main with new task info
@@ -268,14 +268,14 @@ var TopologyEditor = React.createClass({
         nextGroups.forEach(function(group) {
             group.tasks = _.filter(group.tasks, function(task) {
                 return task !== removedTask[0].id;
-            })
+            });
         });
         var nextMain = {
             id: this.state.main.id,
             tasks: nextMainTasks,
             collections: this.state.main.collections,
             groups: nextGroups
-        }
+        };
         this.setState({
             tasks: nextTasks,
             collections: nextCollections,
@@ -325,7 +325,7 @@ var TopologyEditor = React.createClass({
                 if (collection === oldId) {
                     nextGroups[groupIndex].collections[index] = updatedCollection.id;
                 }
-            })
+            });
         });
 
         // update main with new collection info
@@ -355,14 +355,14 @@ var TopologyEditor = React.createClass({
         nextGroups.forEach(function(group) {
             group.collections = _.filter(group.collections, function(collection) {
                 return collection !== removedCollection[0].id;
-            })
+            });
         });
         var nextMain = {
             id: this.state.main.id,
             tasks: this.state.main.tasks,
             collections: nextMainCollections,
             groups: nextGroups
-        }
+        };
         this.setState({
             collections: nextCollections,
             main: nextMain
@@ -408,7 +408,7 @@ var TopologyEditor = React.createClass({
             tasks: this.state.main.tasks,
             collections: this.state.main.collections,
             groups: nextGroups
-        }
+        };
         this.setState({
             main: nextMain
         });
@@ -421,7 +421,7 @@ var TopologyEditor = React.createClass({
             tasks: this.state.main.tasks,
             collections: this.state.main.collections,
             groups: groups
-        }
+        };
         this.setState({
             main: nextMain
         });
@@ -435,7 +435,7 @@ var TopologyEditor = React.createClass({
             tasks: this.state.main.tasks,
             collections: this.state.main.collections,
             groups: nextGroups
-        }
+        };
         this.setState({
             main: nextMain
         });

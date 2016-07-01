@@ -25,7 +25,7 @@ var Collection = React.createClass({
             bodyVisible: false,
             invalidInput: false,
             showDeleteModal: false
-        }
+        };
     },
 
     closeDeleteModal() {
@@ -83,7 +83,7 @@ var Collection = React.createClass({
             id: e.target[0].form[0].value,
             requirement: self.props.collection.requirement,
             tasks: selectedTasks
-        }
+        };
 
         this.refs.editCollectionBtn.toggle();
         this.props.onEditCollection(this.props.elementKey, updatedCollection);

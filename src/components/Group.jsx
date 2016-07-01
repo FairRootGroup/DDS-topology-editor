@@ -26,7 +26,7 @@ var Group = React.createClass({
             bodyVisible: false,
             invalidInput: false,
             showDeleteModal: false
-        }
+        };
     },
 
     closeDeleteModal() {

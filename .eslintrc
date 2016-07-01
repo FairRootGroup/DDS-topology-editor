@@ -21,5 +21,6 @@
       "no-console": 0,
       // Give a warning if identifiers contain underscores
       "no-underscore-dangle": 1,
+      "semi": 2
     }
 }
