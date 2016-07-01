@@ -126,7 +126,7 @@ var TopologyEditor = React.createClass({
         var nextProperties = this.state.properties;
         var removedProperty = nextProperties.splice(key, 1);
         var nextTasks = this.state.tasks;
-        nextTasks.forEach(function(task, index) {
+        nextTasks.forEach(function(task) {
             task.properties = _.filter(task.properties, function(property) {
                 return property.id !== removedProperty[0].id;
             })
@@ -145,8 +145,8 @@ var TopologyEditor = React.createClass({
         var oldId = nextProperties[key].id;
         nextProperties[key] = updatedProperty;
         var nextTasks = this.state.tasks
-        nextTasks.forEach(function(task, index) {
-            task.properties.forEach(function(property, index) {
+        nextTasks.forEach(function(task) {
+            task.properties.forEach(function(property) {
                 if (property.id === oldId) {
                     property.id = updatedProperty.id;
                 }
@@ -255,7 +255,7 @@ var TopologyEditor = React.createClass({
         var nextTasks = this.state.tasks;
         var removedTask = nextTasks.splice(key, 1);
         var nextCollections = this.state.collections;
-        nextCollections.forEach(function(collection, index) {
+        nextCollections.forEach(function(collection) {
             collection.tasks = _.filter(collection.tasks, function(task) {
                 return task !== removedTask[0].id;
             });
@@ -265,7 +265,7 @@ var TopologyEditor = React.createClass({
             return task !== removedTask[0].id;
         });
         var nextGroups = this.state.main.groups;
-        nextGroups.forEach(function(group, index) {
+        nextGroups.forEach(function(group) {
             group.tasks = _.filter(group.tasks, function(task) {
                 return task !== removedTask[0].id;
             })
@@ -352,7 +352,7 @@ var TopologyEditor = React.createClass({
             return collection !== removedCollection[0].id;
         });
         var nextGroups = this.state.main.groups;
-        nextGroups.forEach(function(group, index) {
+        nextGroups.forEach(function(group) {
             group.collections = _.filter(group.collections, function(collection) {
                 return collection !== removedCollection[0].id;
             })

@@ -170,8 +170,8 @@ var FileActions = React.createClass({
         root.appendChild(brbr);
 
         if (this.props.variables.length > 0) {
-            var brbr = xmlDoc.createTextNode('\r\n');
-            root.appendChild(brbr);
+            var brbr2 = xmlDoc.createTextNode('\r\n');
+            root.appendChild(brbr2);
         }
 
         // variables
@@ -200,8 +200,10 @@ var FileActions = React.createClass({
             root.appendChild(br);
         });
 
-        var br = xmlDoc.createTextNode('\r\n');
-        root.appendChild(br);
+        var br2 = xmlDoc.createTextNode('\r\n');
+        root.appendChild(br2);
+
+        var brspaces;
 
         // requirements
         this.props.requirements.forEach(function(requirement) {
@@ -215,13 +217,13 @@ var FileActions = React.createClass({
             hostPattern.setAttribute('type', requirement.type);
             hostPattern.setAttribute('value', requirement.value);
 
-            var brspaces = xmlDoc.createTextNode('\r\n        ');
+            brspaces = xmlDoc.createTextNode('\r\n        ');
             newRequirement.appendChild(brspaces);
 
             // append hostPattern to the requirement
             newRequirement.appendChild(hostPattern);
 
-            var brspaces = xmlDoc.createTextNode('\r\n    ');
+            brspaces = xmlDoc.createTextNode('\r\n    ');
             newRequirement.appendChild(brspaces);
 
             // append requirement to the root
@@ -241,7 +243,7 @@ var FileActions = React.createClass({
             newTask.setAttribute('id', task.id);
 
             if (typeof task.requirement !== typeof undefined) {
-                var brspaces = xmlDoc.createTextNode('\r\n        ');
+                brspaces = xmlDoc.createTextNode('\r\n        ');
                 newTask.appendChild(brspaces);
                 var taskRequirement = xmlDoc.createElement('requirement');
                 taskRequirement.textContent = task.requirement;
@@ -255,7 +257,7 @@ var FileActions = React.createClass({
                 taskExe.setAttribute('reachable', task.exe.reachable);
             }
 
-            var brspaces = xmlDoc.createTextNode('\r\n        ');
+            brspaces = xmlDoc.createTextNode('\r\n        ');
             newTask.appendChild(brspaces);
 
             newTask.appendChild(taskExe);
@@ -268,7 +270,7 @@ var FileActions = React.createClass({
                     taskEnv.setAttribute('reachable', task.env.reachable);
                 }
 
-                var brspaces = xmlDoc.createTextNode('\r\n        ');
+                brspaces = xmlDoc.createTextNode('\r\n        ');
                 newTask.appendChild(brspaces);
 
                 newTask.appendChild(taskEnv);
@@ -281,20 +283,20 @@ var FileActions = React.createClass({
                 var newProperty = xmlDoc.createElement('id');
                 newProperty.textContent = property.id;
                 newProperty.setAttribute('access', property.access);
-                var brspaces = xmlDoc.createTextNode('\r\n            ');
+                brspaces = xmlDoc.createTextNode('\r\n            ');
                 propertiesContainer.appendChild(brspaces);
                 propertiesContainer.appendChild(newProperty);
             });
 
-            var brspaces = xmlDoc.createTextNode('\r\n        ');
+            brspaces = xmlDoc.createTextNode('\r\n        ');
             newTask.appendChild(brspaces);
-            var brspaces = xmlDoc.createTextNode('\r\n        ');
+            brspaces = xmlDoc.createTextNode('\r\n        ');
             propertiesContainer.appendChild(brspaces);
 
             // append properties container
             newTask.appendChild(propertiesContainer);
 
-            var brspaces = xmlDoc.createTextNode('\r\n    ');
+            brspaces = xmlDoc.createTextNode('\r\n    ');
             newTask.appendChild(brspaces);
 
             root.appendChild(newTask);
@@ -313,32 +315,32 @@ var FileActions = React.createClass({
             newCollection.setAttribute('id', collection.id);
 
             if (typeof collection.requirement !== typeof undefined) {
-                var brspaces = xmlDoc.createTextNode('\r\n        ');
+                brspaces = xmlDoc.createTextNode('\r\n        ');
                 newCollection.appendChild(brspaces);
                 var collectionRequirement = xmlDoc.createElement('requirement');
                 collectionRequirement.textContent = collection.requirement;
                 newCollection.appendChild(collectionRequirement);
             }
 
-            var brspaces = xmlDoc.createTextNode('\r\n        ');
+            brspaces = xmlDoc.createTextNode('\r\n        ');
             newCollection.appendChild(brspaces);
 
             var tasks = xmlDoc.createElement('tasks');
 
             collection.tasks.forEach(function(task) {
-                var brspaces = xmlDoc.createTextNode('\r\n            ');
+                brspaces = xmlDoc.createTextNode('\r\n            ');
                 tasks.appendChild(brspaces);
                 var newTask = xmlDoc.createElement('id');
                 newTask.textContent = task;
                 tasks.appendChild(newTask);
             });
 
-            var brspaces = xmlDoc.createTextNode('\r\n        ');
+            brspaces = xmlDoc.createTextNode('\r\n        ');
             tasks.appendChild(brspaces);
 
             newCollection.appendChild(tasks);
 
-            var brspaces = xmlDoc.createTextNode('\r\n    ');
+            brspaces = xmlDoc.createTextNode('\r\n    ');
             newCollection.appendChild(brspaces);
 
             root.appendChild(newCollection);
@@ -356,7 +358,7 @@ var FileActions = React.createClass({
         this.props.main.tasks.forEach(function(task) {
             var newTask = xmlDoc.createElement('task');
             newTask.textContent = task;
-            var brspaces = xmlDoc.createTextNode('\r\n        ');
+            brspaces = xmlDoc.createTextNode('\r\n        ');
             main.appendChild(brspaces);
             main.appendChild(newTask);
         });
@@ -364,7 +366,7 @@ var FileActions = React.createClass({
         this.props.main.collections.forEach(function(collection) {
             var newCollection = xmlDoc.createElement('collection');
             newCollection.textContent = collection;
-            var brspaces = xmlDoc.createTextNode('\r\n        ');
+            brspaces = xmlDoc.createTextNode('\r\n        ');
             main.appendChild(brspaces);
             main.appendChild(newCollection);
         });
@@ -375,34 +377,34 @@ var FileActions = React.createClass({
             newGroup.setAttribute('n', group.n);
 
             group.tasks.forEach(function(task) {
-                var brspaces = xmlDoc.createTextNode('\r\n            ');
+                brspaces = xmlDoc.createTextNode('\r\n            ');
                 newGroup.appendChild(brspaces);
                 var newTask = xmlDoc.createElement('task');
                 newTask.textContent = task;
                 newGroup.appendChild(newTask);
             });
             group.collections.forEach(function(collection) {
-                var brspaces = xmlDoc.createTextNode('\r\n            ');
+                brspaces = xmlDoc.createTextNode('\r\n            ');
                 newGroup.appendChild(brspaces);
                 var newCollection = xmlDoc.createElement('collection');
                 newCollection.textContent = collection;
                 newGroup.appendChild(newCollection);
             });
 
-            var brspaces = xmlDoc.createTextNode('\r\n        ');
+            brspaces = xmlDoc.createTextNode('\r\n        ');
             newGroup.appendChild(brspaces);
 
-            var brspaces = xmlDoc.createTextNode('\r\n        ');
+            brspaces = xmlDoc.createTextNode('\r\n        ');
             main.appendChild(brspaces);
             main.appendChild(newGroup);
         });
 
-        var brspaces = xmlDoc.createTextNode('\r\n    ');
+        brspaces = xmlDoc.createTextNode('\r\n    ');
         main.appendChild(brspaces);
 
         root.appendChild(main);
 
-        var brspaces = xmlDoc.createTextNode('\r\n\r\n');
+        brspaces = xmlDoc.createTextNode('\r\n\r\n');
         root.appendChild(brspaces);
 
         xmlDoc.appendChild(root);

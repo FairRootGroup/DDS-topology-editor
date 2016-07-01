@@ -7,7 +7,6 @@
  ********************************************************************************/
 
 import React from 'react';
-import $ from 'jquery';
 import { OverlayTrigger, Popover, Button, Input, ButtonInput } from 'react-bootstrap';
 
 var MainEditor = React.createClass({
@@ -76,7 +75,7 @@ var MainEditor = React.createClass({
 
         this.props.tasks.forEach(function(task, i) {
             var count = 0;
-            self.props.main.tasks.forEach(function(currentTask, i) {
+            self.props.main.tasks.forEach(function(currentTask) {
                 if (task.id === currentTask) {
                     count++;
                 }
@@ -91,7 +90,7 @@ var MainEditor = React.createClass({
 
         this.props.collections.forEach(function(collection, i) {
             var count = 0;
-            self.props.main.collections.forEach(function(currentCollection, i) {
+            self.props.main.collections.forEach(function(currentCollection) {
                 if (collection.id === currentCollection) {
                     count++;
                 }

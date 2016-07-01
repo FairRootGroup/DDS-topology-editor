@@ -100,7 +100,7 @@ var Collection = React.createClass({
 
         this.props.tasks.forEach(function(task, i) {
             var count = 0;
-            self.props.collection.tasks.forEach(function(currentTask, i) {
+            self.props.collection.tasks.forEach(function(currentTask) {
                 if (task.id === currentTask) {
                     count++;
                 }

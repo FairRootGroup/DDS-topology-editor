@@ -114,7 +114,7 @@ var Group = React.createClass({
 
         this.props.tasks.forEach(function(task, i) {
             var count = 0;
-            self.props.group.tasks.forEach(function(currentTask, i) {
+            self.props.group.tasks.forEach(function(currentTask) {
                 if (task.id === currentTask) {
                     count++;
                 }
@@ -129,7 +129,7 @@ var Group = React.createClass({
 
         this.props.collections.forEach(function(collection, i) {
             var count = 0;
-            self.props.group.collections.forEach(function(currentCollection, i) {
+            self.props.group.collections.forEach(function(currentCollection) {
                 if (collection.id === currentCollection) {
                     count++;
                 }
