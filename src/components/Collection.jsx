@@ -157,7 +157,9 @@ var Collection = React.createClass({
                     </OverlayTrigger>
                 </h5>
                 <div className={this.state.bodyVisible ? "visible-container" : "invisible-container"}>
-                    {this.props.collection.tasks}
+                    {this.props.collection.tasks.map(function(task, i) {
+                        return <span key={i}>{task}</span>;
+                    })}
                 </div>
             </div>
         );

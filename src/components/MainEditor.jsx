@@ -7,7 +7,7 @@
  ********************************************************************************/
 
 import React from 'react';
-import { OverlayTrigger, Popover, Button, Input, ButtonInput } from 'react-bootstrap';
+import { OverlayTrigger, Popover, Button, FormControl, Badge } from 'react-bootstrap';
 
 var MainEditor = React.createClass({
     propTypes: {
@@ -83,7 +83,9 @@ var MainEditor = React.createClass({
             TaskCheckboxes.push(
                 <div className="ct-box ct-box-task" key={"t-box" + i}>
                     <div className="element-name" title={task.id}>{task.id}</div>
-                    <Input className="add-cg-tc-counter" type="number" min="0" defaultValue={count} />
+                    <div className="add-cg-tc-counter form-group">
+                        <FormControl className="add-cg-tc-counter" type="number" min="0" defaultValue={count} />
+                    </div>
                 </div>
             );
         });
@@ -98,7 +100,9 @@ var MainEditor = React.createClass({
             CollectionCheckboxes.push(
                 <div className="ct-box ct-box-collection" key={"c-box" + i}>
                     <div className="element-name" title={collection.id}>{collection.id}</div>
-                    <Input className="add-cg-tc-counter" type="number" min="0" defaultValue={count} />
+                    <div className="add-cg-tc-counter form-group">
+                        <FormControl className="add-cg-tc-counter" type="number" min="0" defaultValue={count} />
+                    </div>
                 </div>
             );
         });
@@ -120,7 +124,7 @@ var MainEditor = React.createClass({
                                             {TaskCheckboxes}
                                             <div className="row">
                                                 <div className="col-xs-12">
-                                                    <ButtonInput className="add-cg-popover-btn" type="submit" bsSize="small" bsStyle="primary" value="edit" />
+                                                    <Button className="add-cg-popover-btn" type="submit" bsSize="small" bsStyle="primary">edit</Button>
                                                     <Button className="add-cg-popover-btn" bsSize="small" bsStyle="default" onClick={this.hideEditTasksInMainBtn}>cancel</Button>
                                                 </div>
                                             </div>
@@ -130,7 +134,11 @@ var MainEditor = React.createClass({
                                     <span className="glyphicon glyphicon-edit add-task-btn edit-main-btn" title="edit tasks in main"></span>
                                 </OverlayTrigger>
                             </h5>
-                            <div className="group-tasks">{this.props.main.tasks}</div>
+                            <div className="group-tasks">
+                                {this.props.main.tasks.map(function(task, i) {
+                                    return <span key={i}>{task}</span>;
+                                })}
+                            </div>
                         </div>
                         <div className="col-xs-4 centered main-element main-element-collections">
                             <h5 className="main-header">
@@ -142,7 +150,7 @@ var MainEditor = React.createClass({
                                             {CollectionCheckboxes}
                                             <div className="row">
                                                 <div className="col-xs-12">
-                                                    <ButtonInput className="add-cg-popover-btn" type="submit" bsSize="small" bsStyle="primary" value="edit" />
+                                                    <Button className="add-cg-popover-btn" type="submit" bsSize="small" bsStyle="primary">edit</Button>
                                                     <Button className="add-cg-popover-btn" bsSize="small" bsStyle="default" onClick={this.hideEditCollectionsInMainBtn}>cancel</Button>
                                                 </div>
                                             </div>
@@ -152,12 +160,16 @@ var MainEditor = React.createClass({
                                     <span className="glyphicon glyphicon-edit add-collection-btn edit-main-btn" title="edit collections in main"></span>
                                 </OverlayTrigger>
                             </h5>
-                            <div className="group-collections">{this.props.main.collections}</div>
+                            <div className="group-collections">
+                                {this.props.main.collections.map(function(collection, i) {
+                                    return <span key={i}>{collection}</span>;
+                                })}
+                            </div>
                         </div>
                         <div className="col-xs-4 centered main-element main-element-groups">
                             <h5 className="main-header">groups</h5>
                             {this.props.main.groups.map(function(group, index) {
-                                return <div className="group-groups" key={index}><span>{group.id} [{group.n}]</span></div>;
+                                return <div className="group-groups" key={index}><span>{group.id} <Badge>{group.n}</Badge></span></div>;
                             })}
                         </div>
                     </div>

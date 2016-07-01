@@ -196,10 +196,14 @@ var Group = React.createClass({
                     <div><strong> n: </strong><span className="plain">{this.props.group.n}</span></div>
                     <hr />
                     <div className="group-tasks">
-                        {this.props.group.tasks}
+                        {this.props.group.tasks.map(function(task, i) {
+                            return <span key={i}>{task}</span>;
+                        })}
                     </div>
                     <div className="group-collections">
-                        {this.props.group.collections}
+                        {this.props.group.collections.map(function(collection, i) {
+                            return <span key={i}>{collection}</span>;
+                        })}
                     </div>
                 </div>
             </div>

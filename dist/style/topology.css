@@ -50,7 +50,7 @@ input[type=text], input[type=password], input[type=email], textarea, [type=text]
     height: 30px;
 }
 .popover .form-control {
-    height: 26px;
+    height: 25px;
 }
 select, select.form-control {
   font-size: 12px;
@@ -227,11 +227,10 @@ pre.prettyprint {
 .ct-box-collection {
     background-color: #607D8B;
 }
-.add-cg-popover span.input-group-addon {
-    padding: 2px 5px 0 0;
+.add-cg-popover .form-control {
+    padding: 0 5px 0 0;
     font-size: 14px;
     font-weight: 300;
-    width: 32px;
 }
 .add-cg-popover .form-group {
     margin: 2px;
@@ -243,6 +242,7 @@ pre.prettyprint {
 }
 .add-cg-popover input[type=number] {
     padding: 0 0 0 6px;
+    width: 32px;
 }
 .add-cg-popover .col-xs-4 {
     padding-right: 2px;
@@ -701,30 +701,8 @@ li.groups {
     display: none;
 }
 
-.connection {
-    border-top: 1px dotted #2a36b1;
-}
-
-/* Main  visual graph */
-.main-element-vis {
-    overflow: auto;
-/*    height: 500px;
-    width: 500px;*/
-    margin-right: auto;
-    margin-left: auto;
-}
-.link-tools .tool-remove {
-    display: none
-}
-.link-tools .tool-options {
-    display: none
-}
-.visual-properties {
-    margin-top: 15px;
-}
-.visual-properties select {
-    min-width: 50px;
-}
-.visual-menu button {
-    width: 110px;
+.badge {
+    color: black;
+    background-color: white;
+    margin-bottom: 1px;
 }
