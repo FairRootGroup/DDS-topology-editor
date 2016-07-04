@@ -23,6 +23,9 @@ pre {
 .btn:active, .btn.active {
     text-shadow: 0px 0px 3px rgba(255, 255, 255, 0.5);
 }
+.btn {
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12);
+}
 a:focus, a:active:focus {
     outline: none;
 }
@@ -130,7 +133,6 @@ span.reachable {
 }
 input.mono {
     font-family: monospace;
-    width: 240px !important;
 }
 textarea, textarea.form-control, input.form-control, input[type=text], input[type=password], input[type=email], input[type=number], [type=text].form-control, [type=password].form-control, [type=email].form-control, [type=tel].form-control, [contenteditable].form-control {
     font-size: 13px;
@@ -242,7 +244,7 @@ pre.prettyprint {
 }
 .add-cg-popover input[type=number] {
     padding: 0 0 0 6px;
-    width: 32px;
+    width: 40px;
 }
 .add-cg-popover .col-xs-4 {
     padding-right: 2px;
@@ -461,6 +463,11 @@ li.groups {
     color: white;
     cursor: pointer;
 }
+.property .glyphicon-tasks {
+    cursor: -webkit-grab;
+    cursor: -moz-grab;
+    cursor: grab;
+}
 .property .glyphicon-edit, .property .glyphicon-trash {
     color: white;
     opacity: 0;
@@ -468,6 +475,16 @@ li.groups {
 .property:hover .glyphicon-edit, .property:hover .glyphicon-trash {
     opacity: 1;
 }
+
+
+.glyphicon-edit:hover,
+.glyphicon-trash:hover,
+.glyphicon-chevron-up:hover,
+.glyphicon-chevron-down:hover {
+    text-shadow: 0px 0px 3px #444;
+    color: white;
+}
+
 .property li {
     list-style-type: none;
     font-size: 12px;
