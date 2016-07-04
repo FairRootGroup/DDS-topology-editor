@@ -24,13 +24,13 @@ var TaskList = React.createClass({
             <div>
                 {this.props.tasks.map(function(task, index) {
                     return <Task task={task}
-                                 properties={self.props.properties}
-                                 tasks={self.props.tasks}
-                                 onRemoveTask={self.props.onRemoveTask}
-                                 onEditTask={self.props.onEditTask}
-                                 key={index}
-                                 elementKey={index}
-                            />;
+                        properties={self.props.properties}
+                        tasks={self.props.tasks}
+                        onRemoveTask={self.props.onRemoveTask}
+                        onEditTask={self.props.onEditTask}
+                        key={index}
+                        elementKey={index}
+                        />;
                 })}
             </div>
         );

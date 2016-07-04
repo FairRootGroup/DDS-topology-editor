@@ -24,13 +24,13 @@ var CollectionList = React.createClass({
             <div>
                 {this.props.collections.map(function(collection, index) {
                     return <Collection collection={collection}
-                                       collections={self.props.collections}
-                                       tasks={self.props.tasks}
-                                       onRemoveCollection={self.props.onRemoveCollection}
-                                       onEditCollection={self.props.onEditCollection}
-                                       key={index}
-                                       elementKey={index}
-                            />;
+                        collections={self.props.collections}
+                        tasks={self.props.tasks}
+                        onRemoveCollection={self.props.onRemoveCollection}
+                        onEditCollection={self.props.onEditCollection}
+                        key={index}
+                        elementKey={index}
+                        />;
                 })}
             </div>
         );

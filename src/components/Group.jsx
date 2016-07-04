@@ -8,7 +8,15 @@
 
 import React from 'react';
 import _ from 'lodash';
-import { OverlayTrigger, Popover, Button, Input, ButtonInput, Modal } from 'react-bootstrap';
+import {
+    Button,
+    FormControl,
+    FormGroup,
+    InputGroup,
+    Modal,
+    OverlayTrigger,
+    Popover
+} from 'react-bootstrap';
 
 var Group = React.createClass({
     propTypes: {
@@ -122,7 +130,9 @@ var Group = React.createClass({
             TaskCheckboxes.push(
                 <div className="ct-box ct-box-task" key={"t-box" + i}>
                     <div className="element-name" title={task.id}>{task.id}</div>
-                    <Input className="add-cg-tc-counter" type="number" min="0" defaultValue={count} />
+                    <FormGroup>
+                        <FormControl className="add-cg-tc-counter" type="number" min="0" defaultValue={count} />
+                    </FormGroup>
                 </div>
             );
         });
@@ -137,7 +147,9 @@ var Group = React.createClass({
             CollectionCheckboxes.push(
                 <div className="ct-box ct-box-collection" key={"c-box" + i}>
                     <div className="element-name" title={collection.id}>{collection.id}</div>
-                    <Input className="add-cg-tc-counter" type="number" min="0" defaultValue={count} />
+                    <FormGroup>
+                        <FormControl className="add-cg-tc-counter" type="number" min="0" defaultValue={count} />
+                    </FormGroup>
                 </div>
             );
         });
@@ -170,10 +182,18 @@ var Group = React.createClass({
                     <OverlayTrigger trigger="click" placement="right" ref="editGroupBtn" onClick={this.handleInputChange} overlay={
                         <Popover className="add-cg-popover" title="edit group" id={this.props.group.id}>
                             <form onSubmit={this.handleEditGroup}>
-                                <Input type="text" addonBefore="id" onChange={this.handleInputChange} className={this.state.invalidInput ? "invalid-input" : ""} defaultValue={this.props.group.id} />
+                                <InputGroup>
+                                    <InputGroup.Addon>id</InputGroup.Addon>
+                                    <FormControl type="text" onChange={this.handleInputChange} className={this.state.invalidInput ? "invalid-input" : "" } defaultValue={this.props.group.id} />
+                                </InputGroup>
                                 <div className="row">
                                     <div className="col-xs-6">
-                                        <Input type="number" min="1" step="1" addonBefore="n" defaultValue={this.props.group.n} />
+                                        <InputGroup>
+                                            <InputGroup.Addon>n</InputGroup.Addon>
+                                            <FormGroup>
+                                                <FormControl className="add-cg-tc-counter" type="number" min="1" defaultValue={this.props.group.n} />
+                                            </FormGroup>
+                                        </InputGroup>
                                     </div>
                                 </div>
                                 <p>Tasks in this group:</p>
@@ -182,7 +202,7 @@ var Group = React.createClass({
                                 {CollectionCheckboxes}
                                 <div className="row">
                                     <div className="col-xs-12">
-                                        <ButtonInput className="add-cg-popover-btn" type="submit" bsSize="small" bsStyle="primary" value="edit" />
+                                        <Button className="add-cg-popover-btn" type="submit" bsSize="small" bsStyle="primary">edit</Button>
                                         <Button className="add-cg-popover-btn" bsSize="small" bsStyle="default" onClick={this.hideEditGroupButton}>cancel</Button>
                                     </div>
                                 </div>

@@ -9,7 +9,16 @@
 import React from 'react';
 import _ from 'lodash';
 
-import { OverlayTrigger, Popover, Button, Input, ButtonInput, Modal } from 'react-bootstrap';
+import {
+    Button,
+    Checkbox,
+    FormControl,
+    FormGroup,
+    InputGroup,
+    Modal,
+    OverlayTrigger,
+    Popover
+} from 'react-bootstrap';
 
 var Task = React.createClass({
     propTypes: {
@@ -72,11 +81,11 @@ var Task = React.createClass({
         }
         var selectedProperties = [];
         this.props.properties.forEach(function(property, index) {
-            if (e.target[0].form[index+5].value === "read") {
+            if (e.target[0].form[index + 5].value === "read") {
                 selectedProperties.push({ id: property.id, access: "read" });
-            } else if (e.target[0].form[index+5].value === "write") {
+            } else if (e.target[0].form[index + 5].value === "write") {
                 selectedProperties.push({ id: property.id, access: "write" });
-            } else if (e.target[0].form[index+5].value === "readwrite") {
+            } else if (e.target[0].form[index + 5].value === "readwrite") {
                 selectedProperties.push({ id: property.id, access: "readwrite" });
             }
         });
@@ -129,12 +138,14 @@ var Task = React.createClass({
             PropertyCheckboxes.push(
                 <div className="ct-box ct-box-property" key={"t-box" + i}>
                     <div className="element-name" title={property.id}>{property.id}</div>
-                    <Input type="select" defaultValue={access} className="accessSelect">
-                        <option value="">-</option>
-                        <option value="read">read</option>
-                        <option value="write">write</option>
-                        <option value="readwrite">readwrite</option>
-                    </Input>
+                    <FormGroup>
+                        <FormControl componentClass="select" placeholder="" defaultValue={access} className="accessSelect">
+                            <option value="">-</option>
+                            <option value="read">read</option>
+                            <option value="write">write</option>
+                            <option value="readwrite">readwrite</option>
+                        </FormControl>
+                    </FormGroup>
                 </div>
             );
         });
@@ -188,16 +199,31 @@ var Task = React.createClass({
                     <OverlayTrigger trigger="click" placement="right" ref="editTaskBtn" onClick={this.handleInputChange} overlay={
                         <Popover className="add-cg-popover" title="edit task" id={this.props.task.id}>
                             <form onSubmit={this.handleEditTask}>
-                                <Input type="text" addonBefore="id" onChange={this.handleInputChange} className={this.state.invalidInput ? "invalid-input" : "" } defaultValue={this.props.task.id} />
-                                <Input type="text" addonBefore="exe" onChange={this.handleInputChange} className={this.state.invalidInput ? "mono invalid-input" : "mono" } defaultValue={this.props.task.exe.valueText || ""} />
-                                <Input type="checkbox" label="exe reachable (optional)" defaultChecked={exeReachableCheckbox} />
-                                <Input type="text" addonBefore="env" className="mono" defaultValue={envPresent ? this.props.task.env.valueText || "" : ""}/>
-                                <Input type="checkbox" label="env reachable (optional)"defaultChecked={envReachableCheckbox} />
+                                <FormGroup>
+                                    <InputGroup>
+                                        <InputGroup.Addon>id</InputGroup.Addon>
+                                        <FormControl type="text" onChange={this.handleInputChange} className={this.state.invalidInput ? "invalid-input" : "" } defaultValue={this.props.task.id} />
+                                    </InputGroup>
+                                </FormGroup>
+                                <FormGroup>
+                                    <InputGroup>
+                                        <InputGroup.Addon>exe</InputGroup.Addon>
+                                        <FormControl type="text" onChange={this.handleInputChange} className={this.state.invalidInput ? "mono invalid-input" : "mono" } defaultValue={this.props.task.exe.valueText || ""} />
+                                    </InputGroup>
+                                </FormGroup>
+                                <Checkbox defaultChecked={exeReachableCheckbox}>exe reachable (optional)</Checkbox>
+                                <FormGroup>
+                                    <InputGroup>
+                                        <InputGroup.Addon>env</InputGroup.Addon>
+                                        <FormControl type="text" onChange={this.handleInputChange} className="mono" defaultValue={envPresent ? this.props.task.env.valueText || "" : ""} />
+                                    </InputGroup>
+                                </FormGroup>
+                                <Checkbox defaultChecked={envReachableCheckbox}>env reachable (optional)</Checkbox>
                                 <p>Properties in this task:</p>
                                 {PropertyCheckboxes}
                                 <div className="row">
                                     <div className="col-xs-12">
-                                        <ButtonInput className="add-cg-popover-btn" type="submit" bsSize="small" bsStyle="primary" value="edit" />
+                                        <Button className="add-cg-popover-btn" type="submit" bsSize="small" bsStyle="primary">save</Button>
                                         <Button className="add-cg-popover-btn" bsSize="small" bsStyle="default" onClick={this.hideEditTaskButton}>cancel</Button>
                                     </div>
                                 </div>

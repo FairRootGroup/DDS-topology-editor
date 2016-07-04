@@ -83,7 +83,7 @@ var MainEditor = React.createClass({
             TaskCheckboxes.push(
                 <div className="ct-box ct-box-task" key={"t-box" + i}>
                     <div className="element-name" title={task.id}>{task.id}</div>
-                    <div className="add-cg-tc-counter form-group">
+                    <div className="form-group">
                         <FormControl className="add-cg-tc-counter" type="number" min="0" defaultValue={count} />
                     </div>
                 </div>
@@ -100,7 +100,7 @@ var MainEditor = React.createClass({
             CollectionCheckboxes.push(
                 <div className="ct-box ct-box-collection" key={"c-box" + i}>
                     <div className="element-name" title={collection.id}>{collection.id}</div>
-                    <div className="add-cg-tc-counter form-group">
+                    <div className="form-group">
                         <FormControl className="add-cg-tc-counter" type="number" min="0" defaultValue={count} />
                     </div>
                 </div>
@@ -120,7 +120,6 @@ var MainEditor = React.createClass({
                                 <OverlayTrigger trigger="click" placement="bottom" ref="editTasksInMainBtn" overlay={
                                     <Popover className="add-cg-popover" title="modify tasks in main" id="tasksinmain">
                                         <form onSubmit={this.handleEditTasksInMain}>
-                                            <p>Tasks in main:</p>
                                             {TaskCheckboxes}
                                             <div className="row">
                                                 <div className="col-xs-12">
@@ -146,7 +145,6 @@ var MainEditor = React.createClass({
                                 <OverlayTrigger trigger="click" placement="bottom" ref="editCollectionsInMainBtn" overlay={
                                     <Popover className="add-cg-popover" title="modify collections in main" id="collectionsinmain">
                                         <form onSubmit={this.handleEditCollectionsInMain}>
-                                            <p>Collections in main:</p>
                                             {CollectionCheckboxes}
                                             <div className="row">
                                                 <div className="col-xs-12">

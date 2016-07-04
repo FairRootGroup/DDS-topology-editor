@@ -8,7 +8,15 @@
 
 import React from 'react';
 import _ from 'lodash';
-import { OverlayTrigger, Popover, Button, Input, ButtonInput, Modal } from 'react-bootstrap';
+import {
+    Button,
+    FormControl,
+    FormGroup,
+    InputGroup,
+    Modal,
+    OverlayTrigger,
+    Popover
+} from 'react-bootstrap';
 
 var Collection = React.createClass({
     propTypes: {
@@ -108,7 +116,9 @@ var Collection = React.createClass({
             TaskCheckboxes.push(
                 <div className="ct-box ct-box-task" key={"t-box" + i}>
                     <div className="element-name" title={task.id}>{task.id}</div>
-                    <Input className="add-cg-tc-counter" type="number" min="0" defaultValue={count} />
+                    <FormGroup>
+                        <FormControl className="add-cg-tc-counter" type="number" min="0" defaultValue={count} />
+                    </FormGroup>
                 </div>
             );
         });
@@ -141,12 +151,15 @@ var Collection = React.createClass({
                     <OverlayTrigger trigger="click" placement="right" ref="editCollectionBtn" onClick={this.handleInputChange} overlay={
                         <Popover className="add-cg-popover" title="edit collection" id={this.props.collection.id}>
                             <form onSubmit={this.handleEditCollection}>
-                                <Input type="text" addonBefore="id" onChange={this.handleInputChange} className={this.state.invalidInput ? "invalid-input" : "" } defaultValue={this.props.collection.id} />
+                                <InputGroup>
+                                    <InputGroup.Addon>id</InputGroup.Addon>
+                                    <FormControl type="text" onChange={this.handleInputChange} className={this.state.invalidInput ? "invalid-input" : "" } defaultValue={this.props.collection.id} />
+                                </InputGroup>
                                 <p>Tasks in this collection:</p>
                                 {TaskCheckboxes}
                                 <div className="row">
                                     <div className="col-xs-12">
-                                        <ButtonInput className="add-cg-popover-btn" type="submit" bsSize="small" bsStyle="primary" value="edit" />
+                                        <Button className="add-cg-popover-btn" type="submit" bsSize="small" bsStyle="primary">edit</Button>
                                         <Button className="add-cg-popover-btn" bsSize="small" bsStyle="default" onClick={this.hideEditCollectionButton}>cancel</Button>
                                     </div>
                                 </div>

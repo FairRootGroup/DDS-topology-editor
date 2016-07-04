@@ -8,7 +8,17 @@
 
 import React from 'react';
 import _ from 'lodash';
-import { OverlayTrigger, Popover, Button, Input, ButtonInput, Modal } from 'react-bootstrap';
+import {
+    Button,
+    Checkbox,
+    FormControl,
+    FormGroup,
+    InputGroup,
+    Modal,
+    OverlayTrigger,
+    Popover
+} from 'react-bootstrap';
+
 import LocalStorageMixin from 'react-localstorage';
 
 import TopBar from './TopBar';
@@ -488,12 +498,14 @@ var TopologyEditor = React.createClass({
             PropertyCheckboxes.push(
                 <div className="ct-box ct-box-property" key={"t-box" + i}>
                     <div className="element-name" title={property.id}>{property.id}</div>
-                    <Input type="select" defaultValue="" className="accessSelect">
-                        <option value="">-</option>
-                        <option value="read">read</option>
-                        <option value="write">write</option>
-                        <option value="readwrite">readwrite</option>
-                    </Input>
+                    <FormGroup>
+                        <FormControl componentClass="select" placeholder="" defaultValue="" className="accessSelect">
+                            <option value="">-</option>
+                            <option value="read">read</option>
+                            <option value="write">write</option>
+                            <option value="readwrite">readwrite</option>
+                        </FormControl>
+                    </FormGroup>
                 </div>
             );
         });
@@ -502,7 +514,9 @@ var TopologyEditor = React.createClass({
             TaskCheckboxes.push(
                 <div className="ct-box ct-box-task" key={"t-box" + i}>
                     <div className="element-name" title={task.id}>{task.id}</div>
-                    <Input className="add-cg-tc-counter" type="number" min="0" defaultValue="0" />
+                    <FormGroup>
+                        <FormControl className="add-cg-tc-counter" type="number" min="0" defaultValue="0" />
+                    </FormGroup>
                 </div>
             );
         });
@@ -511,7 +525,9 @@ var TopologyEditor = React.createClass({
             CollectionCheckboxes.push(
                 <div className="ct-box ct-box-collection" key={"c-box" + i}>
                     <div className="element-name" title={collection.id}>{collection.id}</div>
-                    <Input className="add-cg-tc-counter" type="number" min="0" defaultValue="0" />
+                    <FormGroup>
+                        <FormControl className="add-cg-tc-counter" type="number" min="0" defaultValue="0" />
+                    </FormGroup>
                 </div>
             );
         });
@@ -535,48 +551,21 @@ var TopologyEditor = React.createClass({
                                     requirements={this.state.requirements}
                                     tasks={this.state.tasks}
                                     collections={this.state.collections}
-                                    main={this.state.main} />
-
-                                <li className="list-group-item tasks-header">
-                                    tasks
-                                    <OverlayTrigger trigger="click" placement="right" ref="addTaskBtn" onClick={this.handleInputChange} overlay={
-                                        <Popover className="add-cg-popover" title="add new task" id="addnewtask">
-                                            <form onSubmit={this.handleAddTask}>
-                                                <Input type="text" addonBefore="id" autoFocus onChange={this.handleInputChange} className={this.state.invalidInput ? "invalid-input" : "" } />
-                                                <Input type="text" addonBefore="exe" onChange={this.handleInputChange} className={this.state.invalidInput ? "mono invalid-input" : "mono" } />
-                                                <Input type="checkbox" label="exe reachable (optional)"/>
-                                                <Input type="text" addonBefore="env" className="mono" />
-                                                <Input type="checkbox" label="env reachable (optional)"/>
-                                                <p>Properties in this task:</p>
-                                                {PropertyCheckboxes}
-                                                <div className="row">
-                                                    <div className="col-xs-12">
-                                                        <ButtonInput className="add-cg-popover-btn" type="submit" bsSize="small" bsStyle="primary" value="add" />
-                                                        <Button className="add-cg-popover-btn" bsSize="small" bsStyle="default" onClick={this.hideAddTaskButton}>cancel</Button>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </Popover>
-                                    }>
-                                        <span className="glyphicon glyphicon-plus add-task-btn" title="add new task"></span>
-                                    </OverlayTrigger>
-                                </li>
-                                <li className="list-group-item tasks">
-                                    <TaskList properties={this.state.properties}
-                                              tasks={this.state.tasks}
-                                              onRemoveTask={this.handleRemoveTask}
-                                              onEditTask={this.handleEditTask} />
-                                </li>
+                                    main={this.state.main}
+                                    />
 
                                 <li className="list-group-item properties-header">
                                     properties
                                     <OverlayTrigger trigger="click" placement="right" ref="addPropertyBtn" onClick={this.handleInputChange} overlay={
                                         <Popover className="add-cg-popover" title="add new property" id="addnewproperty">
                                             <form onSubmit={this.handleAddProperty}>
-                                                <Input type="text" addonBefore="id" autoFocus onChange={this.handleInputChange} className={this.state.invalidInput ? "invalid-input" : ""} />
+                                                <InputGroup>
+                                                    <InputGroup.Addon>id&nbsp;</InputGroup.Addon>
+                                                    <FormControl type="text" autoFocus onChange={this.handleInputChange} className={this.state.invalidInput ? "invalid-input" : "" } />
+                                                </InputGroup>
                                                 <div className="row">
                                                     <div className="col-xs-12">
-                                                        <ButtonInput className="add-cg-popover-btn" type="submit" bsSize="small" bsStyle="primary" value="add" />
+                                                        <Button className="add-cg-popover-btn" type="submit" bsSize="small" bsStyle="primary">add</Button>
                                                         <Button className="add-cg-popover-btn" bsSize="small" bsStyle="default" onClick={this.hideAddPropertyButton}>cancel</Button>
                                                     </div>
                                                 </div>
@@ -588,8 +577,56 @@ var TopologyEditor = React.createClass({
                                 </li>
                                 <li className="list-group-item properties">
                                     <PropertyList properties={this.state.properties}
-                                                  onRemoveProperty={this.handleRemoveProperty}
-                                                  onEditProperty={this.handleEditProperty} />
+                                        onRemoveProperty={this.handleRemoveProperty}
+                                        onEditProperty={this.handleEditProperty}
+                                        />
+                                </li>
+
+                                <li className="list-group-item tasks-header">
+                                    tasks
+                                    <OverlayTrigger trigger="click" placement="right" ref="addTaskBtn" onClick={this.handleInputChange} overlay={
+                                        <Popover className="add-cg-popover" title="add new task" id="addnewtask">
+                                            <form onSubmit={this.handleAddTask}>
+                                                <FormGroup>
+                                                    <InputGroup>
+                                                        <InputGroup.Addon>id&nbsp;</InputGroup.Addon>
+                                                        <FormControl type="text" onChange={this.handleInputChange} className={this.state.invalidInput ? "invalid-input" : "" } />
+                                                    </InputGroup>
+                                                </FormGroup>
+                                                <FormGroup>
+                                                    <InputGroup>
+                                                        <InputGroup.Addon>exe</InputGroup.Addon>
+                                                        <FormControl type="text" onChange={this.handleInputChange} className={this.state.invalidInput ? "mono invalid-input" : "mono" } />
+                                                    </InputGroup>
+                                                </FormGroup>
+                                                <Checkbox>exe reachable (optional)</Checkbox>
+                                                <FormGroup>
+                                                    <InputGroup>
+                                                        <InputGroup.Addon>env</InputGroup.Addon>
+                                                        <FormControl type="text" className="mono" />
+                                                    </InputGroup>
+                                                </FormGroup>
+                                                <Checkbox>env reachable (optional)</Checkbox>
+                                                <p>Properties in this task:</p>
+                                                {PropertyCheckboxes}
+                                                <div className="row">
+                                                    <div className="col-xs-12">
+                                                        <Button className="add-cg-popover-btn" type="submit" bsSize="small" bsStyle="primary">add</Button>
+                                                        <Button className="add-cg-popover-btn" bsSize="small" bsStyle="default" onClick={this.hideAddTaskButton}>cancel</Button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </Popover>
+                                    }>
+                                        <span className="glyphicon glyphicon-plus add-task-btn" title="add new task"></span>
+                                    </OverlayTrigger>
+                                </li>
+                                <li className="list-group-item tasks">
+                                    <TaskList properties={this.state.properties}
+                                        tasks={this.state.tasks}
+                                        onRemoveTask={this.handleRemoveTask}
+                                        onEditTask={this.handleEditTask}
+                                        />
                                 </li>
 
                                 <li className="list-group-item collections-header">
@@ -597,12 +634,15 @@ var TopologyEditor = React.createClass({
                                     <OverlayTrigger trigger="click" placement="right" ref="addCollectionBtn" onClick={this.handleInputChange} overlay={
                                         <Popover className="add-cg-popover" title="add new collection" id="addnewcollection">
                                             <form onSubmit={this.handleAddCollection}>
-                                                <Input type="text" addonBefore="id" autoFocus onChange={this.handleInputChange} className={this.state.invalidInput ? "invalid-input" : ""} />
+                                                <InputGroup>
+                                                    <InputGroup.Addon>id</InputGroup.Addon>
+                                                    <FormControl type="text" onChange={this.handleInputChange} className={this.state.invalidInput ? "invalid-input" : "" } />
+                                                </InputGroup>
                                                 <p>Tasks in this collection:</p>
                                                 {TaskCheckboxes}
                                                 <div className="row">
                                                     <div className="col-xs-12">
-                                                        <ButtonInput className="add-cg-popover-btn" type="submit" bsSize="small" bsStyle="primary" value="add" />
+                                                        <Button className="add-cg-popover-btn" type="submit" bsSize="small" bsStyle="primary">add</Button>
                                                         <Button className="add-cg-popover-btn" bsSize="small" bsStyle="default" onClick={this.hideAddCollectionButton}>cancel</Button>
                                                     </div>
                                                 </div>
@@ -617,7 +657,8 @@ var TopologyEditor = React.createClass({
                                         collections={this.state.collections}
                                         tasks={this.state.tasks}
                                         onRemoveCollection={this.handleRemoveCollection}
-                                        onEditCollection={this.handleEditCollection} />
+                                        onEditCollection={this.handleEditCollection}
+                                        />
                                 </li>
 
                                 <li className="list-group-item groups-header">
@@ -625,10 +666,18 @@ var TopologyEditor = React.createClass({
                                     <OverlayTrigger trigger="click" placement="right" ref="addGroupBtn" onClick={this.handleInputChange} overlay={
                                         <Popover className="add-cg-popover" title="add new group" id="addnewgroup">
                                             <form onSubmit={this.handleAddGroup}>
-                                                <Input type="text" addonBefore="id" autoFocus onChange={this.handleInputChange} className={this.state.invalidInput ? "invalid-input" : ""} />
+                                                <InputGroup>
+                                                    <InputGroup.Addon>id</InputGroup.Addon>
+                                                    <FormControl type="text" onChange={this.handleInputChange} className={this.state.invalidInput ? "invalid-input" : "" } />
+                                                </InputGroup>
                                                 <div className="row">
                                                     <div className="col-xs-6">
-                                                        <Input type="number" min="1" step="1" addonBefore="n" defaultValue="1" />
+                                                        <InputGroup>
+                                                            <InputGroup.Addon>n</InputGroup.Addon>
+                                                            <FormGroup>
+                                                                <FormControl className="add-cg-tc-counter" type="number" min="1" defaultValue="1" />
+                                                            </FormGroup>
+                                                        </InputGroup>
                                                     </div>
                                                 </div>
                                                 <p>Tasks in this group:</p>
@@ -637,7 +686,7 @@ var TopologyEditor = React.createClass({
                                                 {CollectionCheckboxes}
                                                 <div className="row">
                                                     <div className="col-xs-12">
-                                                        <ButtonInput className="add-cg-popover-btn" type="submit" bsSize="small" bsStyle="primary" value="add" />
+                                                        <Button className="add-cg-popover-btn" type="submit" bsSize="small" bsStyle="primary">add</Button>
                                                         <Button className="add-cg-popover-btn" bsSize="small" bsStyle="default" onClick={this.hideAddGroupButton}>cancel</Button>
                                                     </div>
                                                 </div>
@@ -653,7 +702,8 @@ var TopologyEditor = React.createClass({
                                         tasks={this.state.tasks}
                                         collections={this.state.collections}
                                         onRemoveGroup={this.handleRemoveGroup}
-                                        onEditGroup={this.handleEditGroup} />
+                                        onEditGroup={this.handleEditGroup}
+                                        />
                                 </li>
 
                                 <li className="list-group-item">
@@ -662,27 +712,28 @@ var TopologyEditor = React.createClass({
                                     </button>
 
                                     <Modal show={this.state.showResetModal} onHide={this.closeResetModal}>
-                                      <Modal.Header closeButton>
-                                        <Modal.Title>Reset topology?</Modal.Title>
-                                      </Modal.Header>
-                                      <Modal.Body>
-                                        <p>This will clear all the contents of the topology.</p>
-                                        <p>Unsaved changes will be lost.</p>
-                                      </Modal.Body>
-                                      <Modal.Footer>
-                                        <Button bsStyle="primary" onClick={this.resetState}>Reset</Button>
-                                        <Button onClick={this.closeResetModal}>Cancel</Button>
-                                      </Modal.Footer>
+                                        <Modal.Header closeButton>
+                                            <Modal.Title>Reset topology?</Modal.Title>
+                                        </Modal.Header>
+                                        <Modal.Body>
+                                            <p>This will clear all the contents of the topology.</p>
+                                            <p>Unsaved changes will be lost.</p>
+                                        </Modal.Body>
+                                        <Modal.Footer>
+                                            <Button bsStyle="primary" onClick={this.resetState}>Reset</Button>
+                                            <Button onClick={this.closeResetModal}>Cancel</Button>
+                                        </Modal.Footer>
                                     </Modal>
                                 </li>
                             </ul>
                         </div>
                         <div className="col-xs-9">
                             <MainEditor properties={this.state.properties}
-                                        tasks={this.state.tasks}
-                                        collections={this.state.collections}
-                                        main={this.state.main}
-                                        onEditMain={this.handleEditMain} />
+                                tasks={this.state.tasks}
+                                collections={this.state.collections}
+                                main={this.state.main}
+                                onEditMain={this.handleEditMain}
+                                />
                         </div>
                     </div>
                 </div>

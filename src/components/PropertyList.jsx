@@ -23,11 +23,11 @@ var PropertyList = React.createClass({
             <div>
                 {this.props.properties.map(function(property, index) {
                     return <Property property={property}
-                                     onRemoveProperty={self.props.onRemoveProperty}
-                                     onEditProperty={self.props.onEditProperty}
-                                     key={index}
-                                     elementKey={index}
-                            />;
+                        onRemoveProperty={self.props.onRemoveProperty}
+                        onEditProperty={self.props.onEditProperty}
+                        key={index}
+                        elementKey={index}
+                        />;
                 })}
             </div>
         );
