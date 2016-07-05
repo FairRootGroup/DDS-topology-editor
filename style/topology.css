@@ -35,11 +35,18 @@ a:focus, a:active:focus {
 input[type="radio"], input[type="checkbox"] {
     margin: 5px 0 0;
 }
+.panel {
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12);
+}
 .popover {
     max-width: 300px;
-    box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 16px 24px 2px rgba(0,0,0,.14),0 6px 30px 5px rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);
 }
 .popover-title {
+    color: white;
+    margin: -1px;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
     text-align: center;
     text-transform: uppercase;
 }
@@ -179,13 +186,13 @@ pre.prettyprint {
 }
 
 /* Add Buttons */
-.add-property-btn, .add-task-btn, .add-collection-btn, .add-group-btn {
+.add-property-btn, .add-task-btn, .add-collection-btn, .add-group-btn, .add-requirement-btn {
     position: absolute;
     top: 6px;
     right: 6px;
     cursor: pointer;
 }
-.add-property-btn:hover, .add-task-btn:hover, .add-collection-btn:hover, .add-group-btn:hover {
+.add-property-btn:hover, .add-task-btn:hover, .add-collection-btn:hover, .add-group-btn:hover, .add-requirement-btn:hover {
     text-shadow: 0px 0px 5px #555;
     color: white;
 }
@@ -200,6 +207,9 @@ pre.prettyprint {
 }
 .add-group-btn {
     color: #e0f2f1;
+}
+.add-requirement-btn {
+    color: #EFEBE9;
 }
 .edit-main-btn {
     top: -9px;
@@ -216,7 +226,7 @@ pre.prettyprint {
     display: inline-block;
     margin: 1px;
     border-radius: 0px;
-    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12);
     font-size: 12px;
     width: 100%;
 }
@@ -229,6 +239,13 @@ pre.prettyprint {
 .ct-box-collection {
     background-color: #607D8B;
 }
+.ct-box-requirement {
+    background-color: #795548;
+}
+.ct-box-requirement select.form-control {
+    padding-right: 16px;
+}
+
 .add-cg-popover .form-control {
     padding: 0 5px 0 4px;
     font-size: 14px;
@@ -289,6 +306,27 @@ pre.prettyprint {
     margin: 15px 5px 0 5px;
 }
 
+.property-popover .popover-title {
+    background-color: #8bc34a;
+}
+
+.task-popover .popover-title {
+    background-color: #03a9f4;
+}
+
+.collection-popover .popover-title {
+    background-color: #607d8b;
+}
+
+.group-popover .popover-title {
+    background-color: #009688;
+}
+
+.requirement-popover .popover-title {
+    color: white;
+    background-color: #795548;
+}
+
 .invalid-input {
     background-color: #FF9B9F;
 }
@@ -301,7 +339,7 @@ li.main-separator {
     padding: 10px 10px 0 10px;
 }
 /* Headers */
-.properties-header, .tasks-header, .collections-header, .groups-header {
+.properties-header, .tasks-header, .collections-header, .groups-header, .requirements-header {
     position: relative;
     margin: 0;
     padding: 2px 10px;
@@ -309,6 +347,7 @@ li.main-separator {
     border-bottom: 0;
     font-size: 12px;
     border: 0;
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12);
 }
 .properties-header {
     color: white;
@@ -326,6 +365,10 @@ li.main-separator {
     color: white;
     background-color: #009688;
 }
+.requirements-header {
+    color: white;
+    background-color: #795548;
+}
 
 /* List Elements */
 .list-group-item:first-child {
@@ -336,25 +379,26 @@ li.main-separator {
 li.file-actions {
     margin-bottom: 4px;
 }
-li.properties {
-    background-color: #f1f8e9;
+li.properties, li.tasks, li.collections, li.groups, li.requirements {
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12);
     border-top: 0;
     margin-bottom: 4px;
+}
+
+li.properties {
+    background-color: #f1f8e9;
 }
 li.tasks {
     background-color: #e1f5fe;
-    border-top: 0;
-    margin-bottom: 4px;
 }
 li.collections {
     background-color: #eceff1;
-    border-top: 0;
-    margin-bottom: 4px;
 }
 li.groups {
     background-color: #e0f2f1;
-    border-top: 0;
-    margin-bottom: 4px;
+}
+li.requirements {
+    background-color: #EFEBE9;
 }
 .list-group-item:last-child {
     border: 0;
@@ -362,33 +406,62 @@ li.groups {
     border-bottom-left-radius: 0px;
 }
 
+.pattern-label {
+    padding-right: 17px;
+    padding-top: 7px;
+}
+
 /* individual Elements */
-.property > *, .task > *, .collection > *, .group > * {
+.property > *,
+.task > *,
+.collection > *,
+.group > *,
+.requirement > * {
     padding: 2px 5px;
 }
 
 /* Glyphicons */
-.property .glyphicon-tasks, .task .glyphicon-tasks, .collection .glyphicon-tasks, .group .glyphicon-tasks {
+.property .glyphicon-tasks,
+.task .glyphicon-tasks,
+.collection .glyphicon-tasks,
+.group .glyphicon-tasks,
+.requirement .glyphicon-tasks {
     position: absolute;
     top: 5px;
     left: 5px;
 }
-.property .glyphicon-chevron-up, .task .glyphicon-chevron-up, .collection .glyphicon-chevron-up, .group .glyphicon-chevron-up {
+.property .glyphicon-chevron-up,
+.task .glyphicon-chevron-up,
+.collection .glyphicon-chevron-up,
+.group .glyphicon-chevron-up,
+.requirement .glyphicon-chevron-up {
     position: absolute;
     top: 4px;
     right: 4px;
 }
-.property .glyphicon-chevron-down, .task .glyphicon-chevron-down, .collection .glyphicon-chevron-down, .group .glyphicon-chevron-down {
+.property .glyphicon-chevron-down,
+.task .glyphicon-chevron-down,
+.collection .glyphicon-chevron-down,
+.group .glyphicon-chevron-down,
+.requirement .glyphicon-chevron-down {
     position: absolute;
     top: 5px;
     right: 5px;
 }
-.property .glyphicon-edit, .task .glyphicon-edit, .collection .glyphicon-edit, .group .glyphicon-edit {
+.property .glyphicon-edit,
+.task .glyphicon-edit,
+.collection .glyphicon-edit,
+.group .glyphicon-edit,
+.requirement .glyphicon-edit {
     position: absolute;
     top: 4px;
     right: 38px;
 }
-.property .glyphicon-trash, .task .glyphicon-trash, .collection .glyphicon-trash, .group .glyphicon-trash {
+.property .glyphicon-trash,
+.task .glyphicon-trash,
+.collection .glyphicon-trash,
+.group .glyphicon-trash,
+.requirement .glyphicon-trash {
     position: absolute;
     top: 5px;
     right: 21px;
@@ -405,7 +478,7 @@ li.groups {
 }
 
 /* Element Headers */
-.property h5, .task h5, .collection h5, .group h5 {
+.property h5, .task h5, .collection h5, .group h5, .requirement h5 {
     color: white;
     padding: 4px 38px 4px 22px;
     margin: 0;
@@ -431,6 +504,9 @@ li.groups {
 .group h5 {
     background-color: #009688;
 }
+.requirement h5 {
+    background-color: #795548;
+}
 .element-title {
     left: 22px;
     margin-right: -32px;
@@ -448,7 +524,7 @@ li.groups {
     color: black;
     padding: 0;
     margin: 3px 2px;
-    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12);
     white-space: nowrap;
     overflow: hidden;
     /*display: inline-block;*/
@@ -476,7 +552,6 @@ li.groups {
     opacity: 1;
 }
 
-
 .glyphicon-edit:hover,
 .glyphicon-trash:hover,
 .glyphicon-chevron-up:hover,
@@ -502,7 +577,7 @@ li.groups {
     color: black;
     padding: 0;
     margin: 3px 2px;
-    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12);
     /*display: inline-block;*/
 }
 .task .glyphicon-chevron-up {
@@ -528,7 +603,7 @@ li.groups {
     color: white;
     padding: 1px 3px;
     margin: 2px 0px;
-    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12);
     display: inline-block;
     width: 100%;
     white-space: nowrap;
@@ -554,6 +629,7 @@ li.groups {
 /*    border-bottom: 1px dotted #2a36b1;*/
 }
 .task li:last-child {
+    border-bottom: none;
 }
 
 /* Collections */
@@ -563,7 +639,7 @@ li.groups {
     color: black;
     padding: 0;
     margin: 4px 2px;
-    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12);
     /*display: inline-block;*/
 }
 .collection .glyphicon-chevron-up {
@@ -583,13 +659,13 @@ li.groups {
 .collection:hover .glyphicon-edit, .collection:hover .glyphicon-trash {
     opacity: 1;
 }
-.collection div span {
+.collection > div > span, .collection > div > div > span {
     border-radius: 0px;
     background-color: #03a9f4;
     color: white;
     padding: 1px 3px;
     margin: 2px 2px;
-    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12);
     display: inline-block;
 }
 .collection div {
@@ -603,14 +679,14 @@ li.groups {
     color: black;
     padding: 0;
     margin: 2px 2px;
-    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12);
     /*display: inline-block;*/
 }
 .group div span {
     border-radius: 0px;
     padding: 1px 3px;
     margin: 2px 2px;
-    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12);
     display: inline-block;
 }
 .group div.group-tasks span {
@@ -648,6 +724,73 @@ li.groups {
     padding: 0;
 }
 
+/* Properties */
+.requirement {
+    border-radius: 0px;
+    background-color: white;
+    color: black;
+    padding: 0;
+    margin: 2px 2px;
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12);
+    /*display: inline-block;*/
+}
+.requirement div span {
+    border-radius: 0px;
+    padding: 1px 3px;
+    margin: 2px 2px;
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12);
+    display: inline-block;
+}
+.requirement .glyphicon-chevron-up {
+    color: white;
+}
+.requirement .glyphicon-chevron-down {
+    color: white;
+}
+.requirement .glyphicon {
+    color: white;
+    cursor: pointer;
+}
+.requirement .glyphicon-edit, .requirement .glyphicon-trash {
+    color: white;
+    opacity: 0;
+}
+.requirement:hover .glyphicon-edit, .requirement:hover .glyphicon-trash {
+    color: white;
+    opacity: 1;
+}
+.requirement hr {
+    margin: 2px;
+}
+.requirement span.plain {
+    box-shadow: none;
+    margin: 0;
+    padding: 0;
+}
+
+.requirement li {
+    list-style-type: none;
+    font-size: 12px;
+    font-family: "Open Sans", sans-serif;
+    border-bottom: 1px dotted #2a36b1;
+    position: relative;
+}
+.requirement li:last-child {
+    border-bottom: none;
+}
+
+span.pattern-type {
+    position: absolute;
+    right: 0px;
+    top: 2px;
+    font-size: 10px;
+    opacity: 0.75;
+}
+
+.requirement-child {
+    background-color: #795548 !important;
+}
+
 /* Main */
 
 #main-editor-body .row {
@@ -666,7 +809,7 @@ li.groups {
     border-radius: 0px;
     padding: 1px 3px;
     margin: 2px 2px;
-    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12);
     display: inline-block;
 }
 .main-element-tasks {
