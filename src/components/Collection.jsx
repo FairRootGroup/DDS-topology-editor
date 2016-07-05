@@ -8,6 +8,7 @@
 
 import React from 'react';
 import _ from 'lodash';
+
 import {
     Button,
     FormControl,
@@ -21,6 +22,7 @@ import {
 var Collection = React.createClass({
     propTypes: {
         collection: React.PropTypes.object.isRequired,
+        requirements: React.PropTypes.array.isRequired,
         collections: React.PropTypes.array.isRequired,
         tasks: React.PropTypes.array.isRequired,
         onRemoveCollection: React.PropTypes.func.isRequired,
@@ -81,17 +83,21 @@ var Collection = React.createClass({
             });
             return;
         }
+
         var selectedTasks = [];
         this.props.tasks.forEach(function(task, index) {
-            for(var i = 0; i < e.target[0].form[index+1].value; i++) {
+            for (var i = 0; i < e.target[0].form[index+1].value; i++) {
                 selectedTasks.push(task.id);
             }
         });
         var updatedCollection = {
             id: e.target[0].form[0].value,
-            requirement: self.props.collection.requirement,
             tasks: selectedTasks
         };
+
+        if (e.target[0].form["requirements"].value !== "") {
+            updatedCollection.requirement = e.target[0].form["requirements"].value;
+        }
 
         this.refs.editCollectionBtn.toggle();
         this.props.onEditCollection(this.props.elementKey, updatedCollection);
@@ -104,7 +110,10 @@ var Collection = React.createClass({
 
     render() {
         var TaskCheckboxes = [];
+        let requirementOptions = [];
+        var requirementContainer;
         var self = this;
+        let requirement;
 
         this.props.tasks.forEach(function(task, i) {
             var count = 0;
@@ -122,6 +131,26 @@ var Collection = React.createClass({
                 </div>
             );
         });
+
+        this.props.requirements.forEach(function(requirement, i) {
+            requirementOptions.push(
+                <option value={requirement.id} key={'option' + i}>{requirement.id}</option>
+            );
+        });
+
+        if ('requirement' in this.props.collection) {
+            requirement = this.props.collection.requirement;
+            let el = _.find(this.props.requirements, function(o) { return o.id === self.props.collection.requirement; });
+            requirementContainer =
+                <div>
+                    <span className="requirement-child">
+                        &nbsp;
+                        <span className="prop-access" title={ (el.type === "hostname") ? "host name" : "" }>{ (el.type === "hostname") ? "HN " : "" }</span>
+                        <span className="prop-access" title={ (el.type === "wnname") ? "SSH worker node name" : "" }>{ (el.type === "wnname") ? "WN " : "" }</span>
+                        {this.props.collection.requirement}
+                    </span>
+                </div>;
+        }
 
         return (
             <div className="collection">
@@ -149,14 +178,27 @@ var Collection = React.createClass({
                     </Modal>
 
                     <OverlayTrigger trigger="click" placement="right" ref="editCollectionBtn" onClick={this.handleInputChange} overlay={
-                        <Popover className="add-cg-popover" title="edit collection" id={this.props.collection.id}>
+                        <Popover className="add-cg-popover collection-popover" title="edit collection" id={this.props.collection.id}>
                             <form onSubmit={this.handleEditCollection}>
                                 <InputGroup>
                                     <InputGroup.Addon>id</InputGroup.Addon>
-                                    <FormControl type="text" onChange={this.handleInputChange} className={this.state.invalidInput ? "invalid-input" : "" } defaultValue={this.props.collection.id} />
+                                    <FormControl type="text" onFocus={this.handleInputChange} className={this.state.invalidInput ? "invalid-input" : "" } defaultValue={this.props.collection.id} />
                                 </InputGroup>
+
                                 <p>Tasks in this collection:</p>
                                 {TaskCheckboxes}
+
+                                <p>Requirement for this collection (optional):</p>
+                                <div className="ct-box ct-box-requirement">
+                                    <div className="element-name">Requirement</div>
+                                    <FormGroup>
+                                        <FormControl componentClass="select" name="requirements" placeholder="" defaultValue={requirement} className="accessSelect">
+                                            <option value="">-</option>
+                                            {requirementOptions}
+                                        </FormControl>
+                                    </FormGroup>
+                                </div>
+
                                 <div className="row">
                                     <div className="col-xs-12">
                                         <Button className="add-cg-popover-btn" type="submit" bsSize="small" bsStyle="primary">edit</Button>
@@ -173,6 +215,7 @@ var Collection = React.createClass({
                     {this.props.collection.tasks.map(function(task, i) {
                         return <span key={i}>{task}</span>;
                     })}
+                    {requirementContainer}
                 </div>
             </div>
         );

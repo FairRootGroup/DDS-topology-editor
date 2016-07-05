@@ -8,28 +8,24 @@
 
 import React from 'react';
 
-import Task from './Task';
+import Requirement from './Requirement';
 
-var TaskList = React.createClass({
+var RequirementList = React.createClass({
     propTypes: {
-        properties: React.PropTypes.array.isRequired,
         requirements: React.PropTypes.array.isRequired,
-        tasks: React.PropTypes.array.isRequired,
-        onRemoveTask: React.PropTypes.func.isRequired,
-        onEditTask: React.PropTypes.func.isRequired
+        onRemoveRequirement: React.PropTypes.func.isRequired,
+        onEditRequirement: React.PropTypes.func.isRequired
     },
 
     render() {
         var self = this;
         return (
             <div>
-                {this.props.tasks.map(function(task, index) {
-                    return <Task task={task}
-                        properties={self.props.properties}
+                {this.props.requirements.map(function(requirement, index) {
+                    return <Requirement requirement={requirement}
                         requirements={self.props.requirements}
-                        tasks={self.props.tasks}
-                        onRemoveTask={self.props.onRemoveTask}
-                        onEditTask={self.props.onEditTask}
+                        onRemoveRequirement={self.props.onRemoveRequirement}
+                        onEditRequirement={self.props.onEditRequirement}
                         key={index}
                         elementKey={index}
                         />;
@@ -39,4 +35,4 @@ var TaskList = React.createClass({
     }
 });
 
-export default TaskList;
+export default RequirementList;

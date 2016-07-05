@@ -24,6 +24,7 @@ var Task = React.createClass({
     propTypes: {
         task: React.PropTypes.object.isRequired,
         properties: React.PropTypes.array.isRequired,
+        requirements: React.PropTypes.array.isRequired,
         tasks: React.PropTypes.array.isRequired,
         onRemoveTask: React.PropTypes.func.isRequired,
         onEditTask: React.PropTypes.func.isRequired,
@@ -79,6 +80,7 @@ var Task = React.createClass({
             });
             return;
         }
+
         var selectedProperties = [];
         this.props.properties.forEach(function(property, index) {
             if (e.target[0].form[index + 5].value === "read") {
@@ -94,9 +96,12 @@ var Task = React.createClass({
             exe: {
                 valueText: e.target[0].form[1].value
             },
-            properties: selectedProperties,
-            requirement: this.props.task.requirement
+            properties: selectedProperties
         };
+
+        if (e.target[0].form["requirements"].value !== "") {
+            updatedTask.requirement = e.target[0].form["requirements"].value;
+        }
 
         if (e.target[0].form[2].checked === true) {
             updatedTask.exe.reachable = "true";
@@ -120,7 +125,10 @@ var Task = React.createClass({
     },
 
     render() {
-        var PropertyCheckboxes = [];
+        var propertyCheckboxes = [];
+        let requirementOptions = [];
+        var requirement = "";
+        var requirementContainer;
         var exeReachable;
         var envValue;
         var exeReachableCheckbox = false;
@@ -135,7 +143,7 @@ var Task = React.createClass({
                     access = currentProperty.access;
                 }
             });
-            PropertyCheckboxes.push(
+            propertyCheckboxes.push(
                 <div className="ct-box ct-box-property" key={"t-box" + i}>
                     <div className="element-name" title={property.id}>{property.id}</div>
                     <FormGroup>
@@ -150,6 +158,12 @@ var Task = React.createClass({
             );
         });
 
+        this.props.requirements.forEach(function(requirement, i) {
+            requirementOptions.push(
+                <option value={requirement.id} key={'option' + i}>{requirement.id}</option>
+            );
+        });
+
         if (this.props.task.exe.reachable) {
             if (this.props.task.exe.reachable === "true") {
                 exeReachable = <span className="reachable" title="executable is available on worker nodes">(reachable)</span>;
@@ -158,6 +172,7 @@ var Task = React.createClass({
                 exeReachable = <span className="reachable" title="executable is not available on worker nodes">(unreachable)</span>;
             }
         }
+
         if (this.props.task.env) {
             envPresent = true;
             if (this.props.task.env.reachable) {
@@ -171,6 +186,21 @@ var Task = React.createClass({
                 envValue = <li><span><strong>env:</strong></span> <input className="code" readOnly value={this.props.task.env.valueText}></input></li>;
             }
         }
+
+        if ('requirement' in this.props.task) {
+            requirement = this.props.task.requirement;
+            let el = _.find(this.props.requirements, function(o) { return o.id === self.props.task.requirement; });
+            requirementContainer =
+                <div>
+                    <span className="requirement-child">
+                        &nbsp;
+                        <span className="prop-access" title={ (el.type === "hostname") ? "host name" : "" }>{ (el.type === "hostname") ? "HN " : "" }</span>
+                        <span className="prop-access" title={ (el.type === "wnname") ? "SSH worker node name" : "" }>{ (el.type === "wnname") ? "WN " : "" }</span>
+                        {this.props.task.requirement}
+                    </span>
+                </div>;
+        }
+
         return (
             <div className="task">
                 <h5>
@@ -197,30 +227,43 @@ var Task = React.createClass({
                     </Modal>
 
                     <OverlayTrigger trigger="click" placement="right" ref="editTaskBtn" onClick={this.handleInputChange} overlay={
-                        <Popover className="add-cg-popover" title="edit task" id={this.props.task.id}>
+                        <Popover className="add-cg-popover task-popover" title="edit task" id={this.props.task.id}>
                             <form onSubmit={this.handleEditTask}>
                                 <FormGroup>
                                     <InputGroup>
                                         <InputGroup.Addon>id</InputGroup.Addon>
-                                        <FormControl type="text" onChange={this.handleInputChange} className={this.state.invalidInput ? "invalid-input" : "" } defaultValue={this.props.task.id} />
+                                        <FormControl type="text" onFocus={this.handleInputChange} className={this.state.invalidInput ? "invalid-input" : "" } defaultValue={this.props.task.id} />
                                     </InputGroup>
                                 </FormGroup>
                                 <FormGroup>
                                     <InputGroup>
                                         <InputGroup.Addon>exe</InputGroup.Addon>
-                                        <FormControl type="text" onChange={this.handleInputChange} className={this.state.invalidInput ? "mono invalid-input" : "mono" } defaultValue={this.props.task.exe.valueText || ""} />
+                                        <FormControl type="text" onFocus={this.handleInputChange} className={this.state.invalidInput ? "mono invalid-input" : "mono" } defaultValue={this.props.task.exe.valueText || ""} />
                                     </InputGroup>
                                 </FormGroup>
                                 <Checkbox defaultChecked={exeReachableCheckbox}>exe reachable (optional)</Checkbox>
                                 <FormGroup>
                                     <InputGroup>
                                         <InputGroup.Addon>env</InputGroup.Addon>
-                                        <FormControl type="text" onChange={this.handleInputChange} className="mono" defaultValue={envPresent ? this.props.task.env.valueText || "" : ""} />
+                                        <FormControl type="text" onFocus={this.handleInputChange} className="mono" defaultValue={envPresent ? this.props.task.env.valueText || "" : ""} />
                                     </InputGroup>
                                 </FormGroup>
                                 <Checkbox defaultChecked={envReachableCheckbox}>env reachable (optional)</Checkbox>
+
                                 <p>Properties in this task:</p>
-                                {PropertyCheckboxes}
+                                {propertyCheckboxes}
+
+                                <p>Requirement for this task (optional):</p>
+                                <div className="ct-box ct-box-requirement">
+                                    <div className="element-name">Requirement</div>
+                                    <FormGroup>
+                                        <FormControl componentClass="select" name="requirements" placeholder="" defaultValue={requirement} className="accessSelect">
+                                            <option value="">-</option>
+                                            {requirementOptions}
+                                        </FormControl>
+                                    </FormGroup>
+                                </div>
+
                                 <div className="row">
                                     <div className="col-xs-12">
                                         <Button className="add-cg-popover-btn" type="submit" bsSize="small" bsStyle="primary">save</Button>
@@ -234,19 +277,24 @@ var Task = React.createClass({
                     </OverlayTrigger>
                 </h5>
                 <ul className={this.state.bodyVisible ? "visible-container" : "invisible-container"}>
-                    <li><span><strong>exe:</strong></span> <input className="code" readOnly value={this.props.task.exe.valueText} title={this.props.task.exe.valueText}></input>{exeReachable}</li>
+                    <li>
+                        <span><strong>exe:</strong></span>
+                        <input className="code" readOnly value={this.props.task.exe.valueText} title={this.props.task.exe.valueText}></input>
+                        {exeReachable}
+                    </li>
                     {envValue}
                     <div>
                         {this.props.task.properties.map(function(property) {
                             return (<span title={property.id} key={property.id}>
-                                        &nbsp;
-                                        <span className="prop-access" title={ (property.access === "write") ? "write" : "" }>{ (property.access === "write") ? "W " : "" }</span>
-                                        <span className="prop-access" title={ (property.access === "read") ? "read" : "" }>{ (property.access === "read") ? "R " : "" }</span>
-                                        <span className="prop-access" title={ (property.access === "readwrite") ? "read & write" : "" }>{ (property.access === "readwrite") ? "RW " : "" }</span>
-                                        {property.id}
-                                    </span>);
+                                &nbsp;
+                                <span className="prop-access" title={ (property.access === "write") ? "write" : "" }>{ (property.access === "write") ? "W " : "" }</span>
+                                <span className="prop-access" title={ (property.access === "read") ? "read" : "" }>{ (property.access === "read") ? "R " : "" }</span>
+                                <span className="prop-access" title={ (property.access === "readwrite") ? "read & write" : "" }>{ (property.access === "readwrite") ? "RW " : "" }</span>
+                                {property.id}
+                                </span>);
                         })}
                     </div>
+                    {requirementContainer}
                 </ul>
             </div>
         );

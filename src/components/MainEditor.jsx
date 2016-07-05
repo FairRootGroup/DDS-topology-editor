@@ -118,7 +118,7 @@ var MainEditor = React.createClass({
                             <h5 className="main-header">
                                 tasks in main
                                 <OverlayTrigger trigger="click" placement="bottom" ref="editTasksInMainBtn" overlay={
-                                    <Popover className="add-cg-popover" title="modify tasks in main" id="tasksinmain">
+                                    <Popover className="add-cg-popover task-popover" title="modify tasks in main" id="tasksinmain">
                                         <form onSubmit={this.handleEditTasksInMain}>
                                             {TaskCheckboxes}
                                             <div className="row">
@@ -143,7 +143,7 @@ var MainEditor = React.createClass({
                             <h5 className="main-header">
                                 collections in main
                                 <OverlayTrigger trigger="click" placement="bottom" ref="editCollectionsInMainBtn" overlay={
-                                    <Popover className="add-cg-popover" title="modify collections in main" id="collectionsinmain">
+                                    <Popover className="add-cg-popover collection-popover" title="modify collections in main" id="collectionsinmain">
                                         <form onSubmit={this.handleEditCollectionsInMain}>
                                             {CollectionCheckboxes}
                                             <div className="row">

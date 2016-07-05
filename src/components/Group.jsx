@@ -180,11 +180,11 @@ var Group = React.createClass({
                     </Modal>
 
                     <OverlayTrigger trigger="click" placement="right" ref="editGroupBtn" onClick={this.handleInputChange} overlay={
-                        <Popover className="add-cg-popover" title="edit group" id={this.props.group.id}>
+                        <Popover className="add-cg-popover group-popover" title="edit group" id={this.props.group.id}>
                             <form onSubmit={this.handleEditGroup}>
                                 <InputGroup>
                                     <InputGroup.Addon>id</InputGroup.Addon>
-                                    <FormControl type="text" onChange={this.handleInputChange} className={this.state.invalidInput ? "invalid-input" : "" } defaultValue={this.props.group.id} />
+                                    <FormControl type="text" onFocus={this.handleInputChange} className={this.state.invalidInput ? "invalid-input" : "" } defaultValue={this.props.group.id} />
                                 </InputGroup>
                                 <div className="row">
                                     <div className="col-xs-6">

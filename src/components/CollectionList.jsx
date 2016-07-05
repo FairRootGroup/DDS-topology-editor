@@ -13,6 +13,7 @@ import Collection from './Collection';
 var CollectionList = React.createClass({
     propTypes: {
         collections: React.PropTypes.array.isRequired,
+        requirements: React.PropTypes.array.isRequired,
         tasks: React.PropTypes.array.isRequired,
         onRemoveCollection: React.PropTypes.func.isRequired,
         onEditCollection: React.PropTypes.func.isRequired
@@ -24,6 +25,7 @@ var CollectionList = React.createClass({
             <div>
                 {this.props.collections.map(function(collection, index) {
                     return <Collection collection={collection}
+                        requirements={self.props.requirements}
                         collections={self.props.collections}
                         tasks={self.props.tasks}
                         onRemoveCollection={self.props.onRemoveCollection}
