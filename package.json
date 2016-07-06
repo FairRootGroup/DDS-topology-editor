@@ -23,6 +23,7 @@
   "homepage": "https://github.com/rbx/DDS-topology-editor#readme",
   "dependencies": {
     "filesaver.js": "^0.2.0",
+    "github-api": "^2.3.0",
     "jquery": "^3.0.0",
     "jsx-loader": "^0.13.2",
     "lodash": "^4.13.1",
@@ -38,7 +39,7 @@
     "babel-preset-react": "6.11.1",
     "babel-preset-react-hmre": "^1.1.1",
     "babel-preset-stage-0": "^6.5.0",
-    "eslint": "^3.0.0",
+    "eslint": "^3.0.1",
     "eslint-loader": "^1.4.0",
     "eslint-plugin-react": "^5.2.2",
     "webpack": "1.13.1",

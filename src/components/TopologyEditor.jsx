@@ -53,20 +53,13 @@ var TopologyEditor = React.createClass({
             },
             invalidInput: false,
             fluid: false,
-            showResetModal: false
+            showResetModal: false,
+            propertiesVisible: true,
+            tasksVisible: true,
+            collectionsVisible: true,
+            groupsVisible: true,
+            requirementsVisible: true
         };
-    },
-
-    closeResetModal() {
-        this.setState({ showResetModal: false });
-    },
-
-    openResetModal() {
-        this.setState({ showResetModal: true });
-    },
-
-    toggleFluid() {
-        this.setState({ fluid: !this.state.fluid });
     },
 
     resetState() {
@@ -85,8 +78,45 @@ var TopologyEditor = React.createClass({
             },
             invalidInput: false,
             fluid: false,
-            showResetModal: false
+            showResetModal: false,
+            propertiesVisible: true,
+            tasksVisible: true,
+            collectionsVisible: true,
+            groupsVisible: true,
+            requirementsVisible: true
         });
+    },
+
+    closeResetModal() {
+        this.setState({ showResetModal: false });
+    },
+
+    openResetModal() {
+        this.setState({ showResetModal: true });
+    },
+
+    toggleFluid() {
+        this.setState({ fluid: !this.state.fluid });
+    },
+
+    togglePropertiesVisibility() {
+        this.setState({ propertiesVisible: !this.state.propertiesVisible });
+    },
+
+    toggleTasksVisibility() {
+        this.setState({ tasksVisible: !this.state.tasksVisible });
+    },
+
+    toggleCollectionsVisibility() {
+        this.setState({ collectionsVisible: !this.state.collectionsVisible });
+    },
+
+    toggleGroupsVisibility() {
+        this.setState({ groupsVisible: !this.state.groupsVisible });
+    },
+
+    toggleRequirementsVisibility() {
+        this.setState({ requirementsVisible: !this.state.requirementsVisible });
     },
 
     handleTopologyChange(topologyId, variables, properties, requirements, tasks, collections, main) {
@@ -687,8 +717,13 @@ var TopologyEditor = React.createClass({
                                     }>
                                         <span className="glyphicon glyphicon-plus add-property-btn" title="add new property"></span>
                                     </OverlayTrigger>
+                                    <span
+                                        className={this.state.propertiesVisible ? "glyphicon glyphicon-chevron-up toggle-property-btn" : "glyphicon glyphicon-chevron-down toggle-property-btn"}
+                                        title={this.state.propertiesVisible ? "hide": "show"}
+                                        onClick={this.togglePropertiesVisibility}>
+                                    </span>
                                 </li>
-                                <li className="list-group-item properties">
+                                <li className={this.state.propertiesVisible ? "visible-container list-group-item properties" : "invisible-container list-group-item properties"}>
                                     <PropertyList properties={this.state.properties}
                                         onRemoveProperty={this.handleRemoveProperty}
                                         onEditProperty={this.handleEditProperty}
@@ -746,8 +781,13 @@ var TopologyEditor = React.createClass({
                                     }>
                                         <span className="glyphicon glyphicon-plus add-task-btn" title="add new task"></span>
                                     </OverlayTrigger>
+                                    <span
+                                        className={this.state.tasksVisible ? "glyphicon glyphicon-chevron-up toggle-property-btn" : "glyphicon glyphicon-chevron-down toggle-property-btn"}
+                                        title={this.state.tasksVisible ? "hide": "show"}
+                                        onClick={this.toggleTasksVisibility}>
+                                    </span>
                                 </li>
-                                <li className="list-group-item tasks">
+                                <li className={this.state.tasksVisible ? "visible-container list-group-item tasks" : "invisible-container list-group-item tasks"}>
                                     <TaskList properties={this.state.properties}
                                         tasks={this.state.tasks}
                                         requirements={this.state.requirements}
@@ -791,8 +831,13 @@ var TopologyEditor = React.createClass({
                                     }>
                                         <span className="glyphicon glyphicon-plus add-collection-btn" title="add new collection"></span>
                                     </OverlayTrigger>
+                                    <span
+                                        className={this.state.collectionsVisible ? "glyphicon glyphicon-chevron-up toggle-property-btn" : "glyphicon glyphicon-chevron-down toggle-property-btn"}
+                                        title={this.state.collectionsVisible ? "hide": "show"}
+                                        onClick={this.toggleCollectionsVisibility}>
+                                    </span>
                                 </li>
-                                <li className="list-group-item collections">
+                                <li className={this.state.collectionsVisible ? "visible-container list-group-item collections" : "invisible-container list-group-item collections"}>
                                     <CollectionList
                                         collections={this.state.collections}
                                         tasks={this.state.tasks}
@@ -836,8 +881,13 @@ var TopologyEditor = React.createClass({
                                     }>
                                         <span className="glyphicon glyphicon-plus add-group-btn" title="add new group"></span>
                                     </OverlayTrigger>
+                                    <span
+                                        className={this.state.groupsVisible ? "glyphicon glyphicon-chevron-up toggle-property-btn" : "glyphicon glyphicon-chevron-down toggle-property-btn"}
+                                        title={this.state.groupsVisible ? "hide": "show"}
+                                        onClick={this.toggleGroupsVisibility}>
+                                    </span>
                                 </li>
-                                <li className="list-group-item groups">
+                                <li className={this.state.groupsVisible ? "visible-container list-group-item groups" : "invisible-container list-group-item groups"}>
                                     <GroupList
                                         groups={this.state.main.groups}
                                         tasks={this.state.tasks}
@@ -876,8 +926,13 @@ var TopologyEditor = React.createClass({
                                     }>
                                         <span className="glyphicon glyphicon-plus add-requirement-btn" title="add new requirement"></span>
                                     </OverlayTrigger>
+                                    <span
+                                        className={this.state.requirementsVisible ? "glyphicon glyphicon-chevron-up toggle-property-btn" : "glyphicon glyphicon-chevron-down toggle-property-btn"}
+                                        title={this.state.requirementsVisible ? "hide": "show"}
+                                        onClick={this.toggleRequirementsVisibility}>
+                                    </span>
                                 </li>
-                                <li className="list-group-item requirements">
+                                <li className={this.state.requirementsVisible ? "visible-container list-group-item requirements" : "invisible-container list-group-item requirements"}>
                                     <RequirementList
                                         requirements={this.state.requirements}
                                         onRemoveRequirement={this.handleRemoveRequirement}
@@ -899,7 +954,7 @@ var TopologyEditor = React.createClass({
                                             <p>Unsaved changes will be lost.</p>
                                         </Modal.Body>
                                         <Modal.Footer>
-                                            <Button bsStyle="primary" onClick={this.resetState}>Reset</Button>
+                                            <Button bsStyle="danger" onClick={this.resetState}>Reset</Button>
                                             <Button onClick={this.closeResetModal}>Cancel</Button>
                                         </Modal.Footer>
                                     </Modal>
