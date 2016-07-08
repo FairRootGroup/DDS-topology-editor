@@ -237,21 +237,15 @@ pre.prettyprint {
     text-shadow: 0px 0px 5px #555;
     color: white;
 }
-.add-property-btn {
-    color: #f1f8e9;
-}
-.add-task-btn {
-    color: #e1f5fe;
-}
-.add-collection-btn {
-    color: #eceff1;
-}
-.add-group-btn {
-    color: #e0f2f1;
-}
+
+.add-property-btn, 
+.add-task-btn, 
+.add-collection-btn, 
+.add-group-btn, 
 .add-requirement-btn {
-    color: #EFEBE9;
+    color: white;
 }
+
 .edit-main-btn {
     top: -9px;
 }
