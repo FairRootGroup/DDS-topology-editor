@@ -3,7 +3,7 @@
  *                                                                              *
  *              This software is distributed under the terms of the             *
  *         GNU Lesser General Public Licence version 3 (LGPL) version 3,        *
- *                  copied verbatim in the file "LICENSE"                       *
+ *                  copied verbatim in the file 'LICENSE'                       *
  ********************************************************************************/
 
 import React, { Component, PropTypes } from 'react';
@@ -96,10 +96,10 @@ export default class MainEditor extends Component {
                 }
             }); 
             TaskCheckboxes.push(
-                <div className="ct-box ct-box-task" key={"t-box" + i}>
-                    <div className="element-name" title={task.id}>{task.id}</div>
-                    <div className="form-group">
-                        <FormControl className="add-cg-tc-counter" type="number" min="0" defaultValue={count} />
+                <div className='ct-box ct-box-task' key={'t-box' + i}>
+                    <div className='element-name' title={task.id}>{task.id}</div>
+                    <div className='form-group'>
+                        <FormControl className='add-cg-tc-counter' type='number' min='0' defaultValue={count} />
                     </div>
                 </div>
             );
@@ -113,76 +113,76 @@ export default class MainEditor extends Component {
                 }
             }); 
             CollectionCheckboxes.push(
-                <div className="ct-box ct-box-collection" key={"c-box" + i}>
-                    <div className="element-name" title={collection.id}>{collection.id}</div>
-                    <div className="form-group">
-                        <FormControl className="add-cg-tc-counter" type="number" min="0" defaultValue={count} />
+                <div className='ct-box ct-box-collection' key={'c-box' + i}>
+                    <div className='element-name' title={collection.id}>{collection.id}</div>
+                    <div className='form-group'>
+                        <FormControl className='add-cg-tc-counter' type='number' min='0' defaultValue={count} />
                     </div>
                 </div>
             );
         });
 
         return (
-            <div className="panel panel-default">
-                <div className="panel-heading">
-                    <p className="panel-title">{this.props.main.id}</p>
+            <div className='panel panel-default'>
+                <div className='panel-heading'>
+                    <p className='panel-title'>{this.props.main.id}</p>
                 </div>
-                <div id="main-editor-body" className="panel-body">
-                    <div className="row">
-                        <div className="col-xs-4 centered main-element main-element-tasks">
-                            <h5 className="main-header">
+                <div id='main-editor-body' className='panel-body'>
+                    <div className='row'>
+                        <div className='col-xs-4 centered main-element main-element-tasks'>
+                            <h5 className='main-header'>
                                 tasks in main
-                                <OverlayTrigger trigger="click" placement="bottom" ref="editTasksInMainBtn" overlay={
-                                    <Popover className="add-cg-popover task-popover" title="modify tasks in main" id="tasksinmain">
+                                <OverlayTrigger trigger='click' placement='bottom' ref='editTasksInMainBtn' overlay={
+                                    <Popover className='add-cg-popover task-popover' title='modify tasks in main' id='tasksinmain'>
                                         <form onSubmit={this.handleEditTasksInMain}>
                                             {TaskCheckboxes}
-                                            <div className="row">
-                                                <div className="col-xs-12">
-                                                    <Button className="add-cg-popover-btn" type="submit" bsSize="small" bsStyle="primary">edit</Button>
-                                                    <Button className="add-cg-popover-btn" bsSize="small" bsStyle="default" onClick={this.hideEditTasksInMainBtn}>cancel</Button>
+                                            <div className='row'>
+                                                <div className='col-xs-12'>
+                                                    <Button className='add-cg-popover-btn' type='submit' bsSize='small' bsStyle='primary'>edit</Button>
+                                                    <Button className='add-cg-popover-btn' bsSize='small' bsStyle='default' onClick={this.hideEditTasksInMainBtn}>cancel</Button>
                                                 </div>
                                             </div>
                                         </form>
                                     </Popover>
                                 }>
-                                    <span className="glyphicon glyphicon-edit add-task-btn edit-main-btn" title="edit tasks in main"></span>
+                                    <span className='glyphicon glyphicon-edit add-task-btn edit-main-btn' title='edit tasks in main'></span>
                                 </OverlayTrigger>
                             </h5>
-                            <div className="group-tasks">
+                            <div className='group-tasks'>
                                 {this.props.main.tasks.map(function(task, i) {
                                     return <span key={i}>{task}</span>;
                                 })}
                             </div>
                         </div>
-                        <div className="col-xs-4 centered main-element main-element-collections">
-                            <h5 className="main-header">
+                        <div className='col-xs-4 centered main-element main-element-collections'>
+                            <h5 className='main-header'>
                                 collections in main
-                                <OverlayTrigger trigger="click" placement="bottom" ref="editCollectionsInMainBtn" overlay={
-                                    <Popover className="add-cg-popover collection-popover" title="modify collections in main" id="collectionsinmain">
+                                <OverlayTrigger trigger='click' placement='bottom' ref='editCollectionsInMainBtn' overlay={
+                                    <Popover className='add-cg-popover collection-popover' title='modify collections in main' id='collectionsinmain'>
                                         <form onSubmit={this.handleEditCollectionsInMain}>
                                             {CollectionCheckboxes}
-                                            <div className="row">
-                                                <div className="col-xs-12">
-                                                    <Button className="add-cg-popover-btn" type="submit" bsSize="small" bsStyle="primary">edit</Button>
-                                                    <Button className="add-cg-popover-btn" bsSize="small" bsStyle="default" onClick={this.hideEditCollectionsInMainBtn}>cancel</Button>
+                                            <div className='row'>
+                                                <div className='col-xs-12'>
+                                                    <Button className='add-cg-popover-btn' type='submit' bsSize='small' bsStyle='primary'>edit</Button>
+                                                    <Button className='add-cg-popover-btn' bsSize='small' bsStyle='default' onClick={this.hideEditCollectionsInMainBtn}>cancel</Button>
                                                 </div>
                                             </div>
                                         </form>
                                     </Popover>
                                 }>
-                                    <span className="glyphicon glyphicon-edit add-collection-btn edit-main-btn" title="edit collections in main"></span>
+                                    <span className='glyphicon glyphicon-edit add-collection-btn edit-main-btn' title='edit collections in main'></span>
                                 </OverlayTrigger>
                             </h5>
-                            <div className="group-collections">
+                            <div className='group-collections'>
                                 {this.props.main.collections.map(function(collection, i) {
                                     return <span key={i}>{collection}</span>;
                                 })}
                             </div>
                         </div>
-                        <div className="col-xs-4 centered main-element main-element-groups">
-                            <h5 className="main-header">groups</h5>
+                        <div className='col-xs-4 centered main-element main-element-groups'>
+                            <h5 className='main-header'>groups</h5>
                             {this.props.main.groups.map(function(group, index) {
-                                return <div className="group-groups" key={index}><span>{group.id} <Badge>{group.n}</Badge></span></div>;
+                                return <div className='group-groups' key={index}><span>{group.id} <Badge>{group.n}</Badge></span></div>;
                             })}
                         </div>
                     </div>

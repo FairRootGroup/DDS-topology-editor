@@ -3,7 +3,7 @@
  *                                                                              *
  *              This software is distributed under the terms of the             *
  *         GNU Lesser General Public Licence version 3 (LGPL) version 3,        *
- *                  copied verbatim in the file "LICENSE"                       *
+ *                  copied verbatim in the file 'LICENSE'                       *
  ********************************************************************************/
 
 import React, { Component, PropTypes } from 'react';
@@ -78,7 +78,7 @@ export default class Collection extends Component {
     handleEditCollection(e) {
         e.preventDefault();
         var self = this;
-        if (e.target[0].form[0].value === "") {
+        if (e.target[0].form[0].value === '') {
             this.setState({
                 invalidInput: true
             });
@@ -105,8 +105,8 @@ export default class Collection extends Component {
             tasks: selectedTasks
         };
 
-        if (e.target[0].form["requirements"].value !== "") {
-            updatedCollection.requirement = e.target[0].form["requirements"].value;
+        if (e.target[0].form['requirements'].value !== '') {
+            updatedCollection.requirement = e.target[0].form['requirements'].value;
         }
 
         this.refs.editCollectionBtn.toggle();
@@ -133,10 +133,10 @@ export default class Collection extends Component {
                 }
             }); 
             TaskCheckboxes.push(
-                <div className="ct-box ct-box-task" key={"t-box" + i}>
-                    <div className="element-name" title={task.id}>{task.id}</div>
+                <div className='ct-box ct-box-task' key={'t-box' + i}>
+                    <div className='element-name' title={task.id}>{task.id}</div>
                     <FormGroup>
-                        <FormControl className="add-cg-tc-counter" type="number" min="0" defaultValue={count} />
+                        <FormControl className='add-cg-tc-counter' type='number' min='0' defaultValue={count} />
                     </FormGroup>
                 </div>
             );
@@ -153,27 +153,27 @@ export default class Collection extends Component {
             let el = _.find(this.props.requirements, function(o) { return o.id === self.props.collection.requirement; });
             requirementContainer =
                 <div>
-                    <span className="requirement-child">
+                    <span className='requirement-child'>
                         &nbsp;
-                        <span className="prop-access" title={ (el.type === "hostname") ? "host name" : "" }>{ (el.type === "hostname") ? "HN " : "" }</span>
-                        <span className="prop-access" title={ (el.type === "wnname") ? "SSH worker node name" : "" }>{ (el.type === "wnname") ? "WN " : "" }</span>
+                        <span className='prop-access' title={ (el.type === 'hostname') ? 'host name' : '' }>{ (el.type === 'hostname') ? 'HN ' : '' }</span>
+                        <span className='prop-access' title={ (el.type === 'wnname') ? 'SSH worker node name' : '' }>{ (el.type === 'wnname') ? 'WN ' : '' }</span>
                         {this.props.collection.requirement}
                     </span>
                 </div>;
         }
 
         return (
-            <div className="collection">
+            <div className='collection'>
                 <h5>
-                    <span className="glyphicon glyphicon-tasks"></span>
+                    <span className='glyphicon glyphicon-tasks'></span>
                     {this.props.collection.id} 
                     <span
-                        className={this.state.bodyVisible ? "glyphicon glyphicon-chevron-up" : "glyphicon glyphicon-chevron-down"}
-                        title={this.state.bodyVisible ? "hide": "show"}
+                        className={this.state.bodyVisible ? 'glyphicon glyphicon-chevron-up' : 'glyphicon glyphicon-chevron-down'}
+                        title={this.state.bodyVisible ? 'hide': 'show'}
                         onClick={this.toggleBodyVisibility}>
                     </span>
 
-                    <span className="glyphicon glyphicon-trash" title="remove" onClick={this.openDeleteModal}></span>
+                    <span className='glyphicon glyphicon-trash' title='remove' onClick={this.openDeleteModal}></span>
                     <Modal show={this.state.showDeleteModal} onHide={this.closeDeleteModal}>
                         <Modal.Header closeButton>
                             <Modal.Title>Delete <strong>{this.props.collection.id}</strong>?</Modal.Title>
@@ -182,46 +182,46 @@ export default class Collection extends Component {
                             <p>Are you sure you want to delete the collection <strong>{this.props.collection.id}?</strong></p>
                         </Modal.Body>
                         <Modal.Footer>
-                            <Button bsStyle="danger" onClick={this.handleRemoveCollection}>Delete</Button>
+                            <Button bsStyle='danger' onClick={this.handleRemoveCollection}>Delete</Button>
                             <Button onClick={this.closeDeleteModal}>Cancel</Button>
                         </Modal.Footer>
                     </Modal>
 
-                    <OverlayTrigger trigger="click" placement="right" ref="editCollectionBtn" onClick={this.handleInputChange} overlay={
-                        <Popover className="add-cg-popover collection-popover" title="edit collection" id={this.props.collection.id}>
+                    <OverlayTrigger trigger='click' placement='right' ref='editCollectionBtn' onClick={this.handleInputChange} overlay={
+                        <Popover className='add-cg-popover collection-popover' title='edit collection' id={this.props.collection.id}>
                             <form onSubmit={this.handleEditCollection}>
                                 <InputGroup>
                                     <InputGroup.Addon>id</InputGroup.Addon>
-                                    <FormControl type="text" onFocus={this.handleInputChange} className={this.state.invalidInput ? "invalid-input" : "" } defaultValue={this.props.collection.id} />
+                                    <FormControl type='text' onFocus={this.handleInputChange} className={this.state.invalidInput ? 'invalid-input' : '' } defaultValue={this.props.collection.id} />
                                 </InputGroup>
 
                                 <p>Tasks in this collection:</p>
                                 {TaskCheckboxes}
 
                                 <p>Requirement for this collection (optional):</p>
-                                <div className="ct-box ct-box-requirement">
-                                    <div className="element-name">Requirement</div>
+                                <div className='ct-box ct-box-requirement'>
+                                    <div className='element-name'>Requirement</div>
                                     <FormGroup>
-                                        <FormControl componentClass="select" name="requirements" placeholder="" defaultValue={requirement} className="accessSelect">
-                                            <option value="">-</option>
+                                        <FormControl componentClass='select' name='requirements' placeholder='' defaultValue={requirement} className='accessSelect'>
+                                            <option value=''>-</option>
                                             {requirementOptions}
                                         </FormControl>
                                     </FormGroup>
                                 </div>
 
-                                <div className="row">
-                                    <div className="col-xs-12">
-                                        <Button className="add-cg-popover-btn" type="submit" bsSize="small" bsStyle="primary">edit</Button>
-                                        <Button className="add-cg-popover-btn" bsSize="small" bsStyle="default" onClick={this.hideEditCollectionButton}>cancel</Button>
+                                <div className='row'>
+                                    <div className='col-xs-12'>
+                                        <Button className='add-cg-popover-btn' type='submit' bsSize='small' bsStyle='primary'>edit</Button>
+                                        <Button className='add-cg-popover-btn' bsSize='small' bsStyle='default' onClick={this.hideEditCollectionButton}>cancel</Button>
                                     </div>
                                 </div>
                             </form>
                         </Popover>
                     }>
-                        <span className="glyphicon glyphicon-edit" title="edit"></span>
+                        <span className='glyphicon glyphicon-edit' title='edit'></span>
                     </OverlayTrigger>
                 </h5>
-                <div className={this.state.bodyVisible ? "visible-container" : "invisible-container"}>
+                <div className={this.state.bodyVisible ? 'visible-container' : 'invisible-container'}>
                     {this.props.collection.tasks.map(function(task, i) {
                         return <span key={i}>{task}</span>;
                     })}

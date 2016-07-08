@@ -3,7 +3,7 @@
  *                                                                              *
  *              This software is distributed under the terms of the             *
  *         GNU Lesser General Public Licence version 3 (LGPL) version 3,        *
- *                  copied verbatim in the file "LICENSE"                       *
+ *                  copied verbatim in the file 'LICENSE'                       *
  ********************************************************************************/
 
 import React, { Component, PropTypes } from 'react';
@@ -44,6 +44,7 @@ export default class FileActions extends Component {
             error: ''
         };
 
+        this.hideFetchButton = this.hideFetchButton.bind(this);
         this.cancelFetch = this.cancelFetch.bind(this);
         this.handleFetch = this.handleFetch.bind(this);
         this.fetchTopologies = this.fetchTopologies.bind(this);
@@ -57,16 +58,16 @@ export default class FileActions extends Component {
     }
 
     cancelFetch() {
-        this.setState({ remoteFiles: [], error: "" });
+        this.setState({ remoteFiles: [], error: '' });
     }
 
     handleFetch(e) {
         e.preventDefault();
 
-        if (e.target[0].form[0].value === "") {
-            console.log("not fetching anything");
+        if (e.target[0].form[0].value === '') {
+            console.log('not fetching anything');
         } else {
-            console.log("fetching " + e.target[0].form[0].value);
+            console.log('fetching ' + e.target[0].form[0].value);
             let el = _.find(this.state.remoteFiles, function(o) { return o.name === e.target[0].form[0].value; });
             console.log(el.contents);
         }
@@ -78,22 +79,22 @@ export default class FileActions extends Component {
         let github = new GitHub();
         let self = this;
 
-        this.setState({ error: "" });
+        this.setState({ error: '' });
 
         let repo = github.getRepo(this.state.remoteUser, this.state.remoteRepo);
         // console.log(repo);
         repo.getContents('dev', this.state.remotePath, true, function(err, contents) {
             if (err) {
                 console.log(err);
-                if ("response" in err) {
+                if ('response' in err) {
                     self.setState({ error:
                         err.response.data.message +
-                        ". Rate limit: " +
+                        '. Rate limit: ' +
                         err.response.headers['x-ratelimit-limit'] +
-                        ", remaining: " +
+                        ', remaining: ' +
                         err.response.headers['x-ratelimit-remaining'] +
-                        ", reset in: " +
-                        new Date(err.response.headers['x-ratelimit-reset'] * 1000) + "."
+                        ', reset in: ' +
+                        new Date(err.response.headers['x-ratelimit-reset'] * 1000) + '.'
                         });
                 } else {
                     self.setState({ error: JSON.stringify(err) });
@@ -103,12 +104,12 @@ export default class FileActions extends Component {
             // console.log(contents);
 
             contents.forEach(function(object) {
-                // console.log(" --- ");
+                // console.log(' --- ');
                 // console.log(object.name);
                 // console.log(object);
 
-                if (object.name.substr(object.name.length - 4) !== ".xml") {
-                    console.log("ignoring file with non-XML extension: " + object.name);
+                if (object.name.substr(object.name.length - 4) !== '.xml') {
+                    console.log('ignoring file with non-XML extension: ' + object.name);
                     return;
                 }
 
@@ -209,7 +210,7 @@ export default class FileActions extends Component {
                     if (typeof ($(this).attr('access')) !== typeof undefined) {
                         property.access = $(this).attr('access');
                     } else {
-                        property.access = "readwrite";
+                        property.access = 'readwrite';
                     }
                     task.properties.push(property);
                 });
@@ -264,7 +265,7 @@ export default class FileActions extends Component {
 
             self.props.onFileLoad(topologyId, variables, properties, requirements, tasks, collections, main);
 
-            target.value = "";
+            target.value = '';
         };
 
         reader.readAsText(event.target.files[0]);
@@ -518,45 +519,45 @@ export default class FileActions extends Component {
 
         xmlDoc.appendChild(root);
 
-        var blob = new Blob([(new XMLSerializer).serializeToString(xmlDoc)], {type: "text/plain;charset=utf-8"});
-        saveAs(blob, this.props.topologyId + ".xml");
+        var blob = new Blob([(new XMLSerializer).serializeToString(xmlDoc)], {type: 'text/plain;charset=utf-8'});
+        saveAs(blob, this.props.topologyId + '.xml');
     }
 
     render() {
         return (
-            <li className="list-group-item file-actions">
-                <div className="row centered">
+            <li className='list-group-item file-actions'>
+                <div className='row centered'>
                     <ButtonGroup>
-                        <Button className="btn-file" componentClass="span" bsSize="small" title="load topology file from disk">
-                            <span className="glyphicon glyphicon-floppy-open"></span> load<input type="file" onChange={this.handleFileLoad}/>
+                        <Button className='btn-file' componentClass='span' bsSize='small' title='load topology file from disk'>
+                            <span className='glyphicon glyphicon-floppy-open'></span> load<input type='file' onChange={this.handleFileLoad}/>
                         </Button>
 
-                        <OverlayTrigger trigger="click" placement="bottom" ref="fetchBtn" onEnter={this.fetchTopologies} onExit={this.cancelFetch} overlay={
-                            <Popover className="fetch-popover" title="fetch remote topologies" id="fetchremotetopologies">
-                                <p>Fetching topologies from<br /><span className="mono monobg">{this.state.remoteUser}/{this.state.remoteRepo}/{this.state.remotePath}</span></p>
+                        <OverlayTrigger trigger='click' placement='bottom' ref='fetchBtn' onEnter={this.fetchTopologies} onExit={this.cancelFetch} overlay={
+                            <Popover className='fetch-popover' title='fetch remote topologies' id='fetchremotetopologies'>
+                                <p>Fetching topologies from<br /><span className='mono monobg'>{this.state.remoteUser}/{this.state.remoteRepo}/{this.state.remotePath}</span></p>
                                 <form onSubmit={this.handleFetch}>
-                                    {this.state.error !== '' ? <p className='error'>{this.state.error}</p> : ""}
+                                    {this.state.error !== '' ? <p className='error'>{this.state.error}</p> : ''}
                                     <FormGroup>
                                         {this.state.remoteFiles.map(function(file, i) {
-                                            return (<Radio title={file.url} key={file.name + i} name="files" className="mono">{file.name}</Radio>);
+                                            return (<Radio title={file.url} key={file.name + i} name='files' className='mono'>{file.name}</Radio>);
                                         })}
                                     </FormGroup>
-                                    <div className="row">
-                                        <div className="col-xs-12">
-                                            <Button className="add-cg-popover-btn" type="submit" bsSize="small" bsStyle="primary">load</Button>
-                                            <Button className="add-cg-popover-btn" bsSize="small" bsStyle="default" onClick={this.hideFetchButton}>cancel</Button>
+                                    <div className='row'>
+                                        <div className='col-xs-12'>
+                                            <Button className='add-cg-popover-btn' type='submit' bsSize='small' bsStyle='primary'>load</Button>
+                                            <Button className='add-cg-popover-btn' bsSize='small' bsStyle='default' onClick={this.hideFetchButton}>cancel</Button>
                                         </div>
                                     </div>
                                 </form>
                             </Popover>
                         }>
-                            <Button bsSize="small" title="fetch topology file from a remote repository">
-                                <span className="glyphicon glyphicon-cloud-download"></span> fetch
+                            <Button bsSize='small' title='fetch topology file from a remote repository'>
+                                <span className='glyphicon glyphicon-cloud-download'></span> fetch
                             </Button>
                         </OverlayTrigger>
 
-                        <Button bsSize="small" onClick={this.handleFileSave} title="save the topology to disk">
-                            <span className="glyphicon glyphicon-floppy-save"></span> save
+                        <Button bsSize='small' onClick={this.handleFileSave} title='save the topology to disk'>
+                            <span className='glyphicon glyphicon-floppy-save'></span> save
                         </Button>
                     </ButtonGroup>
                 </div>

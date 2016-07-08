@@ -3,7 +3,7 @@
  *                                                                              *
  *              This software is distributed under the terms of the             *
  *         GNU Lesser General Public Licence version 3 (LGPL) version 3,        *
- *                  copied verbatim in the file "LICENSE"                       *
+ *                  copied verbatim in the file 'LICENSE'                       *
  ********************************************************************************/
 
 import React, { Component, PropTypes } from 'react';
@@ -78,7 +78,7 @@ export default class Group extends Component {
     handleEditGroup(e) {
         e.preventDefault();
         var self = this;
-        if (e.target[0].form[0].value === "") {
+        if (e.target[0].form[0].value === '') {
             this.setState({
                 invalidInput: true
             });
@@ -139,10 +139,10 @@ export default class Group extends Component {
                 }
             }); 
             TaskCheckboxes.push(
-                <div className="ct-box ct-box-task" key={"t-box" + i}>
-                    <div className="element-name" title={task.id}>{task.id}</div>
+                <div className='ct-box ct-box-task' key={'t-box' + i}>
+                    <div className='element-name' title={task.id}>{task.id}</div>
                     <FormGroup>
-                        <FormControl className="add-cg-tc-counter" type="number" min="0" defaultValue={count} />
+                        <FormControl className='add-cg-tc-counter' type='number' min='0' defaultValue={count} />
                     </FormGroup>
                 </div>
             );
@@ -156,27 +156,27 @@ export default class Group extends Component {
                 }
             }); 
             CollectionCheckboxes.push(
-                <div className="ct-box ct-box-collection" key={"c-box" + i}>
-                    <div className="element-name" title={collection.id}>{collection.id}</div>
+                <div className='ct-box ct-box-collection' key={'c-box' + i}>
+                    <div className='element-name' title={collection.id}>{collection.id}</div>
                     <FormGroup>
-                        <FormControl className="add-cg-tc-counter" type="number" min="0" defaultValue={count} />
+                        <FormControl className='add-cg-tc-counter' type='number' min='0' defaultValue={count} />
                     </FormGroup>
                 </div>
             );
         });
 
         return (
-            <div className="group">
+            <div className='group'>
                 <h5>
-                    <span className="glyphicon glyphicon-tasks"></span>
+                    <span className='glyphicon glyphicon-tasks'></span>
                     {this.props.group.id}
                     <span
-                        className={this.state.bodyVisible ? "glyphicon glyphicon-chevron-up" : "glyphicon glyphicon-chevron-down"}
-                        title={this.state.bodyVisible ? "hide": "show"}
+                        className={this.state.bodyVisible ? 'glyphicon glyphicon-chevron-up' : 'glyphicon glyphicon-chevron-down'}
+                        title={this.state.bodyVisible ? 'hide': 'show'}
                         onClick={this.toggleBodyVisibility}>
                     </span>
 
-                    <span className="glyphicon glyphicon-trash" title="remove" onClick={this.openDeleteModal}></span>
+                    <span className='glyphicon glyphicon-trash' title='remove' onClick={this.openDeleteModal}></span>
                     <Modal show={this.state.showDeleteModal} onHide={this.closeDeleteModal}>
                         <Modal.Header closeButton>
                             <Modal.Title>Delete <strong>{this.props.group.id}</strong>?</Modal.Title>
@@ -185,24 +185,24 @@ export default class Group extends Component {
                             <p>Are you sure you want to delete the group <strong>{this.props.group.id}?</strong></p>
                         </Modal.Body>
                         <Modal.Footer>
-                            <Button bsStyle="danger" onClick={this.handleRemoveGroup}>Delete</Button>
+                            <Button bsStyle='danger' onClick={this.handleRemoveGroup}>Delete</Button>
                             <Button onClick={this.closeDeleteModal}>Cancel</Button>
                         </Modal.Footer>
                     </Modal>
 
-                    <OverlayTrigger trigger="click" placement="right" ref="editGroupBtn" onClick={this.handleInputChange} overlay={
-                        <Popover className="add-cg-popover group-popover" title="edit group" id={this.props.group.id}>
+                    <OverlayTrigger trigger='click' placement='right' ref='editGroupBtn' onClick={this.handleInputChange} overlay={
+                        <Popover className='add-cg-popover group-popover' title='edit group' id={this.props.group.id}>
                             <form onSubmit={this.handleEditGroup}>
                                 <InputGroup>
                                     <InputGroup.Addon>id</InputGroup.Addon>
-                                    <FormControl type="text" onFocus={this.handleInputChange} className={this.state.invalidInput ? "invalid-input" : "" } defaultValue={this.props.group.id} />
+                                    <FormControl type='text' onFocus={this.handleInputChange} className={this.state.invalidInput ? 'invalid-input' : '' } defaultValue={this.props.group.id} />
                                 </InputGroup>
-                                <div className="row">
-                                    <div className="col-xs-6">
+                                <div className='row'>
+                                    <div className='col-xs-6'>
                                         <InputGroup>
                                             <InputGroup.Addon>n</InputGroup.Addon>
                                             <FormGroup>
-                                                <FormControl className="add-cg-tc-counter" type="number" min="1" defaultValue={this.props.group.n} />
+                                                <FormControl className='add-cg-tc-counter' type='number' min='1' defaultValue={this.props.group.n} />
                                             </FormGroup>
                                         </InputGroup>
                                     </div>
@@ -211,27 +211,27 @@ export default class Group extends Component {
                                 {TaskCheckboxes}
                                 <p>Collections in this group:</p>
                                 {CollectionCheckboxes}
-                                <div className="row">
-                                    <div className="col-xs-12">
-                                        <Button className="add-cg-popover-btn" type="submit" bsSize="small" bsStyle="primary">edit</Button>
-                                        <Button className="add-cg-popover-btn" bsSize="small" bsStyle="default" onClick={this.hideEditGroupButton}>cancel</Button>
+                                <div className='row'>
+                                    <div className='col-xs-12'>
+                                        <Button className='add-cg-popover-btn' type='submit' bsSize='small' bsStyle='primary'>edit</Button>
+                                        <Button className='add-cg-popover-btn' bsSize='small' bsStyle='default' onClick={this.hideEditGroupButton}>cancel</Button>
                                     </div>
                                 </div>
                             </form>
                         </Popover>
                     }>
-                        <span className="glyphicon glyphicon-edit" title="edit"></span>
+                        <span className='glyphicon glyphicon-edit' title='edit'></span>
                     </OverlayTrigger>
                 </h5>
-                <div className={this.state.bodyVisible ? "visible-container" : "invisible-container"}>
-                    <div><strong> n: </strong><span className="plain">{this.props.group.n}</span></div>
+                <div className={this.state.bodyVisible ? 'visible-container' : 'invisible-container'}>
+                    <div><strong> n: </strong><span className='plain'>{this.props.group.n}</span></div>
                     <hr />
-                    <div className="group-tasks">
+                    <div className='group-tasks'>
                         {this.props.group.tasks.map(function(task, i) {
                             return <span key={i}>{task}</span>;
                         })}
                     </div>
-                    <div className="group-collections">
+                    <div className='group-collections'>
                         {this.props.group.collections.map(function(collection, i) {
                             return <span key={i}>{collection}</span>;
                         })}

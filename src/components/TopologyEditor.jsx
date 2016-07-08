@@ -3,7 +3,7 @@
  *                                                                              *
  *              This software is distributed under the terms of the             *
  *         GNU Lesser General Public Licence version 3 (LGPL) version 3,        *
- *                  copied verbatim in the file "LICENSE"                       *
+ *                  copied verbatim in the file 'LICENSE'                       *
  ********************************************************************************/
 
 import React, { Component } from 'react';
@@ -21,7 +21,8 @@ import {
     Radio
 } from 'react-bootstrap';
 
-import LocalStorageMixin from 'react-localstorage';
+import localStorageMixin from 'react-localstorage';
+import reactMixin from 'react-mixin';
 
 import TopBar from './TopBar';
 import FileActions from './FileActions';
@@ -34,8 +35,6 @@ import MainEditor from './MainEditor';
 
 export default class TopologyEditor extends Component {
     static displayName = 'TopologyEditor';
-
-    static mixins = [LocalStorageMixin];
 
     constructor() {
         super();
@@ -182,7 +181,7 @@ export default class TopologyEditor extends Component {
 
     handleAddProperty(e) {
         e.preventDefault();
-        if (e.target[0].form[0].value === "") {
+        if (e.target[0].form[0].value === '') {
             this.setState({
                 invalidInput: true
             });
@@ -241,7 +240,7 @@ export default class TopologyEditor extends Component {
         e.preventDefault();
 
         // cancel if ID or value is empty
-        if (e.target[0].form[0].value === "" || e.target[0].form[3].value === "") {
+        if (e.target[0].form[0].value === '' || e.target[0].form[3].value === '') {
             this.setState({
                 invalidInput: true
             });
@@ -256,11 +255,11 @@ export default class TopologyEditor extends Component {
         }
 
         // set the type according to the radio button value
-        let type = "";
+        let type = '';
         if (e.target[0].form[1].checked) {
-            type = "hostname";
+            type = 'hostname';
         } else {
-            type = "wnname";
+            type = 'wnname';
         }
 
         // create next requirements out of existing and new value
@@ -321,7 +320,7 @@ export default class TopologyEditor extends Component {
 
     handleAddTask(e) {
         e.preventDefault();
-        if (e.target[0].form[0].value === "" || e.target[0].form[1].value === "") {
+        if (e.target[0].form[0].value === '' || e.target[0].form[1].value === '') {
             this.setState({
                 invalidInput: true
             });
@@ -336,12 +335,12 @@ export default class TopologyEditor extends Component {
 
         var selectedProperties = [];
         this.state.properties.forEach(function(property, index) {
-            if (e.target[0].form[index + 5].value === "read") {
-                selectedProperties.push({ id: property.id, access: "read" });
-            } else if (e.target[0].form[index + 5].value === "write") {
-                selectedProperties.push({ id: property.id, access: "write" });
-            } else if (e.target[0].form[index + 5].value === "readwrite") {
-                selectedProperties.push({ id: property.id, access: "readwrite" });
+            if (e.target[0].form[index + 5].value === 'read') {
+                selectedProperties.push({ id: property.id, access: 'read' });
+            } else if (e.target[0].form[index + 5].value === 'write') {
+                selectedProperties.push({ id: property.id, access: 'write' });
+            } else if (e.target[0].form[index + 5].value === 'readwrite') {
+                selectedProperties.push({ id: property.id, access: 'readwrite' });
             }
         });
         var newTask = {
@@ -352,19 +351,19 @@ export default class TopologyEditor extends Component {
             properties: selectedProperties
         };
 
-        if (e.target[0].form["requirements"].value !== "") {
-            newTask.requirement = e.target[0].form["requirements"].value;
+        if (e.target[0].form['requirements'].value !== '') {
+            newTask.requirement = e.target[0].form['requirements'].value;
         }
 
         if (e.target[0].form[2].checked === true) {
-            newTask.exe.reachable = "true";
+            newTask.exe.reachable = 'true';
         }
 
-        if (e.target[0].form[3].value !== "") {
+        if (e.target[0].form[3].value !== '') {
             newTask.env = {};
             newTask.env.valueText = e.target[0].form[3].value;
             if (e.target[0].form[4].checked == true) {
-                newTask.env.reachable = "true";
+                newTask.env.reachable = 'true';
             }
         }
 
@@ -451,7 +450,7 @@ export default class TopologyEditor extends Component {
 
     handleAddCollection(e) {
         e.preventDefault();
-        if (e.target[0].form[0].value === "") {
+        if (e.target[0].form[0].value === '') {
             this.setState({
                 invalidInput: true
             });
@@ -476,8 +475,8 @@ export default class TopologyEditor extends Component {
             tasks: selectedTasks
         };
 
-        if (e.target[0].form["requirements"].value !== "") {
-            newCollection.requirement = e.target[0].form["requirements"].value;
+        if (e.target[0].form['requirements'].value !== '') {
+            newCollection.requirement = e.target[0].form['requirements'].value;
         }
 
         var nextCollections = this.state.collections.concat([newCollection]);
@@ -545,7 +544,7 @@ export default class TopologyEditor extends Component {
 
     handleAddGroup(e) {
         e.preventDefault();
-        if (e.target[0].form[0].value === "") {
+        if (e.target[0].form[0].value === '') {
             this.setState({
                 invalidInput: true
             });
@@ -669,14 +668,14 @@ export default class TopologyEditor extends Component {
 
         this.state.properties.forEach(function(property, i) {
             PropertyCheckboxes.push(
-                <div className="ct-box ct-box-property" key={"t-box" + i}>
-                    <div className="element-name" title={property.id}>{property.id}</div>
+                <div className='ct-box ct-box-property' key={'t-box' + i}>
+                    <div className='element-name' title={property.id}>{property.id}</div>
                     <FormGroup>
-                        <FormControl componentClass="select" placeholder="" defaultValue="" className="accessSelect">
-                            <option value="">-</option>
-                            <option value="read">read</option>
-                            <option value="write">write</option>
-                            <option value="readwrite">readwrite</option>
+                        <FormControl componentClass='select' placeholder='' defaultValue='' className='accessSelect'>
+                            <option value=''>-</option>
+                            <option value='read'>read</option>
+                            <option value='write'>write</option>
+                            <option value='readwrite'>readwrite</option>
                         </FormControl>
                     </FormGroup>
                 </div>
@@ -685,10 +684,10 @@ export default class TopologyEditor extends Component {
 
         this.state.tasks.forEach(function(task, i) {
             TaskCheckboxes.push(
-                <div className="ct-box ct-box-task" key={"t-box" + i}>
-                    <div className="element-name" title={task.id}>{task.id}</div>
+                <div className='ct-box ct-box-task' key={'t-box' + i}>
+                    <div className='element-name' title={task.id}>{task.id}</div>
                     <FormGroup>
-                        <FormControl className="add-cg-tc-counter" type="number" min="0" defaultValue="0" />
+                        <FormControl className='add-cg-tc-counter' type='number' min='0' defaultValue='0' />
                     </FormGroup>
                 </div>
             );
@@ -696,10 +695,10 @@ export default class TopologyEditor extends Component {
 
         this.state.collections.forEach(function(collection, i) {
             CollectionCheckboxes.push(
-                <div className="ct-box ct-box-collection" key={"c-box" + i}>
-                    <div className="element-name" title={collection.id}>{collection.id}</div>
+                <div className='ct-box ct-box-collection' key={'c-box' + i}>
+                    <div className='element-name' title={collection.id}>{collection.id}</div>
                     <FormGroup>
-                        <FormControl className="add-cg-tc-counter" type="number" min="0" defaultValue="0" />
+                        <FormControl className='add-cg-tc-counter' type='number' min='0' defaultValue='0' />
                     </FormGroup>
                 </div>
             );
@@ -718,10 +717,10 @@ export default class TopologyEditor extends Component {
                         fluid={this.state.fluid}
                         onToggleFluid={this.toggleFluid} />
 
-                <div className={this.state.fluid ? "container-fluid" : "container"}>
-                    <div className="row">
-                        <div className="col-xs-3">
-                            <ul className="list-group left-pane">
+                <div className={this.state.fluid ? 'container-fluid' : 'container'}>
+                    <div className='row'>
+                        <div className='col-xs-3'>
+                            <ul className='list-group left-pane'>
                                 <FileActions
                                     onFileLoad={this.handleTopologyChange}
                                     topologyId={this.state.topologyId}
@@ -733,61 +732,61 @@ export default class TopologyEditor extends Component {
                                     main={this.state.main}
                                     />
 
-                                <li className="list-group-item properties-header">
+                                <li className='list-group-item properties-header'>
                                     properties
-                                    <OverlayTrigger trigger="click" placement="right" ref="addPropertyBtn" onClick={this.handleInputChange} overlay={
-                                        <Popover className="add-cg-popover property-popover" title="add new property" id="addnewproperty">
+                                    <OverlayTrigger trigger='click' placement='right' ref='addPropertyBtn' onClick={this.handleInputChange} overlay={
+                                        <Popover className='add-cg-popover property-popover' title='add new property' id='addnewproperty'>
                                             <form onSubmit={this.handleAddProperty}>
                                                 <InputGroup>
                                                     <InputGroup.Addon>id&nbsp;</InputGroup.Addon>
-                                                    <FormControl type="text" autoFocus onFocus={this.handleInputChange} className={this.state.invalidInput ? "invalid-input" : "" } />
+                                                    <FormControl type='text' autoFocus onFocus={this.handleInputChange} className={this.state.invalidInput ? 'invalid-input' : '' } />
                                                 </InputGroup>
-                                                <div className="row">
-                                                    <div className="col-xs-12">
-                                                        <Button className="add-cg-popover-btn" type="submit" bsSize="small" bsStyle="primary">add</Button>
-                                                        <Button className="add-cg-popover-btn" bsSize="small" bsStyle="default" onClick={this.hideAddPropertyButton}>cancel</Button>
+                                                <div className='row'>
+                                                    <div className='col-xs-12'>
+                                                        <Button className='add-cg-popover-btn' type='submit' bsSize='small' bsStyle='primary'>add</Button>
+                                                        <Button className='add-cg-popover-btn' bsSize='small' bsStyle='default' onClick={this.hideAddPropertyButton}>cancel</Button>
                                                     </div>
                                                 </div>
                                             </form>
                                         </Popover>
                                     }>
-                                        <span className="glyphicon glyphicon-plus add-property-btn" title="add new property"></span>
+                                        <span className='glyphicon glyphicon-plus add-property-btn' title='add new property'></span>
                                     </OverlayTrigger>
                                     <span
-                                        className={this.state.propertiesVisible ? "glyphicon glyphicon-chevron-up toggle-property-btn" : "glyphicon glyphicon-chevron-down toggle-property-btn"}
-                                        title={this.state.propertiesVisible ? "hide": "show"}
+                                        className={this.state.propertiesVisible ? 'glyphicon glyphicon-chevron-up toggle-property-btn' : 'glyphicon glyphicon-chevron-down toggle-property-btn'}
+                                        title={this.state.propertiesVisible ? 'hide': 'show'}
                                         onClick={this.togglePropertiesVisibility}>
                                     </span>
                                 </li>
-                                <li className={this.state.propertiesVisible ? "visible-container list-group-item properties" : "invisible-container list-group-item properties"}>
+                                <li className={this.state.propertiesVisible ? 'visible-container list-group-item properties' : 'invisible-container list-group-item properties'}>
                                     <PropertyList properties={this.state.properties}
                                         onRemoveProperty={this.handleRemoveProperty}
                                         onEditProperty={this.handleEditProperty}
                                         />
                                 </li>
 
-                                <li className="list-group-item tasks-header">
+                                <li className='list-group-item tasks-header'>
                                     tasks
-                                    <OverlayTrigger trigger="click" placement="right" ref="addTaskBtn" onClick={this.handleInputChange} overlay={
-                                        <Popover className="add-cg-popover task-popover" title="add new task" id="addnewtask">
+                                    <OverlayTrigger trigger='click' placement='right' ref='addTaskBtn' onClick={this.handleInputChange} overlay={
+                                        <Popover className='add-cg-popover task-popover' title='add new task' id='addnewtask'>
                                             <form onSubmit={this.handleAddTask}>
                                                 <FormGroup>
                                                     <InputGroup>
                                                         <InputGroup.Addon>id&nbsp;</InputGroup.Addon>
-                                                        <FormControl type="text" onFocus={this.handleInputChange} className={this.state.invalidInput ? "invalid-input" : "" } />
+                                                        <FormControl type='text' onFocus={this.handleInputChange} className={this.state.invalidInput ? 'invalid-input' : '' } />
                                                     </InputGroup>
                                                 </FormGroup>
                                                 <FormGroup>
                                                     <InputGroup>
                                                         <InputGroup.Addon>exe</InputGroup.Addon>
-                                                        <FormControl type="text" onFocus={this.handleInputChange} className={this.state.invalidInput ? "mono invalid-input" : "mono" } />
+                                                        <FormControl type='text' onFocus={this.handleInputChange} className={this.state.invalidInput ? 'mono invalid-input' : 'mono' } />
                                                     </InputGroup>
                                                 </FormGroup>
                                                 <Checkbox>exe reachable (optional)</Checkbox>
                                                 <FormGroup>
                                                     <InputGroup>
                                                         <InputGroup.Addon>env</InputGroup.Addon>
-                                                        <FormControl type="text" className="mono" />
+                                                        <FormControl type='text' className='mono' />
                                                     </InputGroup>
                                                 </FormGroup>
                                                 <Checkbox>env reachable (optional)</Checkbox>
@@ -796,34 +795,34 @@ export default class TopologyEditor extends Component {
                                                 {PropertyCheckboxes}
 
                                                 <p>Requirement for this task (optional):</p>
-                                                <div className="ct-box ct-box-requirement">
-                                                    <div className="element-name">Requirement</div>
+                                                <div className='ct-box ct-box-requirement'>
+                                                    <div className='element-name'>Requirement</div>
                                                     <FormGroup>
-                                                        <FormControl componentClass="select" name="requirements" placeholder="" defaultValue="" className="accessSelect">
-                                                            <option value="">-</option>
+                                                        <FormControl componentClass='select' name='requirements' placeholder='' defaultValue='' className='accessSelect'>
+                                                            <option value=''>-</option>
                                                             {requirementOptions}
                                                         </FormControl>
                                                     </FormGroup>
                                                 </div>
 
-                                                <div className="row">
-                                                    <div className="col-xs-12">
-                                                        <Button className="add-cg-popover-btn" type="submit" bsSize="small" bsStyle="primary">add</Button>
-                                                        <Button className="add-cg-popover-btn" bsSize="small" bsStyle="default" onClick={this.hideAddTaskButton}>cancel</Button>
+                                                <div className='row'>
+                                                    <div className='col-xs-12'>
+                                                        <Button className='add-cg-popover-btn' type='submit' bsSize='small' bsStyle='primary'>add</Button>
+                                                        <Button className='add-cg-popover-btn' bsSize='small' bsStyle='default' onClick={this.hideAddTaskButton}>cancel</Button>
                                                     </div>
                                                 </div>
                                             </form>
                                         </Popover>
                                     }>
-                                        <span className="glyphicon glyphicon-plus add-task-btn" title="add new task"></span>
+                                        <span className='glyphicon glyphicon-plus add-task-btn' title='add new task'></span>
                                     </OverlayTrigger>
                                     <span
-                                        className={this.state.tasksVisible ? "glyphicon glyphicon-chevron-up toggle-property-btn" : "glyphicon glyphicon-chevron-down toggle-property-btn"}
-                                        title={this.state.tasksVisible ? "hide": "show"}
+                                        className={this.state.tasksVisible ? 'glyphicon glyphicon-chevron-up toggle-property-btn' : 'glyphicon glyphicon-chevron-down toggle-property-btn'}
+                                        title={this.state.tasksVisible ? 'hide': 'show'}
                                         onClick={this.toggleTasksVisibility}>
                                     </span>
                                 </li>
-                                <li className={this.state.tasksVisible ? "visible-container list-group-item tasks" : "invisible-container list-group-item tasks"}>
+                                <li className={this.state.tasksVisible ? 'visible-container list-group-item tasks' : 'invisible-container list-group-item tasks'}>
                                     <TaskList properties={this.state.properties}
                                         tasks={this.state.tasks}
                                         requirements={this.state.requirements}
@@ -832,48 +831,48 @@ export default class TopologyEditor extends Component {
                                         />
                                 </li>
 
-                                <li className="list-group-item collections-header">
+                                <li className='list-group-item collections-header'>
                                     collections
-                                    <OverlayTrigger trigger="click" placement="right" ref="addCollectionBtn" onClick={this.handleInputChange} overlay={
-                                        <Popover className="add-cg-popover collection-popover" title="add new collection" id="addnewcollection">
+                                    <OverlayTrigger trigger='click' placement='right' ref='addCollectionBtn' onClick={this.handleInputChange} overlay={
+                                        <Popover className='add-cg-popover collection-popover' title='add new collection' id='addnewcollection'>
                                             <form onSubmit={this.handleAddCollection}>
                                                 <InputGroup>
                                                     <InputGroup.Addon>id</InputGroup.Addon>
-                                                    <FormControl type="text" onFocus={this.handleInputChange} className={this.state.invalidInput ? "invalid-input" : "" } />
+                                                    <FormControl type='text' onFocus={this.handleInputChange} className={this.state.invalidInput ? 'invalid-input' : '' } />
                                                 </InputGroup>
 
                                                 <p>Tasks in this collection:</p>
                                                 {TaskCheckboxes}
 
                                                 <p>Requirement for this collection (optional):</p>
-                                                <div className="ct-box ct-box-requirement">
-                                                    <div className="element-name">Requirement</div>
+                                                <div className='ct-box ct-box-requirement'>
+                                                    <div className='element-name'>Requirement</div>
                                                     <FormGroup>
-                                                        <FormControl componentClass="select" name="requirements" placeholder="" defaultValue="" className="accessSelect">
-                                                            <option value="">-</option>
+                                                        <FormControl componentClass='select' name='requirements' placeholder='' defaultValue='' className='accessSelect'>
+                                                            <option value=''>-</option>
                                                             {requirementOptions}
                                                         </FormControl>
                                                     </FormGroup>
                                                 </div>
 
-                                                <div className="row">
-                                                    <div className="col-xs-12">
-                                                        <Button className="add-cg-popover-btn" type="submit" bsSize="small" bsStyle="primary">add</Button>
-                                                        <Button className="add-cg-popover-btn" bsSize="small" bsStyle="default" onClick={this.hideAddCollectionButton}>cancel</Button>
+                                                <div className='row'>
+                                                    <div className='col-xs-12'>
+                                                        <Button className='add-cg-popover-btn' type='submit' bsSize='small' bsStyle='primary'>add</Button>
+                                                        <Button className='add-cg-popover-btn' bsSize='small' bsStyle='default' onClick={this.hideAddCollectionButton}>cancel</Button>
                                                     </div>
                                                 </div>
                                             </form>
                                         </Popover>
                                     }>
-                                        <span className="glyphicon glyphicon-plus add-collection-btn" title="add new collection"></span>
+                                        <span className='glyphicon glyphicon-plus add-collection-btn' title='add new collection'></span>
                                     </OverlayTrigger>
                                     <span
-                                        className={this.state.collectionsVisible ? "glyphicon glyphicon-chevron-up toggle-property-btn" : "glyphicon glyphicon-chevron-down toggle-property-btn"}
-                                        title={this.state.collectionsVisible ? "hide": "show"}
+                                        className={this.state.collectionsVisible ? 'glyphicon glyphicon-chevron-up toggle-property-btn' : 'glyphicon glyphicon-chevron-down toggle-property-btn'}
+                                        title={this.state.collectionsVisible ? 'hide': 'show'}
                                         onClick={this.toggleCollectionsVisibility}>
                                     </span>
                                 </li>
-                                <li className={this.state.collectionsVisible ? "visible-container list-group-item collections" : "invisible-container list-group-item collections"}>
+                                <li className={this.state.collectionsVisible ? 'visible-container list-group-item collections' : 'invisible-container list-group-item collections'}>
                                     <CollectionList
                                         collections={this.state.collections}
                                         tasks={this.state.tasks}
@@ -883,21 +882,21 @@ export default class TopologyEditor extends Component {
                                         />
                                 </li>
 
-                                <li className="list-group-item groups-header">
+                                <li className='list-group-item groups-header'>
                                     groups
-                                    <OverlayTrigger trigger="click" placement="right" ref="addGroupBtn" onClick={this.handleInputChange} overlay={
-                                        <Popover className="add-cg-popover group-popover" title="add new group" id="addnewgroup">
+                                    <OverlayTrigger trigger='click' placement='right' ref='addGroupBtn' onClick={this.handleInputChange} overlay={
+                                        <Popover className='add-cg-popover group-popover' title='add new group' id='addnewgroup'>
                                             <form onSubmit={this.handleAddGroup}>
                                                 <InputGroup>
                                                     <InputGroup.Addon>id</InputGroup.Addon>
-                                                    <FormControl type="text" onFocus={this.handleInputChange} className={this.state.invalidInput ? "invalid-input" : "" } />
+                                                    <FormControl type='text' onFocus={this.handleInputChange} className={this.state.invalidInput ? 'invalid-input' : '' } />
                                                 </InputGroup>
-                                                <div className="row">
-                                                    <div className="col-xs-6">
+                                                <div className='row'>
+                                                    <div className='col-xs-6'>
                                                         <InputGroup>
                                                             <InputGroup.Addon>n</InputGroup.Addon>
                                                             <FormGroup>
-                                                                <FormControl className="add-cg-tc-counter" type="number" min="1" defaultValue="1" />
+                                                                <FormControl className='add-cg-tc-counter' type='number' min='1' defaultValue='1' />
                                                             </FormGroup>
                                                         </InputGroup>
                                                     </div>
@@ -906,24 +905,24 @@ export default class TopologyEditor extends Component {
                                                 {TaskCheckboxes}
                                                 <p>Collections in this group:</p>
                                                 {CollectionCheckboxes}
-                                                <div className="row">
-                                                    <div className="col-xs-12">
-                                                        <Button className="add-cg-popover-btn" type="submit" bsSize="small" bsStyle="primary">add</Button>
-                                                        <Button className="add-cg-popover-btn" bsSize="small" bsStyle="default" onClick={this.hideAddGroupButton}>cancel</Button>
+                                                <div className='row'>
+                                                    <div className='col-xs-12'>
+                                                        <Button className='add-cg-popover-btn' type='submit' bsSize='small' bsStyle='primary'>add</Button>
+                                                        <Button className='add-cg-popover-btn' bsSize='small' bsStyle='default' onClick={this.hideAddGroupButton}>cancel</Button>
                                                     </div>
                                                 </div>
                                             </form>
                                         </Popover>
                                     }>
-                                        <span className="glyphicon glyphicon-plus add-group-btn" title="add new group"></span>
+                                        <span className='glyphicon glyphicon-plus add-group-btn' title='add new group'></span>
                                     </OverlayTrigger>
                                     <span
-                                        className={this.state.groupsVisible ? "glyphicon glyphicon-chevron-up toggle-property-btn" : "glyphicon glyphicon-chevron-down toggle-property-btn"}
-                                        title={this.state.groupsVisible ? "hide": "show"}
+                                        className={this.state.groupsVisible ? 'glyphicon glyphicon-chevron-up toggle-property-btn' : 'glyphicon glyphicon-chevron-down toggle-property-btn'}
+                                        title={this.state.groupsVisible ? 'hide': 'show'}
                                         onClick={this.toggleGroupsVisibility}>
                                     </span>
                                 </li>
-                                <li className={this.state.groupsVisible ? "visible-container list-group-item groups" : "invisible-container list-group-item groups"}>
+                                <li className={this.state.groupsVisible ? 'visible-container list-group-item groups' : 'invisible-container list-group-item groups'}>
                                     <GroupList
                                         groups={this.state.main.groups}
                                         tasks={this.state.tasks}
@@ -933,42 +932,42 @@ export default class TopologyEditor extends Component {
                                         />
                                 </li>
 
-                                <li className="list-group-item requirements-header">
+                                <li className='list-group-item requirements-header'>
                                     requirements
-                                    <OverlayTrigger trigger="click" placement="right" ref="addRequirementBtn" onClick={this.handleInputChange} overlay={
-                                        <Popover className="add-cg-popover requirement-popover" title="add new requirement" id="addnewrequirement">
+                                    <OverlayTrigger trigger='click' placement='right' ref='addRequirementBtn' onClick={this.handleInputChange} overlay={
+                                        <Popover className='add-cg-popover requirement-popover' title='add new requirement' id='addnewrequirement'>
                                             <form onSubmit={this.handleAddRequirement}>
                                                 <InputGroup>
                                                     <InputGroup.Addon>id</InputGroup.Addon>
-                                                    <FormControl type="text" onFocus={this.handleInputChange} className={this.state.invalidInput ? "invalid-input" : "" } />
+                                                    <FormControl type='text' onFocus={this.handleInputChange} className={this.state.invalidInput ? 'invalid-input' : '' } />
                                                 </InputGroup>
                                                 <FormGroup>
-                                                    <ControlLabel className="pattern-label">Pattern Type</ControlLabel>
-                                                    <Radio name="patternType" inline defaultChecked title="host name">hostname</Radio>
-                                                    <Radio name="patternType" inline title="SSH worker node name">wnname</Radio>
+                                                    <ControlLabel className='pattern-label'>Pattern Type</ControlLabel>
+                                                    <Radio name='patternType' inline defaultChecked title='host name'>hostname</Radio>
+                                                    <Radio name='patternType' inline title='SSH worker node name'>wnname</Radio>
                                                 </FormGroup>
                                                 <InputGroup>
                                                     <InputGroup.Addon>pattern</InputGroup.Addon>
-                                                    <FormControl type="text" onFocus={this.handleInputChange} className={this.state.invalidInput ? "mono invalid-input" : "mono" } />
+                                                    <FormControl type='text' onFocus={this.handleInputChange} className={this.state.invalidInput ? 'mono invalid-input' : 'mono' } />
                                                 </InputGroup>
-                                                <div className="row">
-                                                    <div className="col-xs-12">
-                                                        <Button className="add-cg-popover-btn" type="submit" bsSize="small" bsStyle="primary">add</Button>
-                                                        <Button className="add-cg-popover-btn" bsSize="small" bsStyle="default" onClick={this.hideAddRequirementButton}>cancel</Button>
+                                                <div className='row'>
+                                                    <div className='col-xs-12'>
+                                                        <Button className='add-cg-popover-btn' type='submit' bsSize='small' bsStyle='primary'>add</Button>
+                                                        <Button className='add-cg-popover-btn' bsSize='small' bsStyle='default' onClick={this.hideAddRequirementButton}>cancel</Button>
                                                     </div>
                                                 </div>
                                             </form>
                                         </Popover>
                                     }>
-                                        <span className="glyphicon glyphicon-plus add-requirement-btn" title="add new requirement"></span>
+                                        <span className='glyphicon glyphicon-plus add-requirement-btn' title='add new requirement'></span>
                                     </OverlayTrigger>
                                     <span
-                                        className={this.state.requirementsVisible ? "glyphicon glyphicon-chevron-up toggle-property-btn" : "glyphicon glyphicon-chevron-down toggle-property-btn"}
-                                        title={this.state.requirementsVisible ? "hide": "show"}
+                                        className={this.state.requirementsVisible ? 'glyphicon glyphicon-chevron-up toggle-property-btn' : 'glyphicon glyphicon-chevron-down toggle-property-btn'}
+                                        title={this.state.requirementsVisible ? 'hide': 'show'}
                                         onClick={this.toggleRequirementsVisibility}>
                                     </span>
                                 </li>
-                                <li className={this.state.requirementsVisible ? "visible-container list-group-item requirements" : "invisible-container list-group-item requirements"}>
+                                <li className={this.state.requirementsVisible ? 'visible-container list-group-item requirements' : 'invisible-container list-group-item requirements'}>
                                     <RequirementList
                                         requirements={this.state.requirements}
                                         onRemoveRequirement={this.handleRemoveRequirement}
@@ -976,9 +975,9 @@ export default class TopologyEditor extends Component {
                                         />
                                 </li>
 
-                                <li className="list-group-item">
-                                    <button type="button" className="btn btn-sm btn-default" onClick={this.openResetModal}>
-                                        <span className="glyphicon glyphicon-remove" title="reset the topology"></span> reset
+                                <li className='list-group-item'>
+                                    <button type='button' className='btn btn-sm btn-default' onClick={this.openResetModal}>
+                                        <span className='glyphicon glyphicon-remove' title='reset the topology'></span> reset
                                     </button>
 
                                     <Modal show={this.state.showResetModal} onHide={this.closeResetModal}>
@@ -990,14 +989,14 @@ export default class TopologyEditor extends Component {
                                             <p>Unsaved changes will be lost.</p>
                                         </Modal.Body>
                                         <Modal.Footer>
-                                            <Button bsStyle="danger" onClick={this.resetState}>Reset</Button>
+                                            <Button bsStyle='danger' onClick={this.resetState}>Reset</Button>
                                             <Button onClick={this.closeResetModal}>Cancel</Button>
                                         </Modal.Footer>
                                     </Modal>
                                 </li>
                             </ul>
                         </div>
-                        <div className="col-xs-9">
+                        <div className='col-xs-9'>
                             <MainEditor properties={this.state.properties}
                                 tasks={this.state.tasks}
                                 collections={this.state.collections}
@@ -1011,3 +1010,5 @@ export default class TopologyEditor extends Component {
         );
     }
 }
+
+reactMixin(TopologyEditor.prototype, localStorageMixin);
