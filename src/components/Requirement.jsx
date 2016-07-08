@@ -6,7 +6,7 @@
  *                  copied verbatim in the file "LICENSE"                       *
  ********************************************************************************/
 
-import React from 'react';
+import React, { Component, PropTypes } from 'react';
 import _ from 'lodash';
 
 import {
@@ -21,45 +21,55 @@ import {
     Radio
 } from 'react-bootstrap';
 
-var Requirement = React.createClass({
-    propTypes: {
-        requirement: React.PropTypes.object.isRequired,
-        requirements: React.PropTypes.array.isRequired,
-        onRemoveRequirement: React.PropTypes.func.isRequired,
-        onEditRequirement: React.PropTypes.func.isRequired,
-        elementKey: React.PropTypes.number.isRequired
-    },
+export default class Requirement extends Component {
+    static propTypes = {
+        requirement: PropTypes.object.isRequired,
+        requirements: PropTypes.array.isRequired,
+        onRemoveRequirement: PropTypes.func.isRequired,
+        onEditRequirement: PropTypes.func.isRequired,
+        elementKey: PropTypes.number.isRequired
+    };
 
-    getInitialState() {
-        return {
+    constructor() {
+        super();
+
+        this.state = {
             bodyVisible: false,
             invalidInput: false,
             showDeleteModal: false
         };
-    },
+
+        this.closeDeleteModal = this.closeDeleteModal.bind(this);
+        this.openDeleteModal = this.openDeleteModal.bind(this);
+        this.handleInputChange = this.handleInputChange.bind(this);
+        this.hideEditRequirementButton = this.hideEditRequirementButton.bind(this);
+        this.toggleBodyVisibility = this.toggleBodyVisibility.bind(this);
+        this.handleEditRequirement = this.handleEditRequirement.bind(this);
+        this.handleRemoveRequirement = this.handleRemoveRequirement.bind(this);
+    }
 
     closeDeleteModal() {
         this.setState({ showDeleteModal: false });
-    },
+    }
 
     openDeleteModal() {
         this.setState({ showDeleteModal: true });
-    },
+    }
 
     handleInputChange(e) {
         e.preventDefault();
         this.setState({ invalidInput: false });
-    },
+    }
 
     hideEditRequirementButton(e) {
         e.preventDefault();
         this.setState({ invalidInput: false });
         this.refs.editRequirementBtn.toggle();
-    },
+    }
 
     toggleBodyVisibility() {
         this.setState({ bodyVisible: !this.state.bodyVisible });
-    },
+    }
 
     handleEditRequirement(e) {
         e.preventDefault();
@@ -100,12 +110,12 @@ var Requirement = React.createClass({
 
         this.refs.editRequirementBtn.toggle();
         this.props.onEditRequirement(this.props.elementKey, updatedRequirement);
-    },
+    }
 
     handleRemoveRequirement() {
         this.setState({ showDeleteModal: false });
         this.props.onRemoveRequirement(this.props.elementKey);
-    },
+    }
 
     render() {
         return (
@@ -173,6 +183,4 @@ var Requirement = React.createClass({
             </div>
         );
     }
-});
-
-export default Requirement;
+}

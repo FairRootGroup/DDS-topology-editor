@@ -6,7 +6,7 @@
  *                  copied verbatim in the file "LICENSE"                       *
  ********************************************************************************/
 
-import React from 'react';
+import React, { Component, PropTypes } from 'react';
 import _ from 'lodash';
 
 import {
@@ -20,47 +20,57 @@ import {
     Popover
 } from 'react-bootstrap';
 
-var Task = React.createClass({
-    propTypes: {
-        task: React.PropTypes.object.isRequired,
-        properties: React.PropTypes.array.isRequired,
-        requirements: React.PropTypes.array.isRequired,
-        tasks: React.PropTypes.array.isRequired,
-        onRemoveTask: React.PropTypes.func.isRequired,
-        onEditTask: React.PropTypes.func.isRequired,
-        elementKey: React.PropTypes.number.isRequired
-    },
+export default class Task extends Component {
+    static propTypes = {
+        task: PropTypes.object.isRequired,
+        properties: PropTypes.array.isRequired,
+        requirements: PropTypes.array.isRequired,
+        tasks: PropTypes.array.isRequired,
+        onRemoveTask: PropTypes.func.isRequired,
+        onEditTask: PropTypes.func.isRequired,
+        elementKey: PropTypes.number.isRequired
+    };
 
-    getInitialState() {
-        return {
+    constructor() {
+        super();
+
+        this.state = {
             bodyVisible: false,
             invalidInput: false,
             showDeleteModal: false
         };
-    },
+
+        this.closeDeleteModal = this.closeDeleteModal.bind(this);
+        this.openDeleteModal = this.openDeleteModal.bind(this);
+        this.handleInputChange = this.handleInputChange.bind(this);
+        this.hideEditTaskButton = this.hideEditTaskButton.bind(this);
+        this.toggleBodyVisibility = this.toggleBodyVisibility.bind(this);
+        this.handleEditTask = this.handleEditTask.bind(this);
+        this.handleRemoveTask = this.handleRemoveTask.bind(this);
+    }
 
     closeDeleteModal() {
         this.setState({ showDeleteModal: false });
-    },
+    }
 
     openDeleteModal() {
         this.setState({ showDeleteModal: true });
-    },
+    }
 
     handleInputChange(e) {
         e.preventDefault();
         this.setState({ invalidInput: false });
-    },
+    }
 
     hideEditTaskButton(e) {
         e.preventDefault();
         this.setState({ invalidInput: false });
         this.refs.editTaskBtn.toggle();
-    },
+    }
 
     toggleBodyVisibility() {
         this.setState({ bodyVisible: !this.state.bodyVisible });
-    },
+    }
 
     handleEditTask(e) {
         e.preventDefault();
@@ -117,12 +127,12 @@ var Task = React.createClass({
 
         this.refs.editTaskBtn.toggle();
         this.props.onEditTask(this.props.elementKey, updatedTask);
-    },
+    }
 
     handleRemoveTask() {
         this.setState({ showDeleteModal: false });
         this.props.onRemoveTask(this.props.elementKey);
-    },
+    }
 
     render() {
         var propertyCheckboxes = [];
@@ -299,6 +309,4 @@ var Task = React.createClass({
             </div>
         );
     }
-});
-
-export default Task;
+}

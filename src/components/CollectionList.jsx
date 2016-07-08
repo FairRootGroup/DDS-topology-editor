@@ -6,18 +6,18 @@
  *                  copied verbatim in the file "LICENSE"                       *
  ********************************************************************************/
 
-import React from 'react';
+import React, { Component, PropTypes } from 'react';
 
 import Collection from './Collection';
 
-var CollectionList = React.createClass({
-    propTypes: {
-        collections: React.PropTypes.array.isRequired,
-        requirements: React.PropTypes.array.isRequired,
-        tasks: React.PropTypes.array.isRequired,
-        onRemoveCollection: React.PropTypes.func.isRequired,
-        onEditCollection: React.PropTypes.func.isRequired
-    },
+export default class CollectionList extends Component {
+    static propTypes = {
+        collections: PropTypes.array.isRequired,
+        requirements: PropTypes.array.isRequired,
+        tasks: PropTypes.array.isRequired,
+        onRemoveCollection: PropTypes.func.isRequired,
+        onEditCollection: PropTypes.func.isRequired
+    };
 
     render() {
         var self = this;
@@ -37,6 +37,4 @@ var CollectionList = React.createClass({
             </div>
         );
     }
-});
-
-export default CollectionList;
+}

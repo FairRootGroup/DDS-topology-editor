@@ -6,7 +6,7 @@
  *                  copied verbatim in the file "LICENSE"                       *
  ********************************************************************************/
 
-import React from 'react';
+import React, { Component } from 'react';
 import _ from 'lodash';
 import {
     Button,
@@ -32,13 +32,15 @@ import RequirementList from './RequirementList';
 import TaskList from './TaskList';
 import MainEditor from './MainEditor';
 
-var TopologyEditor = React.createClass({
-    displayName: 'TopologyEditor',
+export default class TopologyEditor extends Component {
+    static displayName = 'TopologyEditor';
 
-    mixins: [LocalStorageMixin],
+    static mixins = [LocalStorageMixin];
 
-    getInitialState() {
-        return {
+    constructor() {
+        super();
+
+        this.state = {
             topologyId: 'new',
             variables: [],
             properties: [],
@@ -60,10 +62,44 @@ var TopologyEditor = React.createClass({
             groupsVisible: true,
             requirementsVisible: true
         };
-    },
+
+        this.resetState = this.resetState.bind(this);
+        this.closeResetModal = this.closeResetModal.bind(this);
+        this.openResetModal = this.openResetModal.bind(this);
+        this.toggleFluid = this.toggleFluid.bind(this);
+        this.togglePropertiesVisibility = this.togglePropertiesVisibility.bind(this);
+        this.toggleTasksVisibility = this.toggleTasksVisibility.bind(this);
+        this.toggleCollectionsVisibility = this.toggleCollectionsVisibility.bind(this);
+        this.toggleGroupsVisibility = this.toggleGroupsVisibility.bind(this);
+        this.toggleRequirementsVisibility = this.toggleRequirementsVisibility.bind(this);
+        this.handleTopologyChange = this.handleTopologyChange.bind(this);
+        this.handleTopologyIdChange = this.handleTopologyIdChange.bind(this);
+        this.handleInputChange = this.handleInputChange.bind(this);
+        this.handleAddProperty = this.handleAddProperty.bind(this);
+        this.handleRemoveProperty = this.handleRemoveProperty.bind(this);
+        this.handleEditProperty = this.handleEditProperty.bind(this);
+        this.handleAddRequirement = this.handleAddRequirement.bind(this);
+        this.handleRemoveRequirement = this.handleRemoveRequirement.bind(this);
+        this.handleEditRequirement = this.handleEditRequirement.bind(this);
+        this.handleAddTask = this.handleAddTask.bind(this);
+        this.handleEditTask = this.handleEditTask.bind(this);
+        this.handleRemoveTask = this.handleRemoveTask.bind(this);
+        this.handleAddCollection = this.handleAddCollection.bind(this);
+        this.handleEditCollection = this.handleEditCollection.bind(this);
+        this.handleRemoveCollection = this.handleRemoveCollection.bind(this);
+        this.handleAddGroup = this.handleAddGroup.bind(this);
+        this.handleEditGroup = this.handleEditGroup.bind(this);
+        this.handleRemoveGroup = this.handleRemoveGroup.bind(this);
+        this.handleEditMain = this.handleEditMain.bind(this);
+        this.hideAddPropertyButton = this.hideAddPropertyButton.bind(this);
+        this.hideAddRequirementButton = this.hideAddRequirementButton.bind(this);
+        this.hideAddTaskButton = this.hideAddTaskButton.bind(this);
+        this.hideAddCollectionButton = this.hideAddCollectionButton.bind(this);
+        this.hideAddGroupButton = this.hideAddGroupButton.bind(this);
+    }
 
     resetState() {
-        this.replaceState({
+        this.setState({
             topologyId: 'new',
             variables: [],
             properties: [],
@@ -85,39 +121,39 @@ var TopologyEditor = React.createClass({
             groupsVisible: true,
             requirementsVisible: true
         });
-    },
+    }
 
     closeResetModal() {
         this.setState({ showResetModal: false });
-    },
+    }
 
     openResetModal() {
         this.setState({ showResetModal: true });
-    },
+    }
 
     toggleFluid() {
         this.setState({ fluid: !this.state.fluid });
-    },
+    }
 
     togglePropertiesVisibility() {
         this.setState({ propertiesVisible: !this.state.propertiesVisible });
-    },
+    }
 
     toggleTasksVisibility() {
         this.setState({ tasksVisible: !this.state.tasksVisible });
-    },
+    }
 
     toggleCollectionsVisibility() {
         this.setState({ collectionsVisible: !this.state.collectionsVisible });
-    },
+    }
 
     toggleGroupsVisibility() {
         this.setState({ groupsVisible: !this.state.groupsVisible });
-    },
+    }
 
     toggleRequirementsVisibility() {
         this.setState({ requirementsVisible: !this.state.requirementsVisible });
-    },
+    }
 
     handleTopologyChange(topologyId, variables, properties, requirements, tasks, collections, main) {
         this.setState({
@@ -129,20 +165,20 @@ var TopologyEditor = React.createClass({
             collections: collections,
             main: main
         });
-    },
+    }
 
     handleTopologyIdChange(topologyId) {
         this.setState({
             topologyId: topologyId
         });
-    },
+    }
 
     handleInputChange(e) {
         e.preventDefault();
         this.setState({
             invalidInput: false
         });
-    },
+    }
 
     handleAddProperty(e) {
         e.preventDefault();
@@ -163,7 +199,7 @@ var TopologyEditor = React.createClass({
         this.setState({
             properties: nextProperties
         });
-    },
+    }
 
     handleRemoveProperty(key) {
         var nextProperties = this.state.properties;
@@ -178,7 +214,7 @@ var TopologyEditor = React.createClass({
             properties: nextProperties,
             tasks: nextTasks
         });
-    },
+    }
 
     handleEditProperty(key, updatedProperty) {
         if (_.some(this.state.properties, { 'id': updatedProperty.id })) {
@@ -199,7 +235,7 @@ var TopologyEditor = React.createClass({
             properties: nextProperties,
             tasks: nextTasks
         });
-    },
+    }
 
     handleAddRequirement(e) {
         e.preventDefault();
@@ -237,7 +273,7 @@ var TopologyEditor = React.createClass({
         this.setState({
             requirements: nextRequirements
         });
-    },
+    }
 
     handleRemoveRequirement(key) {
         var nextRequirements = this.state.requirements;
@@ -252,7 +288,7 @@ var TopologyEditor = React.createClass({
             requirements: nextRequirements,
             tasks: nextTasks
         });
-    },
+    }
 
     handleEditRequirement(key, updatedRequirement) {
         // create new requirements
@@ -281,7 +317,7 @@ var TopologyEditor = React.createClass({
             tasks: nextTasks,
             collections: nextCollections
         });
-    },
+    }
 
     handleAddTask(e) {
         e.preventDefault();
@@ -337,7 +373,7 @@ var TopologyEditor = React.createClass({
         this.setState({
             tasks: nextTasks
         });
-    },
+    }
 
     handleEditTask(key, updatedTask) {
         var nextTasks = this.state.tasks;
@@ -379,7 +415,7 @@ var TopologyEditor = React.createClass({
             collections: nextCollections,
             main: nextMain
         });
-    },
+    }
 
     handleRemoveTask(key) {
         var nextTasks = this.state.tasks;
@@ -411,7 +447,7 @@ var TopologyEditor = React.createClass({
             collections: nextCollections,
             main: nextMain
         });
-    },
+    }
 
     handleAddCollection(e) {
         e.preventDefault();
@@ -449,7 +485,7 @@ var TopologyEditor = React.createClass({
         this.setState({
             collections: nextCollections
         });
-    },
+    }
 
     handleEditCollection(key, updatedCollection) {
         var nextCollections = this.state.collections;
@@ -480,7 +516,7 @@ var TopologyEditor = React.createClass({
             collections: nextCollections,
             main: nextMain
         });
-    },
+    }
 
     handleRemoveCollection(key) {
         var nextCollections = this.state.collections;
@@ -505,7 +541,7 @@ var TopologyEditor = React.createClass({
             collections: nextCollections,
             main: nextMain
         });
-    },
+    }
 
     handleAddGroup(e) {
         e.preventDefault();
@@ -551,7 +587,7 @@ var TopologyEditor = React.createClass({
             main: nextMain
         });
         this.refs.addGroupBtn.toggle();
-    },
+    }
 
     handleEditGroup(groups) {
         var nextMain = {
@@ -563,7 +599,7 @@ var TopologyEditor = React.createClass({
         this.setState({
             main: nextMain
         });
-    },
+    }
 
     handleRemoveGroup(key) {
         var nextGroups = this.state.main.groups;
@@ -577,13 +613,13 @@ var TopologyEditor = React.createClass({
         this.setState({
             main: nextMain
         });
-    },
+    }
 
     handleEditMain(main) {
         this.setState({
             main: main
         });
-    },
+    }
 
     hideAddPropertyButton(e) {
         e.preventDefault();
@@ -591,7 +627,7 @@ var TopologyEditor = React.createClass({
             invalidInput: false
         });
         this.refs.addPropertyBtn.toggle();
-    },
+    }
 
     hideAddRequirementButton(e) {
         e.preventDefault();
@@ -599,7 +635,7 @@ var TopologyEditor = React.createClass({
             invalidInput: false
         });
         this.refs.addRequirementBtn.toggle();
-    },
+    }
 
     hideAddTaskButton(e) {
         e.preventDefault();
@@ -607,7 +643,7 @@ var TopologyEditor = React.createClass({
             invalidInput: false
         });
         this.refs.addTaskBtn.toggle();
-    },
+    }
 
     hideAddCollectionButton(e) {
         e.preventDefault();
@@ -615,7 +651,7 @@ var TopologyEditor = React.createClass({
             invalidInput: false
         });
         this.refs.addCollectionBtn.toggle();
-    },
+    }
 
     hideAddGroupButton(e) {
         e.preventDefault();
@@ -623,7 +659,7 @@ var TopologyEditor = React.createClass({
             invalidInput: false
         });
         this.refs.addGroupBtn.toggle();
-    },
+    }
 
     render() {
         let PropertyCheckboxes = [];
@@ -974,6 +1010,4 @@ var TopologyEditor = React.createClass({
             </div>
         );
     }
-});
-
-export default TopologyEditor;
+}

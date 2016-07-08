@@ -6,35 +6,41 @@
  *                  copied verbatim in the file "LICENSE"                       *
  ********************************************************************************/
 
-import React from 'react';
+import React, { Component, PropTypes } from 'react';
 
-var TopBar = React.createClass({
-    propTypes: {
-        topologyId: React.PropTypes.string.isRequired,
-        onTopologyIdChange: React.PropTypes.func.isRequired,
-        fluid: React.PropTypes.bool.isRequired,
-        onToggleFluid: React.PropTypes.func.isRequired
-    },
+export default class TopBar extends Component {
+    static propTypes = {
+        topologyId: PropTypes.string.isRequired,
+        onTopologyIdChange: PropTypes.func.isRequired,
+        fluid: PropTypes.bool.isRequired,
+        onToggleFluid: PropTypes.func.isRequired
+    };
 
-    getInitialState() {
-        return {
+    constructor() {
+        super();
+
+        this.state = {
             beeingEdited: false
         };
-    },
+
+        this.toggleEditing = this.toggleEditing.bind(this);
+        this.handleToggleFluid = this.handleToggleFluid.bind(this);
+        this.handleTopologyIdChange = this.handleTopologyIdChange.bind(this);
+    }
 
     toggleEditing() {
         this.setState({ beeingEdited: !this.state.beeingEdited });
-    },
+    }
 
     handleToggleFluid() {
         this.props.onToggleFluid();
-    },
+    }
 
     handleTopologyIdChange(e) {
         e.preventDefault();
         this.toggleEditing();
         this.props.onTopologyIdChange(e.target[0].form[0].value);
-    },
+    }
 
     render() {
         return (
@@ -77,6 +83,4 @@ var TopBar = React.createClass({
             </nav>
         );
     }
-});
-
-export default TopBar;
+}

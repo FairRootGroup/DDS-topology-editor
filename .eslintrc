@@ -3,6 +3,7 @@
     "extends": [
       "eslint:recommended", "plugin:react/recommended"
     ],
+    "parser": "babel-eslint",
     // Enable ES6 support.
     "parserOptions": {
       "ecmaVersion": 6,
@@ -21,6 +22,7 @@
       "no-console": 0,
       // Give a warning if identifiers contain underscores
       "no-underscore-dangle": 1,
+      "quotes": [2, "single"],
       "semi": 2
     }
 }

@@ -6,7 +6,7 @@
  *                  copied verbatim in the file "LICENSE"                       *
  ********************************************************************************/
 
-import React from 'react';
+import React, { Component, PropTypes } from 'react';
 import _ from 'lodash';
 
 import {
@@ -19,39 +19,49 @@ import {
     Popover
 } from 'react-bootstrap';
 
-var Collection = React.createClass({
-    propTypes: {
-        collection: React.PropTypes.object.isRequired,
-        requirements: React.PropTypes.array.isRequired,
-        collections: React.PropTypes.array.isRequired,
-        tasks: React.PropTypes.array.isRequired,
-        onRemoveCollection: React.PropTypes.func.isRequired,
-        onEditCollection: React.PropTypes.func.isRequired,
-        elementKey: React.PropTypes.number.isRequired
-    },
+export default class Collection extends Component {
+    static propTypes = {
+        collection: PropTypes.object.isRequired,
+        requirements: PropTypes.array.isRequired,
+        collections: PropTypes.array.isRequired,
+        tasks: PropTypes.array.isRequired,
+        onRemoveCollection: PropTypes.func.isRequired,
+        onEditCollection: PropTypes.func.isRequired,
+        elementKey: PropTypes.number.isRequired
+    };
 
-    getInitialState() {
-        return {
+    constructor() {
+        super();
+
+        this.state = {
             bodyVisible: false,
             invalidInput: false,
             showDeleteModal: false
         };
-    },
+
+        this.closeDeleteModal = this.closeDeleteModal.bind(this);
+        this.openDeleteModal = this.openDeleteModal.bind(this);
+        this.handleInputChange = this.handleInputChange.bind(this);
+        this.hideEditCollectionButton = this.hideEditCollectionButton.bind(this);
+        this.toggleBodyVisibility = this.toggleBodyVisibility.bind(this);
+        this.handleEditCollection = this.handleEditCollection.bind(this);
+        this.handleRemoveCollection = this.handleRemoveCollection.bind(this);
+    }
 
     closeDeleteModal() {
         this.setState({ showDeleteModal: false });
-    },
+    }
 
     openDeleteModal() {
         this.setState({ showDeleteModal: true });
-    },
+    }
 
     handleInputChange(e) {
         e.preventDefault();
         this.setState({
             invalidInput: false
         });
-    },
+    }
 
     hideEditCollectionButton(e) {
         e.preventDefault();
@@ -59,11 +69,11 @@ var Collection = React.createClass({
             invalidInput: false
         });
         this.refs.editCollectionBtn.toggle();
-    },
+    }
 
     toggleBodyVisibility() {
         this.setState({ bodyVisible: !this.state.bodyVisible });
-    },
+    }
 
     handleEditCollection(e) {
         e.preventDefault();
@@ -101,12 +111,12 @@ var Collection = React.createClass({
 
         this.refs.editCollectionBtn.toggle();
         this.props.onEditCollection(this.props.elementKey, updatedCollection);
-    },
+    }
 
     handleRemoveCollection() {
         this.setState({ showDeleteModal: false });
         this.props.onRemoveCollection(this.props.elementKey);
-    },
+    }
 
     render() {
         var TaskCheckboxes = [];
@@ -220,6 +230,4 @@ var Collection = React.createClass({
             </div>
         );
     }
-});
-
-export default Collection;
+}

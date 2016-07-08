@@ -6,27 +6,42 @@
  *                  copied verbatim in the file "LICENSE"                       *
  ********************************************************************************/
 
-import React from 'react';
-import { OverlayTrigger, Popover, Button, FormControl, Badge } from 'react-bootstrap';
+import React, { Component, PropTypes } from 'react';
+import {
+    Badge,
+    Button,
+    FormControl,
+    Popover,
+    OverlayTrigger
+} from 'react-bootstrap';
 
-var MainEditor = React.createClass({
-    propTypes: {
-        properties: React.PropTypes.array.isRequired,
-        tasks: React.PropTypes.array.isRequired,
-        collections: React.PropTypes.array.isRequired,
-        main: React.PropTypes.object.isRequired,
-        onEditMain: React.PropTypes.func.isRequired
-    },
+export default class MainEditor extends Component {
+    static propTypes = {
+        properties: PropTypes.array.isRequired,
+        tasks: PropTypes.array.isRequired,
+        collections: PropTypes.array.isRequired,
+        main: PropTypes.object.isRequired,
+        onEditMain: PropTypes.func.isRequired
+    };
+
+    constructor() {
+        super();
+
+        this.hideEditTasksInMainBtn = this.hideEditTasksInMainBtn.bind(this);
+        this.hideEditCollectionsInMainBtn = this.hideEditCollectionsInMainBtn.bind(this);
+        this.handleEditTasksInMain = this.handleEditTasksInMain.bind(this);
+        this.handleEditCollectionsInMain = this.handleEditCollectionsInMain.bind(this);
+    }
 
     hideEditTasksInMainBtn(e) {
         e.preventDefault();
         this.refs.editTasksInMainBtn.toggle();
-    },
+    }
 
     hideEditCollectionsInMainBtn(e) {
         e.preventDefault();
         this.refs.editCollectionsInMainBtn.toggle();
-    },
+    }
 
     handleEditTasksInMain(e) {
         e.preventDefault();
@@ -46,7 +61,7 @@ var MainEditor = React.createClass({
 
         this.refs.editTasksInMainBtn.toggle();
         this.props.onEditMain(nextMain);
-    },
+    }
 
     handleEditCollectionsInMain(e) {
         e.preventDefault();
@@ -66,7 +81,7 @@ var MainEditor = React.createClass({
 
         this.refs.editCollectionsInMainBtn.toggle();
         this.props.onEditMain(nextMain);
-    },
+    }
 
     render() {
         var TaskCheckboxes = [];
@@ -175,6 +190,4 @@ var MainEditor = React.createClass({
             </div>
         );
     }
-});
-
-export default MainEditor;
+}

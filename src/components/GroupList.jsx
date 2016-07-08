@@ -6,18 +6,18 @@
  *                  copied verbatim in the file "LICENSE"                       *
  ********************************************************************************/
 
-import React from 'react';
+import React, { Component, PropTypes } from 'react';
 
 import Group from './Group';
 
-var GroupList = React.createClass({
-    propTypes: {
-        groups: React.PropTypes.array.isRequired,
-        tasks: React.PropTypes.array.isRequired,
-        collections: React.PropTypes.array.isRequired,
-        onRemoveGroup: React.PropTypes.func.isRequired,
-        onEditGroup: React.PropTypes.func.isRequired
-    },
+export default class GroupList extends Component {
+    static propTypes = {
+        groups: PropTypes.array.isRequired,
+        tasks: PropTypes.array.isRequired,
+        collections: PropTypes.array.isRequired,
+        onRemoveGroup: PropTypes.func.isRequired,
+        onEditGroup: PropTypes.func.isRequired
+    };
 
     render() {
         var self = this;
@@ -37,6 +37,4 @@ var GroupList = React.createClass({
             </div>
         );
     }
-});
-
-export default GroupList;
+}

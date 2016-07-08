@@ -6,7 +6,7 @@
  *                  copied verbatim in the file "LICENSE"                       *
  ********************************************************************************/
 
-import React from 'react';
+import React, { Component, PropTypes } from 'react';
 import _ from 'lodash';
 import {
     Button,
@@ -18,39 +18,50 @@ import {
     Popover
 } from 'react-bootstrap';
 
-var Group = React.createClass({
-    propTypes: {
-        group: React.PropTypes.object.isRequired,
-        groups: React.PropTypes.array.isRequired,
-        tasks: React.PropTypes.array.isRequired,
-        collections: React.PropTypes.array.isRequired,
-        onRemoveGroup: React.PropTypes.func.isRequired,
-        onEditGroup: React.PropTypes.func.isRequired,
-        elementKey: React.PropTypes.number.isRequired
-    },
+export default class Group extends Component {
+    static propTypes = {
+        group: PropTypes.object.isRequired,
+        groups: PropTypes.array.isRequired,
+        tasks: PropTypes.array.isRequired,
+        collections: PropTypes.array.isRequired,
+        onRemoveGroup: PropTypes.func.isRequired,
+        onEditGroup: PropTypes.func.isRequired,
+        elementKey: PropTypes.number.isRequired
+    };
 
-    getInitialState() {
-        return {
+    constructor() {
+        super();
+
+        this.state = {
             bodyVisible: false,
             invalidInput: false,
             showDeleteModal: false
         };
-    },
+
+        this.closeDeleteModal = this.closeDeleteModal.bind(this);
+        this.openDeleteModal = this.openDeleteModal.bind(this);
+        this.handleInputChange = this.handleInputChange.bind(this);
+        this.hideEditGroupButton = this.hideEditGroupButton.bind(this);
+        this.toggleBodyVisibility = this.toggleBodyVisibility.bind(this);
+        this.handleEditGroup = this.handleEditGroup.bind(this);
+        this.handleRemoveGroup = this.handleRemoveGroup.bind(this);
+
+    }
 
     closeDeleteModal() {
         this.setState({ showDeleteModal: false });
-    },
+    }
 
     openDeleteModal() {
         this.setState({ showDeleteModal: true });
-    },
+    }
 
     handleInputChange(e) {
         e.preventDefault();
         this.setState({
             invalidInput: false
         });
-    },
+    }
 
     hideEditGroupButton(e) {
         e.preventDefault();
@@ -58,11 +69,11 @@ var Group = React.createClass({
             invalidInput: false
         });
         this.refs.editGroupBtn.toggle();
-    },
+    }
 
     toggleBodyVisibility() {
         this.setState({ bodyVisible: !this.state.bodyVisible });
-    },
+    }
 
     handleEditGroup(e) {
         e.preventDefault();
@@ -108,12 +119,12 @@ var Group = React.createClass({
 
         this.refs.editGroupBtn.toggle();
         this.props.onEditGroup(nextGroups);
-    },
+    }
 
     handleRemoveGroup() {
         this.setState({ showDeleteModal: false });
         this.props.onRemoveGroup(this.props.elementKey);
-    },
+    }
 
     render() {
         var TaskCheckboxes = [];
@@ -229,6 +240,4 @@ var Group = React.createClass({
             </div>
         );
     }
-});
-
-export default Group;
+}

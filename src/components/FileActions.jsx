@@ -6,7 +6,7 @@
  *                  copied verbatim in the file "LICENSE"                       *
  ********************************************************************************/
 
-import React from 'react';
+import React, { Component, PropTypes } from 'react';
 import $ from 'jquery';
 import _ from 'lodash';
 import { saveAs } from 'filesaver.js';
@@ -21,36 +21,44 @@ import {
 } from 'react-bootstrap';
 import GitHub from 'github-api';
 
-var FileActions = React.createClass({
-    propTypes: {
-        onFileLoad: React.PropTypes.func.isRequired,
-        topologyId: React.PropTypes.string.isRequired,
-        variables: React.PropTypes.array.isRequired,
-        properties: React.PropTypes.array.isRequired,
-        requirements: React.PropTypes.array.isRequired,
-        tasks: React.PropTypes.array.isRequired,
-        collections: React.PropTypes.array.isRequired,
-        main: React.PropTypes.object.isRequired
-    },
+export default class FileActions extends Component {
+    static propTypes = {
+        onFileLoad: PropTypes.func.isRequired,
+        topologyId: PropTypes.string.isRequired,
+        variables: PropTypes.array.isRequired,
+        properties: PropTypes.array.isRequired,
+        requirements: PropTypes.array.isRequired,
+        tasks: PropTypes.array.isRequired,
+        collections: PropTypes.array.isRequired,
+        main: PropTypes.object.isRequired
+    };
 
-    getInitialState() {
-        return {
+    constructor() {
+        super();
+
+        this.state = {
             remoteFiles: [],
             remoteUser: 'AliceO2Group',
             remoteRepo: 'AliceO2',
             remotePath: 'Common/Topologies',
             error: ''
         };
-    },
+
+        this.cancelFetch = this.cancelFetch.bind(this);
+        this.handleFetch = this.handleFetch.bind(this);
+        this.fetchTopologies = this.fetchTopologies.bind(this);
+        this.handleFileLoad = this.handleFileLoad.bind(this);
+        this.handleFileSave = this.handleFileSave.bind(this);
+    }
 
     hideFetchButton(e) {
         e.preventDefault();
         this.refs.fetchBtn.toggle();
-    },
+    }
 
     cancelFetch() {
         this.setState({ remoteFiles: [], error: "" });
-    },
+    }
 
     handleFetch(e) {
         e.preventDefault();
@@ -64,7 +72,7 @@ var FileActions = React.createClass({
         }
 
         this.refs.fetchBtn.toggle();
-    },
+    }
 
     fetchTopologies() {
         let github = new GitHub();
@@ -121,7 +129,7 @@ var FileActions = React.createClass({
                 });
             });
         });
-    },
+    }
 
     handleFileLoad(event) {
         var parser = new DOMParser(),
@@ -260,7 +268,7 @@ var FileActions = React.createClass({
         };
 
         reader.readAsText(event.target.files[0]);
-    },
+    }
 
     handleFileSave() {
         var xmlDoc = document.implementation.createDocument('', '', null);
@@ -512,7 +520,7 @@ var FileActions = React.createClass({
 
         var blob = new Blob([(new XMLSerializer).serializeToString(xmlDoc)], {type: "text/plain;charset=utf-8"});
         saveAs(blob, this.props.topologyId + ".xml");
-    },
+    }
 
     render() {
         return (
@@ -555,6 +563,4 @@ var FileActions = React.createClass({
             </li>
         );
     }
-});
-
-export default FileActions;
+}
