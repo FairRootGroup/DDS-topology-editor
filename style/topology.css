@@ -558,6 +558,11 @@ li.requirements {
     width: 100%;
 }
 
+
+.glyphicon {
+    cursor: pointer;
+}
+
 /* Properties */
 .property {
     border-radius: 0px;
