@@ -8,12 +8,11 @@
 
 import React, { Component, PropTypes } from 'react';
 import $ from 'jquery';
-import _ from 'lodash';
+// import _ from 'lodash';
 import { saveAs } from 'filesaver.js';
 import {
     Button,
     ButtonGroup,
-    // FormControl,
     FormGroup,
     OverlayTrigger,
     Popover,
@@ -63,14 +62,21 @@ export default class FileActions extends Component {
 
     handleFetch(e) {
         e.preventDefault();
+        const self = this;
 
-        if (e.target[0].form[0].value === '') {
-            console.log('not fetching anything');
-        } else {
-            console.log('fetching ' + e.target[0].form[0].value);
-            let el = _.find(this.state.remoteFiles, function(o) { return o.name === e.target[0].form[0].value; });
-            console.log(el.contents);
-        }
+        e.target[0].form['files'].forEach(function(f, i) {
+            if (f.checked) {
+                const github = new GitHub();
+
+                const repo = github.getRepo(self.state.remoteUser, self.state.remoteRepo);
+                repo.getContents('dev', 'Common/Topologies' + '/' + self.state.remoteFiles[i].name, true, function(err, contents) {
+                    if (err) {
+                        console.log(err);
+                    }
+                    self.processXML(contents);
+                });
+            }
+        });
 
         this.refs.fetchBtn.toggle();
     }
@@ -117,154 +123,157 @@ export default class FileActions extends Component {
                 file.name = object.name;
                 file.url = object.download_url;
 
-                repo.getContents('dev', 'Common/Topologies' + '/' + object.name, true, function(err, contents) {
-                    if (err) {
-                        console.log(err);
-                    }
-                    file.contents = contents;
-                    let nextFiles = self.state.remoteFiles;
-                    nextFiles.push(file);
+                let nextFiles = self.state.remoteFiles;
+                nextFiles.push(file);
+                self.setState({ remoteFiles: nextFiles });
 
-                    self.setState({ remoteFiles: nextFiles });
-                    // console.log(contents);
-                });
+                // repo.getContents('dev', 'Common/Topologies' + '/' + object.name, true, function(err, contents) {
+                //     if (err) {
+                //         console.log(err);
+                //     }
+                //     file.contents = contents;
+                // });
             });
         });
     }
 
-    handleFileLoad(event) {
-        var parser = new DOMParser(),
-            reader = new FileReader(),
-            topologyId = '',
+    processXML(xmlString) {
+        const parser = new DOMParser();
+        var topologyId = '',
             variables = [],
             properties = [],
             requirements = [],
             tasks = [],
             collections = [],
-            main = {},
-            self = this,
-            target = event.target;
+            main = {};
+
+        const $xml = $(parser.parseFromString(xmlString, 'application/xml'));
+
+        // topology name
+        topologyId = $xml.find('topology').attr('id');
+
+        // variables
+        $xml.find('topology>var').each(function() {
+            var variable = {};
+            variable.id = $(this).attr('id');
+            variable.value = $(this).attr('value');
+            variables.push(variable);
+        });
+
+        // properties
+        $xml.find('topology>property').each(function() {
+            var property = {};
+            property.id = $(this).attr('id');
+            properties.push(property);
+        });
+
+        // requirements
+        $xml.find('topology>declrequirement').each(function() {
+            var requirement = {};
+
+            requirement.id = $(this).attr('id');
+            requirement.type = $(this).find('hostPattern').attr('type');
+            requirement.value = $(this).find('hostPattern').attr('value');
+
+            requirements.push(requirement);
+        });
+
+        // tasks
+        $xml.find('topology>decltask').each(function() {
+            var task = {};
+
+            task.id = $(this).attr('id');
+
+            $(this).find('requirement').each(function() {
+                task.requirement = $(this).text();
+            });
+
+            $(this).find('exe').each(function() {
+                task.exe = {};
+                if (typeof ($(this).attr('reachable')) !== typeof undefined && ($(this).attr('reachable')) !== false) {
+                    task.exe.reachable = $(this).attr('reachable');
+                }
+                task.exe.valueText = $(this).text();
+            });
+
+            $(this).find('env').each(function() {
+                task.env = {};
+                if (typeof ($(this).attr('reachable')) !== typeof undefined && ($(this).attr('reachable')) !== false) {
+                    task.env.reachable = $(this).attr('reachable');
+                }
+                task.env.valueText = $(this).text();
+            });
+
+            task.properties = [];
+            $(this).find('properties>id').each(function() {
+                var property = {};
+                property.id = $(this).text();
+                if (typeof ($(this).attr('access')) !== typeof undefined) {
+                    property.access = $(this).attr('access');
+                } else {
+                    property.access = 'readwrite';
+                }
+                task.properties.push(property);
+            });
+            tasks.push(task);
+        });
+
+        // collections
+        $xml.find('topology>declcollection').each(function() {
+            var collection = {};
+            collection.id = $(this).attr('id');
+
+            $(this).find('requirement').each(function() {
+                collection.requirement = $(this).text();
+            });
+
+            collection.tasks = [];
+            $(this).find('tasks>id').each(function() {
+                collection.tasks.push($(this).text());
+            });
+            collections.push(collection);
+        });
+
+        // main
+        var $main = $xml.find('topology>main');
+        main.id = $main.attr('id');
+        main.tasks = [];
+        main.collections = [];
+        main.groups = [];
+
+        $xml.find('topology>main>task').each(function() {
+            main.tasks.push($(this).text());
+        });
+        $xml.find('topology>main>collection').each(function() {
+            main.collections.push($(this).text());
+        });
+
+        // groups in main
+        $xml.find('topology>main>group').each(function() {
+            var group = {};
+            group.tasks = [];
+            group.collections = [];
+            group.id = $(this).attr('id');
+            group.n = $(this).attr('n');
+            $(this).find('task').each(function() {
+                group.tasks.push($(this).text());
+            });
+            $(this).find('collection').each(function() {
+                group.collections.push($(this).text());
+            });
+            main.groups.push(group);
+        });
+
+        this.props.onFileLoad(topologyId, variables, properties, requirements, tasks, collections, main);
+    }
+
+    handleFileLoad(event) {
+        const self = this;
+        var reader = new FileReader();
+        var target = event.target;
 
         reader.onload = function() {
-            var $xml = $(parser.parseFromString(reader.result, 'application/xml'));
-
-            // topology name
-            topologyId = $xml.find('topology').attr('id');
-
-            // variables
-            $xml.find('topology>var').each(function() {
-                var variable = {};
-                variable.id = $(this).attr('id');
-                variable.value = $(this).attr('value');
-                variables.push(variable);
-            });
-
-            // properties
-            $xml.find('topology>property').each(function() {
-                var property = {};
-                property.id = $(this).attr('id');
-                properties.push(property);
-            });
-
-            // requirements
-            $xml.find('topology>declrequirement').each(function() {
-                var requirement = {};
-
-                requirement.id = $(this).attr('id');
-                requirement.type = $(this).find('hostPattern').attr('type');
-                requirement.value = $(this).find('hostPattern').attr('value');
-
-                requirements.push(requirement);
-            });
-
-            // tasks
-            $xml.find('topology>decltask').each(function() {
-                var task = {};
-
-                task.id = $(this).attr('id');
-
-                $(this).find('requirement').each(function() {
-                    task.requirement = $(this).text();
-                });
-
-                $(this).find('exe').each(function() {
-                    task.exe = {};
-                    if (typeof ($(this).attr('reachable')) !== typeof undefined && ($(this).attr('reachable')) !== false) {
-                        task.exe.reachable = $(this).attr('reachable');
-                    }
-                    task.exe.valueText = $(this).text();
-                });
-
-                $(this).find('env').each(function() {
-                    task.env = {};
-                    if (typeof ($(this).attr('reachable')) !== typeof undefined && ($(this).attr('reachable')) !== false) {
-                        task.env.reachable = $(this).attr('reachable');
-                    }
-                    task.env.valueText = $(this).text();
-                });
-
-                task.properties = [];
-                $(this).find('properties>id').each(function() {
-                    var property = {};
-                    property.id = $(this).text();
-                    if (typeof ($(this).attr('access')) !== typeof undefined) {
-                        property.access = $(this).attr('access');
-                    } else {
-                        property.access = 'readwrite';
-                    }
-                    task.properties.push(property);
-                });
-                tasks.push(task);
-            });
-
-            // collections
-            $xml.find('topology>declcollection').each(function() {
-                var collection = {};
-                collection.id = $(this).attr('id');
-
-                $(this).find('requirement').each(function() {
-                    collection.requirement = $(this).text();
-                });
-
-                collection.tasks = [];
-                $(this).find('tasks>id').each(function() {
-                    collection.tasks.push($(this).text());
-                });
-                collections.push(collection);
-            });
-
-            // main
-            var $main = $xml.find('topology>main');
-            main.id = $main.attr('id');
-            main.tasks = [];
-            main.collections = [];
-            main.groups = [];
-
-            $xml.find('topology>main>task').each(function() {
-                main.tasks.push($(this).text());
-            });
-            $xml.find('topology>main>collection').each(function() {
-                main.collections.push($(this).text());
-            });
-
-            // groups in main
-            $xml.find('topology>main>group').each(function() {
-                var group = {};
-                group.tasks = [];
-                group.collections = [];
-                group.id = $(this).attr('id');
-                group.n = $(this).attr('n');
-                $(this).find('task').each(function() {
-                    group.tasks.push($(this).text());
-                });
-                $(this).find('collection').each(function() {
-                    group.collections.push($(this).text());
-                });
-                main.groups.push(group);
-            });
-
-            self.props.onFileLoad(topologyId, variables, properties, requirements, tasks, collections, main);
-
+            self.processXML(reader.result);
             target.value = '';
         };
 
