@@ -64,8 +64,10 @@ export default class FileActions extends Component {
         e.preventDefault();
         const self = this;
 
-        e.target[0].form['files'].forEach(function(f, i) {
-            if (f.checked) {
+        const fileSelections = e.target[0].form['files'];
+
+        for (let i = 0; i < fileSelections.length; i++) {
+            if (fileSelections.item(i).checked) {
                 const github = new GitHub();
 
                 const repo = github.getRepo(self.state.remoteUser, self.state.remoteRepo);
@@ -76,7 +78,7 @@ export default class FileActions extends Component {
                     self.processXML(contents);
                 });
             }
-        });
+        }
 
         this.refs.fetchBtn.toggle();
     }
