@@ -12,15 +12,10 @@ module.exports = {
         filename: 'bundle.js'
     },
     resolve: {
-        extensions: ['', '.js', '.jsx']
+        extensions: ['.js', '.jsx']
     },
     module: {
-        loaders: loaders,
-        preLoaders: [{
-            test: /\.jsx?$/,
-            loaders: ['eslint'],
-            exclude: /node_modules/
-        }],
+        loaders: loaders
     },
     devServer: {
         contentBase: "./dist",
@@ -29,6 +24,6 @@ module.exports = {
             inline: true
         },
     plugins: [
-        new webpack.NoErrorsPlugin()
+        new webpack.NoEmitOnErrorsPlugin()
     ]
 };
