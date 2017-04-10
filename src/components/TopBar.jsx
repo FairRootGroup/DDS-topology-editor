@@ -6,16 +6,10 @@
  *                  copied verbatim in the file "LICENSE"                       *
  ********************************************************************************/
 
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
-export default class TopBar extends Component {
-    static propTypes = {
-        topologyId: PropTypes.string.isRequired,
-        onTopologyIdChange: PropTypes.func.isRequired,
-        fluid: PropTypes.bool.isRequired,
-        onToggleFluid: PropTypes.func.isRequired
-    };
-
+class TopBar extends Component {
     constructor() {
         super();
 
@@ -84,3 +78,12 @@ export default class TopBar extends Component {
         );
     }
 }
+
+TopBar.propTypes = {
+    topologyId: PropTypes.string.isRequired,
+    onTopologyIdChange: PropTypes.func.isRequired,
+    fluid: PropTypes.bool.isRequired,
+    onToggleFluid: PropTypes.func.isRequired
+};
+
+export default TopBar;

@@ -6,20 +6,14 @@
  *                  copied verbatim in the file 'LICENSE'                       *
  ********************************************************************************/
 
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import {
     Button,
     Modal
 } from 'react-bootstrap';
 
-export default class Property extends Component {
-    static propTypes = {
-        property: PropTypes.object.isRequired,
-        onRemoveProperty: PropTypes.func.isRequired,
-        onEditProperty: PropTypes.func.isRequired,
-        elementKey: PropTypes.number.isRequired
-    };
-
+class Property extends Component {
     constructor() {
         super();
 
@@ -121,3 +115,12 @@ export default class Property extends Component {
         );
     }
 }
+
+Property.propTypes = {
+    property: PropTypes.object.isRequired,
+    onRemoveProperty: PropTypes.func.isRequired,
+    onEditProperty: PropTypes.func.isRequired,
+    elementKey: PropTypes.number.isRequired
+};
+
+export default Property;

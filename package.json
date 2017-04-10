@@ -28,6 +28,7 @@
     "jquery": "^3.1.0",
     "jsx-loader": "^0.13.2",
     "lodash": "^4.13.1",
+    "prop-types": "^15.5.6",
     "react": "~15.5.3",
     "react-bootstrap": "~0.30.8",
     "react-dom": "~15.5.3",

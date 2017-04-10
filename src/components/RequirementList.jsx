@@ -6,17 +6,12 @@
  *                  copied verbatim in the file "LICENSE"                       *
  ********************************************************************************/
 
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 import Requirement from './Requirement';
 
-export default class RequirementList extends Component {
-    static propTypes = {
-        requirements: PropTypes.array.isRequired,
-        onRemoveRequirement: PropTypes.func.isRequired,
-        onEditRequirement: PropTypes.func.isRequired
-    };
-
+class RequirementList extends Component {
     render() {
         var self = this;
         return (
@@ -34,3 +29,11 @@ export default class RequirementList extends Component {
         );
     }
 }
+
+RequirementList.propTypes = {
+    requirements: PropTypes.array.isRequired,
+    onRemoveRequirement: PropTypes.func.isRequired,
+    onEditRequirement: PropTypes.func.isRequired
+};
+
+export default RequirementList;

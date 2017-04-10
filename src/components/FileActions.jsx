@@ -6,7 +6,8 @@
  *                  copied verbatim in the file 'LICENSE'                       *
  ********************************************************************************/
 
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import $ from 'jquery';
 // import _ from 'lodash';
 import { saveAs } from 'filesaver.js';
@@ -20,18 +21,7 @@ import {
 } from 'react-bootstrap';
 import GitHub from 'github-api';
 
-export default class FileActions extends Component {
-    static propTypes = {
-        onFileLoad: PropTypes.func.isRequired,
-        topologyId: PropTypes.string.isRequired,
-        variables: PropTypes.array.isRequired,
-        properties: PropTypes.array.isRequired,
-        requirements: PropTypes.array.isRequired,
-        tasks: PropTypes.array.isRequired,
-        collections: PropTypes.array.isRequired,
-        main: PropTypes.object.isRequired
-    };
-
+class FileActions extends Component {
     constructor() {
         super();
 
@@ -576,3 +566,16 @@ export default class FileActions extends Component {
         );
     }
 }
+
+FileActions.propTypes = {
+    onFileLoad: PropTypes.func.isRequired,
+    topologyId: PropTypes.string.isRequired,
+    variables: PropTypes.array.isRequired,
+    properties: PropTypes.array.isRequired,
+    requirements: PropTypes.array.isRequired,
+    tasks: PropTypes.array.isRequired,
+    collections: PropTypes.array.isRequired,
+    main: PropTypes.object.isRequired
+};
+
+export default FileActions;

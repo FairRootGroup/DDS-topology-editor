@@ -6,7 +6,8 @@
  *                  copied verbatim in the file 'LICENSE'                       *
  ********************************************************************************/
 
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import _ from 'lodash';
 import {
     Button,
@@ -18,17 +19,7 @@ import {
     Popover
 } from 'react-bootstrap';
 
-export default class Group extends Component {
-    static propTypes = {
-        group: PropTypes.object.isRequired,
-        groups: PropTypes.array.isRequired,
-        tasks: PropTypes.array.isRequired,
-        collections: PropTypes.array.isRequired,
-        onRemoveGroup: PropTypes.func.isRequired,
-        onEditGroup: PropTypes.func.isRequired,
-        elementKey: PropTypes.number.isRequired
-    };
-
+class Group extends Component {
     constructor() {
         super();
 
@@ -241,3 +232,15 @@ export default class Group extends Component {
         );
     }
 }
+
+Group.propTypes = {
+    group: PropTypes.object.isRequired,
+    groups: PropTypes.array.isRequired,
+    tasks: PropTypes.array.isRequired,
+    collections: PropTypes.array.isRequired,
+    onRemoveGroup: PropTypes.func.isRequired,
+    onEditGroup: PropTypes.func.isRequired,
+    elementKey: PropTypes.number.isRequired
+};
+
+export default Group;

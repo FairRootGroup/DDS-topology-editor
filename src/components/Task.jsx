@@ -6,7 +6,8 @@
  *                  copied verbatim in the file 'LICENSE'                       *
  ********************************************************************************/
 
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import _ from 'lodash';
 
 import {
@@ -20,17 +21,7 @@ import {
     Popover
 } from 'react-bootstrap';
 
-export default class Task extends Component {
-    static propTypes = {
-        task: PropTypes.object.isRequired,
-        properties: PropTypes.array.isRequired,
-        requirements: PropTypes.array.isRequired,
-        tasks: PropTypes.array.isRequired,
-        onRemoveTask: PropTypes.func.isRequired,
-        onEditTask: PropTypes.func.isRequired,
-        elementKey: PropTypes.number.isRequired
-    };
-
+class Task extends Component {
     constructor() {
         super();
 
@@ -310,3 +301,15 @@ export default class Task extends Component {
         );
     }
 }
+
+Task.propTypes = {
+    task: PropTypes.object.isRequired,
+    properties: PropTypes.array.isRequired,
+    requirements: PropTypes.array.isRequired,
+    tasks: PropTypes.array.isRequired,
+    onRemoveTask: PropTypes.func.isRequired,
+    onEditTask: PropTypes.func.isRequired,
+    elementKey: PropTypes.number.isRequired
+};
+
+export default Task;

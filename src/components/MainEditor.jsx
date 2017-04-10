@@ -6,7 +6,8 @@
  *                  copied verbatim in the file 'LICENSE'                       *
  ********************************************************************************/
 
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import {
     Badge,
     Button,
@@ -17,22 +18,22 @@ import {
 import cytoscape from 'cytoscape';
 import Cytoscape from './Cytoscape';
 
-export default class MainEditor extends Component {
-    static propTypes = {
-        properties: PropTypes.array.isRequired,
-        tasks: PropTypes.array.isRequired,
-        collections: PropTypes.array.isRequired,
-        main: PropTypes.object.isRequired,
-        onEditMain: PropTypes.func.isRequired
-    };
-
+class MainEditor extends Component {
     constructor() {
         super();
+
+        this.state = {
+            zoom: 1
+        };
 
         this.hideEditTasksInMainBtn = this.hideEditTasksInMainBtn.bind(this);
         this.hideEditCollectionsInMainBtn = this.hideEditCollectionsInMainBtn.bind(this);
         this.handleEditTasksInMain = this.handleEditTasksInMain.bind(this);
         this.handleEditCollectionsInMain = this.handleEditCollectionsInMain.bind(this);
+    }
+
+    componentDidMount(){
+        this.refs.graph.getCy().on('zoom', () => { this.setState({ zoom: this.refs.graph.getCy().zoom() }) });
     }
 
     hideEditTasksInMainBtn(e) {
@@ -193,7 +194,18 @@ export default class MainEditor extends Component {
                 </div>
                 
                 <Cytoscape ref="graph" elements={[{data: { id: 'a' }}]} />
+                <div>zoom: {this.state.zoom}</div>
             </div>
         );
     }
 }
+
+MainEditor.propTypes = {
+    properties: PropTypes.array.isRequired,
+    tasks: PropTypes.array.isRequired,
+    collections: PropTypes.array.isRequired,
+    main: PropTypes.object.isRequired,
+    onEditMain: PropTypes.func.isRequired
+};
+
+export default MainEditor;

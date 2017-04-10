@@ -6,7 +6,8 @@
  *                  copied verbatim in the file 'LICENSE'                       *
  ********************************************************************************/
 
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import _ from 'lodash';
 
 import {
@@ -21,15 +22,7 @@ import {
     Radio
 } from 'react-bootstrap';
 
-export default class Requirement extends Component {
-    static propTypes = {
-        requirement: PropTypes.object.isRequired,
-        requirements: PropTypes.array.isRequired,
-        onRemoveRequirement: PropTypes.func.isRequired,
-        onEditRequirement: PropTypes.func.isRequired,
-        elementKey: PropTypes.number.isRequired
-    };
-
+class Requirement extends Component {
     constructor() {
         super();
 
@@ -184,3 +177,13 @@ export default class Requirement extends Component {
         );
     }
 }
+
+Requirement.propTypes = {
+    requirement: PropTypes.object.isRequired,
+    requirements: PropTypes.array.isRequired,
+    onRemoveRequirement: PropTypes.func.isRequired,
+    onEditRequirement: PropTypes.func.isRequired,
+    elementKey: PropTypes.number.isRequired
+};
+
+export default Requirement;

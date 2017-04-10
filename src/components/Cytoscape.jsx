@@ -7,7 +7,7 @@ let cyStyle = {
     border: '1px solid silver'
 };
 
-export default class Cytoscape extends Component {
+class Cytoscape extends Component {
     cy = null;
 
     componentDidMount() {
@@ -39,3 +39,5 @@ export default class Cytoscape extends Component {
         return <div style={cyStyle} ref="cyelement" />
     }
 }
+
+export default Cytoscape;

@@ -6,19 +6,12 @@
  *                  copied verbatim in the file "LICENSE"                       *
  ********************************************************************************/
 
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 import Task from './Task';
 
-export default class TaskList extends Component {
-    static propTypes = {
-        properties: PropTypes.array.isRequired,
-        requirements: PropTypes.array.isRequired,
-        tasks: PropTypes.array.isRequired,
-        onRemoveTask: PropTypes.func.isRequired,
-        onEditTask: PropTypes.func.isRequired
-    };
-
+class TaskList extends Component {
     render() {
         var self = this;
         return (
@@ -38,3 +31,13 @@ export default class TaskList extends Component {
         );
     }
 }
+
+TaskList.propTypes = {
+    properties: PropTypes.array.isRequired,
+    requirements: PropTypes.array.isRequired,
+    tasks: PropTypes.array.isRequired,
+    onRemoveTask: PropTypes.func.isRequired,
+    onEditTask: PropTypes.func.isRequired
+};
+
+export default TaskList;

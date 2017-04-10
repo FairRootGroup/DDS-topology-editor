@@ -6,17 +6,12 @@
  *                  copied verbatim in the file "LICENSE"                       *
  ********************************************************************************/
 
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 import Property from './Property';
 
-export default class PropertyList extends Component {
-    static propTypes= {
-        properties: PropTypes.array.isRequired,
-        onRemoveProperty: PropTypes.func.isRequired,
-        onEditProperty: PropTypes.func.isRequired
-    };
-
+class PropertyList extends Component {
     render() {
         var self = this;
         return (
@@ -33,3 +28,11 @@ export default class PropertyList extends Component {
         );
     }
 }
+
+PropertyList.propTypes= {
+    properties: PropTypes.array.isRequired,
+    onRemoveProperty: PropTypes.func.isRequired,
+    onEditProperty: PropTypes.func.isRequired
+};
+
+export default PropertyList;

@@ -6,19 +6,12 @@
  *                  copied verbatim in the file "LICENSE"                       *
  ********************************************************************************/
 
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 import Group from './Group';
 
-export default class GroupList extends Component {
-    static propTypes = {
-        groups: PropTypes.array.isRequired,
-        tasks: PropTypes.array.isRequired,
-        collections: PropTypes.array.isRequired,
-        onRemoveGroup: PropTypes.func.isRequired,
-        onEditGroup: PropTypes.func.isRequired
-    };
-
+class GroupList extends Component {
     render() {
         var self = this;
         return (
@@ -38,3 +31,13 @@ export default class GroupList extends Component {
         );
     }
 }
+
+GroupList.propTypes = {
+    groups: PropTypes.array.isRequired,
+    tasks: PropTypes.array.isRequired,
+    collections: PropTypes.array.isRequired,
+    onRemoveGroup: PropTypes.func.isRequired,
+    onEditGroup: PropTypes.func.isRequired
+};
+
+export default GroupList;

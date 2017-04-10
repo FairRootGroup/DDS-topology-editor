@@ -33,7 +33,7 @@ import RequirementList from './RequirementList';
 import TaskList from './TaskList';
 import MainEditor from './MainEditor';
 
-export default class TopologyEditor extends Component {
+class TopologyEditor extends Component {
     static displayName = 'TopologyEditor';
 
     constructor() {
@@ -1012,3 +1012,5 @@ export default class TopologyEditor extends Component {
 }
 
 reactMixin(TopologyEditor.prototype, localStorageMixin);
+
+export default TopologyEditor;
