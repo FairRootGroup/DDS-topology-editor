@@ -59,7 +59,7 @@ class Group extends Component {
         this.setState({
             invalidInput: false
         });
-        this.refs.editGroupBtn.toggle();
+        this.refs.editGroupBtn.hide();
     }
 
     toggleBodyVisibility() {
@@ -108,7 +108,7 @@ class Group extends Component {
         var nextGroups = this.props.groups;
         nextGroups[this.props.elementKey] = newGroup;
 
-        this.refs.editGroupBtn.toggle();
+        this.refs.editGroupBtn.hide();
         this.props.onEditGroup(nextGroups);
     }
 

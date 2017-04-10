@@ -59,7 +59,7 @@ class Collection extends Component {
         this.setState({
             invalidInput: false
         });
-        this.refs.editCollectionBtn.toggle();
+        this.refs.editCollectionBtn.hide();
     }
 
     toggleBodyVisibility() {
@@ -100,7 +100,7 @@ class Collection extends Component {
             updatedCollection.requirement = e.target[0].form['requirements'].value;
         }
 
-        this.refs.editCollectionBtn.toggle();
+        this.refs.editCollectionBtn.hide();
         this.props.onEditCollection(this.props.elementKey, updatedCollection);
     }
 

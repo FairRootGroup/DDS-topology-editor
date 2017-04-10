@@ -56,7 +56,7 @@ class Task extends Component {
     hideEditTaskButton(e) {
         e.preventDefault();
         this.setState({ invalidInput: false });
-        this.refs.editTaskBtn.toggle();
+        this.refs.editTaskBtn.hide();
     }
 
     toggleBodyVisibility() {
@@ -116,7 +116,7 @@ class Task extends Component {
             }
         }
 
-        this.refs.editTaskBtn.toggle();
+        this.refs.editTaskBtn.hide();
         this.props.onEditTask(this.props.elementKey, updatedTask);
     }
 

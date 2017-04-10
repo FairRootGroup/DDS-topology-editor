@@ -194,7 +194,7 @@ class TopologyEditor extends Component {
             return;
         }
         var nextProperties = this.state.properties.concat([{ id: e.target[0].form[0].value }]);
-        this.refs.addPropertyBtn.toggle();
+        this.refs.addPropertyBtn.hide();
         this.setState({
             properties: nextProperties
         });
@@ -268,7 +268,7 @@ class TopologyEditor extends Component {
             type: type,
             value: e.target[0].form[3].value
         }]);
-        this.refs.addRequirementBtn.toggle();
+        this.refs.addRequirementBtn.hide();
         this.setState({
             requirements: nextRequirements
         });
@@ -368,7 +368,7 @@ class TopologyEditor extends Component {
         }
 
         var nextTasks = this.state.tasks.concat([newTask]);
-        this.refs.addTaskBtn.toggle();
+        this.refs.addTaskBtn.hide();
         this.setState({
             tasks: nextTasks
         });
@@ -480,7 +480,7 @@ class TopologyEditor extends Component {
         }
 
         var nextCollections = this.state.collections.concat([newCollection]);
-        this.refs.addCollectionBtn.toggle();
+        this.refs.addCollectionBtn.hide();
         this.setState({
             collections: nextCollections
         });
@@ -585,7 +585,7 @@ class TopologyEditor extends Component {
         this.setState({
             main: nextMain
         });
-        this.refs.addGroupBtn.toggle();
+        this.refs.addGroupBtn.hide();
     }
 
     handleEditGroup(groups) {
@@ -625,7 +625,7 @@ class TopologyEditor extends Component {
         this.setState({
             invalidInput: false
         });
-        this.refs.addPropertyBtn.toggle();
+        this.refs.addPropertyBtn.hide();
     }
 
     hideAddRequirementButton(e) {
@@ -633,7 +633,7 @@ class TopologyEditor extends Component {
         this.setState({
             invalidInput: false
         });
-        this.refs.addRequirementBtn.toggle();
+        this.refs.addRequirementBtn.hide();
     }
 
     hideAddTaskButton(e) {
@@ -641,7 +641,7 @@ class TopologyEditor extends Component {
         this.setState({
             invalidInput: false
         });
-        this.refs.addTaskBtn.toggle();
+        this.refs.addTaskBtn.hide();
     }
 
     hideAddCollectionButton(e) {
@@ -649,7 +649,7 @@ class TopologyEditor extends Component {
         this.setState({
             invalidInput: false
         });
-        this.refs.addCollectionBtn.toggle();
+        this.refs.addCollectionBtn.hide();
     }
 
     hideAddGroupButton(e) {
@@ -657,7 +657,7 @@ class TopologyEditor extends Component {
         this.setState({
             invalidInput: false
         });
-        this.refs.addGroupBtn.toggle();
+        this.refs.addGroupBtn.hide();
     }
 
     render() {

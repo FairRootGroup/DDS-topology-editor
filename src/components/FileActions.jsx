@@ -43,7 +43,7 @@ class FileActions extends Component {
 
     hideFetchButton(e) {
         e.preventDefault();
-        this.refs.fetchBtn.toggle();
+        this.refs.fetchBtn.hide();
     }
 
     cancelFetch() {
@@ -70,7 +70,7 @@ class FileActions extends Component {
             }
         }
 
-        this.refs.fetchBtn.toggle();
+        this.refs.fetchBtn.hide();
     }
 
     fetchTopologies() {

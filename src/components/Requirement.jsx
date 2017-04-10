@@ -57,7 +57,7 @@ class Requirement extends Component {
     hideEditRequirementButton(e) {
         e.preventDefault();
         this.setState({ invalidInput: false });
-        this.refs.editRequirementBtn.toggle();
+        this.refs.editRequirementBtn.hide();
     }
 
     toggleBodyVisibility() {
@@ -101,7 +101,7 @@ class Requirement extends Component {
             value: e.target[0].form[3].value
         };
 
-        this.refs.editRequirementBtn.toggle();
+        this.refs.editRequirementBtn.hide();
         this.props.onEditRequirement(this.props.elementKey, updatedRequirement);
     }
 
