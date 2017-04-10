@@ -195,7 +195,7 @@ class MainEditor extends Component {
 
                 <Cytoscape ref="graph" elements={{
                     nodes: [
-                        { data: { id: 'collector' }, position: { x: 300, y: 40 }, classes: 'task' },
+                        { data: { id: 'collector' }, classes: 'task' },
 
                         { data: { id: 'groupFLP' }, classes: 'group' },
                         { data: { id: 'groupEPN' }, classes: 'group' },
@@ -203,16 +203,16 @@ class MainEditor extends Component {
                         { data: { id: 'flpCollection', parent: 'groupFLP' }, classes: 'collection' },
                         { data: { id: 'epnCollection', parent: 'groupEPN' }, classes: 'collection' },
 
-                        { data: { id: 'dataPublisher', parent: 'flpCollection' }, position: { x: 200, y: 200 }, classes: 'task' },
-                        { data: { id: 'relay', parent: 'flpCollection' }, position: { x: 200, y: 240 }, classes: 'task' },
-                        { data: { id: 'flpSender', parent: 'flpCollection' }, position: { x: 200, y: 280 }, classes: 'task' },
+                        { data: { id: 'dataPublisher', parent: 'flpCollection' }, classes: 'task' },
+                        { data: { id: 'relay', parent: 'flpCollection' }, classes: 'task' },
+                        { data: { id: 'flpSender', parent: 'flpCollection' }, classes: 'task' },
 
-                        { data: { id: 'epnReceiver', parent: 'epnCollection' }, position: { x: 400, y: 200 }, classes: 'task' },
-                        { data: { id: 'tracker', parent: 'epnCollection' }, position: { x: 400, y: 240 }, classes: 'task' },
-                        { data: { id: 'merger', parent: 'epnCollection' }, position: { x: 400, y: 280 }, classes: 'task' },
+                        { data: { id: 'epnReceiver', parent: 'epnCollection' }, classes: 'task' },
+                        { data: { id: 'tracker', parent: 'epnCollection' }, classes: 'task' },
+                        { data: { id: 'merger', parent: 'epnCollection' }, classes: 'task' },
                     ]
                 }} />
-                <div>zoom: {this.state.zoom}</div>
+                <div>zoom: {Math.round(this.state.zoom * 100)}%</div>
             </div>
         );
     }

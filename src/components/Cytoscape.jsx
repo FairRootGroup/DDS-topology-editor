@@ -23,7 +23,20 @@ class Cytoscape extends Component {
         let cy = cytoscape(graphConfig);
 
         this.cy = cy;
-        cy.json({elements: this.props.elements});
+        cy.json({ elements: this.props.elements});
+        cy.layout({
+            name: 'grid',
+
+            fit: true, // whether to fit the viewport to the graph
+            padding: 30, // padding used on fit
+            avoidOverlap: true, // prevents node overlap, may overflow boundingBox if not enough space
+            avoidOverlapPadding: 10, // extra spacing around nodes when avoidOverlap: true
+            condense: false, // uses all available space on false, uses minimal space on true
+            rows: undefined, // force num of rows in the grid
+            cols: undefined, // force num of columns in the grid
+            position: function( node ){}, // returns { row, col } for element
+            sort: undefined, // a sorting function to order the nodes; e.g. function(a, b){ return a.data('weight') - b.data('weight') }
+        });
     }
 
     shouldComponentUpdate() {
