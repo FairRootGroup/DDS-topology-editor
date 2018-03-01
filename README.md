@@ -4,9 +4,9 @@ DDS-topology-editor
 To run the editor, open `dist/index.html`.
 
 #### Development
-For development **npm** is required (comes with [node.js](https://nodejs.org/)).
+For development **npm** or **yarn** is required.
 
-First, install the project dependencies:
+First, install the project dependencies (use yarn instead of npm if you prefer):
 ```bash
 npm install
 ```
