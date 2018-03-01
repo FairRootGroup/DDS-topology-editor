@@ -12,27 +12,27 @@ import PropTypes from 'prop-types';
 import Property from './Property';
 
 class PropertyList extends Component {
-    render() {
-        var self = this;
-        return (
-            <div>
-                {this.props.properties.map(function(property, index) {
-                    return <Property property={property}
-                        onRemoveProperty={self.props.onRemoveProperty}
-                        onEditProperty={self.props.onEditProperty}
-                        key={index}
-                        elementKey={index}
-                        />;
-                })}
-            </div>
-        );
-    }
+  render() {
+    var self = this;
+    return (
+      <div>
+        {this.props.properties.map(function (property, index) {
+          return <Property property={property}
+            onRemoveProperty={self.props.onRemoveProperty}
+            onEditProperty={self.props.onEditProperty}
+            key={index}
+            elementKey={index}
+          />;
+        })}
+      </div>
+    );
+  }
 }
 
-PropertyList.propTypes= {
-    properties: PropTypes.array.isRequired,
-    onRemoveProperty: PropTypes.func.isRequired,
-    onEditProperty: PropTypes.func.isRequired
+PropertyList.propTypes = {
+  properties: PropTypes.array.isRequired,
+  onRemoveProperty: PropTypes.func.isRequired,
+  onEditProperty: PropTypes.func.isRequired
 };
 
 export default PropertyList;

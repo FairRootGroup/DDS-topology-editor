@@ -12,32 +12,32 @@ import PropTypes from 'prop-types';
 import Group from './Group';
 
 class GroupList extends Component {
-    render() {
-        var self = this;
-        return (
-            <div>
-                {this.props.groups.map(function(group, index) {
-                    return <Group group={group}
-                        groups={self.props.groups}
-                        tasks={self.props.tasks}
-                        collections={self.props.collections}
-                        onRemoveGroup={self.props.onRemoveGroup}
-                        onEditGroup={self.props.onEditGroup}
-                        key={index}
-                        elementKey={index}
-                        />;
-                })}
-            </div>
-        );
-    }
+  render() {
+    var self = this;
+    return (
+      <div>
+        {this.props.groups.map(function (group, index) {
+          return <Group group={group}
+            groups={self.props.groups}
+            tasks={self.props.tasks}
+            collections={self.props.collections}
+            onRemoveGroup={self.props.onRemoveGroup}
+            onEditGroup={self.props.onEditGroup}
+            key={index}
+            elementKey={index}
+          />;
+        })}
+      </div>
+    );
+  }
 }
 
 GroupList.propTypes = {
-    groups: PropTypes.array.isRequired,
-    tasks: PropTypes.array.isRequired,
-    collections: PropTypes.array.isRequired,
-    onRemoveGroup: PropTypes.func.isRequired,
-    onEditGroup: PropTypes.func.isRequired
+  groups: PropTypes.array.isRequired,
+  tasks: PropTypes.array.isRequired,
+  collections: PropTypes.array.isRequired,
+  onRemoveGroup: PropTypes.func.isRequired,
+  onEditGroup: PropTypes.func.isRequired
 };
 
 export default GroupList;
