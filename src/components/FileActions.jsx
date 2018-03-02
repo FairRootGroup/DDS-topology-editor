@@ -9,16 +9,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import $ from 'jquery';
-// import _ from 'lodash';
 import { saveAs } from 'filesaver.js';
-import {
-  Button,
-  ButtonGroup,
-  FormGroup,
-  OverlayTrigger,
-  Popover,
-  Radio
-} from 'react-bootstrap';
+
+import Button from 'react-bootstrap/lib/Button';
+import ButtonGroup from 'react-bootstrap/lib/ButtonGroup';
+import FormGroup from 'react-bootstrap/lib/FormGroup';
+import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
+import Popover from 'react-bootstrap/lib/Popover';
+import Radio from 'react-bootstrap/lib/Radio';
+
 import GitHub from 'github-api';
 
 class FileActions extends Component {

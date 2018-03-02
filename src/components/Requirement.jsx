@@ -8,19 +8,16 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
 
-import {
-  Button,
-  ControlLabel,
-  FormControl,
-  FormGroup,
-  InputGroup,
-  Modal,
-  OverlayTrigger,
-  Popover,
-  Radio
-} from 'react-bootstrap';
+import Button from 'react-bootstrap/lib/Button';
+import ControlLabel from 'react-bootstrap/lib/ControlLabel';
+import FormControl from 'react-bootstrap/lib/FormControl';
+import FormGroup from 'react-bootstrap/lib/FormGroup';
+import InputGroup from 'react-bootstrap/lib/InputGroup';
+import Modal from 'react-bootstrap/lib/Modal';
+import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
+import Popover from 'react-bootstrap/lib/Popover';
+import Radio from 'react-bootstrap/lib/Radio';
 
 class Requirement extends Component {
   constructor() {
@@ -79,10 +76,8 @@ class Requirement extends Component {
     }
 
     // cancel if ID already exists (except its own ID)
-    var otherRequirements = _.filter(this.props.requirements, function (requirement) {
-      return requirement.id !== self.props.requirement.id;
-    });
-    if (_.some(otherRequirements, { 'id': e.target[0].form[0].value })) {
+    var otherRequirements = this.props.requirements.filter(requirement => requirement.id !== self.props.requirement.id);
+    if (otherRequirements.some(requirement => requirement.id === e.target[0].form[0].value)) {
       this.setState({
         invalidInput: true
       });

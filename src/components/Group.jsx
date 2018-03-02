@@ -8,16 +8,14 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
-import {
-  Button,
-  FormControl,
-  FormGroup,
-  InputGroup,
-  Modal,
-  OverlayTrigger,
-  Popover
-} from 'react-bootstrap';
+
+import Button from 'react-bootstrap/lib/Button';
+import FormControl from 'react-bootstrap/lib/FormControl';
+import FormGroup from 'react-bootstrap/lib/FormGroup';
+import InputGroup from 'react-bootstrap/lib/InputGroup';
+import Modal from 'react-bootstrap/lib/Modal';
+import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
+import Popover from 'react-bootstrap/lib/Popover';
 
 class Group extends Component {
   constructor() {
@@ -77,10 +75,10 @@ class Group extends Component {
       });
       return;
     }
-    var otherGroups = _.filter(this.props.groups, function (groups) {
-      return groups.id !== self.props.group.id;
-    });
-    if (_.some(otherGroups, { 'id': e.target[0].form[0].value })) {
+
+    var otherGroups = this.props.groups.filter(group => group.id !== self.props.group.id);
+
+    if (otherGroups.some(group => group.id === e.target[0].form[0].value)) {
       this.setState({
         invalidInput: true
       });

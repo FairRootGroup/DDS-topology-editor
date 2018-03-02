@@ -8,17 +8,14 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
 
-import {
-  Button,
-  FormControl,
-  FormGroup,
-  InputGroup,
-  Modal,
-  OverlayTrigger,
-  Popover
-} from 'react-bootstrap';
+import Button from 'react-bootstrap/lib/Button';
+import FormControl from 'react-bootstrap/lib/FormControl';
+import FormGroup from 'react-bootstrap/lib/FormGroup';
+import InputGroup from 'react-bootstrap/lib/InputGroup';
+import Modal from 'react-bootstrap/lib/Modal';
+import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
+import Popover from 'react-bootstrap/lib/Popover';
 
 class Collection extends Component {
   constructor() {
@@ -77,10 +74,10 @@ class Collection extends Component {
       });
       return;
     }
-    var otherCollections = _.filter(this.props.collections, function (collections) {
-      return collections.id !== self.props.collection.id;
-    });
-    if (_.some(otherCollections, { 'id': e.target[0].form[0].value })) {
+
+    var otherCollections = this.props.collections.filter(collection => collection.id !== self.props.collection.id);
+
+    if (otherCollections.some(collection => collection.id === e.target[0].form[0].value)) {
       this.setState({
         invalidInput: true
       });
@@ -143,7 +140,7 @@ class Collection extends Component {
 
     if ('requirement' in this.props.collection) {
       requirement = this.props.collection.requirement;
-      let el = _.find(this.props.requirements, function (o) { return o.id === self.props.collection.requirement; });
+      let el = this.props.requirements.find(requirement => requirement.id === self.props.collection.requirement);
       requirementContainer =
         <div>
           <span className="requirement-child">

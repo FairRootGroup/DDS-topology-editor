@@ -8,18 +8,15 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
 
-import {
-  Button,
-  Checkbox,
-  FormControl,
-  FormGroup,
-  InputGroup,
-  Modal,
-  OverlayTrigger,
-  Popover
-} from 'react-bootstrap';
+import Button from 'react-bootstrap/lib/Button';
+import Checkbox from 'react-bootstrap/lib/Checkbox';
+import FormControl from 'react-bootstrap/lib/FormControl';
+import FormGroup from 'react-bootstrap/lib/FormGroup';
+import InputGroup from 'react-bootstrap/lib/InputGroup';
+import Modal from 'react-bootstrap/lib/Modal';
+import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
+import Popover from 'react-bootstrap/lib/Popover';
 
 class Task extends Component {
   constructor() {
@@ -74,10 +71,8 @@ class Task extends Component {
       });
       return;
     }
-    var otherTasks = _.filter(this.props.tasks, function (task) {
-      return task.id !== self.props.task.id;
-    });
-    if (_.some(otherTasks, { 'id': e.target[0].form[0].value })) {
+    var otherTasks = this.props.tasks.filter(task => task.id !== self.props.task.id);
+    if (otherTasks.some( task => task.id === e.target[0].form[0].value )) {
       this.setState({
         invalidInput: true
       });
@@ -192,7 +187,7 @@ class Task extends Component {
 
     if ('requirement' in this.props.task) {
       requirement = this.props.task.requirement;
-      let el = _.find(this.props.requirements, function (o) { return o.id === self.props.task.requirement; });
+      let el = this.props.requirements.find(requirement => requirement.id === self.props.task.requirement);
       requirementContainer =
         <div>
           <span className="requirement-child">

@@ -7,19 +7,18 @@
  ********************************************************************************/
 
 import React, { Component } from 'react';
-import _ from 'lodash';
-import {
-  Button,
-  Checkbox,
-  ControlLabel,
-  FormControl,
-  FormGroup,
-  InputGroup,
-  Modal,
-  OverlayTrigger,
-  Popover,
-  Radio
-} from 'react-bootstrap';
+
+import Button from 'react-bootstrap/lib/Button';
+import Checkbox from 'react-bootstrap/lib/Checkbox';
+import ControlLabel from 'react-bootstrap/lib/ControlLabel';
+import FormControl from 'react-bootstrap/lib/FormControl';
+import FormGroup from 'react-bootstrap/lib/FormGroup';
+import InputGroup from 'react-bootstrap/lib/InputGroup';
+import Modal from 'react-bootstrap/lib/Modal';
+import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
+import Popover from 'react-bootstrap/lib/Popover';
+import Radio from 'react-bootstrap/lib/Radio';
+
 import { hot } from 'react-hot-loader';
 
 import localStorageMixin from 'react-localstorage';
@@ -194,7 +193,7 @@ class TopologyEditor extends Component {
       });
       return;
     }
-    if (_.some(this.state.properties, { 'id': e.target[0].form[0].value })) {
+    if (this.state.properties.some(property => property.id === e.target[0].form[0].value)) {
       this.setState({
         invalidInput: true
       });
@@ -212,9 +211,7 @@ class TopologyEditor extends Component {
     var removedProperty = nextProperties.splice(key, 1);
     var nextTasks = this.state.tasks;
     nextTasks.forEach(function (task) {
-      task.properties = _.filter(task.properties, function (property) {
-        return property.id !== removedProperty[0].id;
-      });
+      task.properties = task.properties.filter(property => property.id !== removedProperty[0].id);
     });
     this.setState({
       properties: nextProperties,
@@ -223,7 +220,7 @@ class TopologyEditor extends Component {
   }
 
   handleEditProperty(key, updatedProperty) {
-    if (_.some(this.state.properties, { 'id': updatedProperty.id })) {
+    if (this.state.properties.some(property => property.id === updatedProperty.id)) {
       return;
     }
     var nextProperties = this.state.properties;
@@ -254,7 +251,7 @@ class TopologyEditor extends Component {
       return;
     }
     // cancel if ID already exists
-    if (_.some(this.state.requirements, { 'id': e.target[0].form[0].value })) {
+    if (this.state.requirements.some(requirement => requirement.id === e.target[0].form[0].value)) {
       this.setState({
         invalidInput: true
       });
@@ -333,7 +330,7 @@ class TopologyEditor extends Component {
       });
       return;
     }
-    if (_.some(this.state.tasks, { 'id': e.target[0].form[0].value })) {
+    if (this.state.tasks.some(task => task.id === e.target[0].form[0].value )) {
       this.setState({
         invalidInput: true
       });
@@ -428,19 +425,13 @@ class TopologyEditor extends Component {
     var removedTask = nextTasks.splice(key, 1);
     var nextCollections = this.state.collections;
     nextCollections.forEach(function (collection) {
-      collection.tasks = _.filter(collection.tasks, function (task) {
-        return task !== removedTask[0].id;
-      });
+      collection.tasks = collection.tasks.filter(task => task !== removedTask[0].id);
     });
     var nextMainTasks = this.state.main.tasks;
-    nextMainTasks = _.filter(nextMainTasks, function (task) {
-      return task !== removedTask[0].id;
-    });
+    nextMainTasks = nextMainTasks.filter(task => task !== removedTask[0].id);
     var nextGroups = this.state.main.groups;
     nextGroups.forEach(function (group) {
-      group.tasks = _.filter(group.tasks, function (task) {
-        return task !== removedTask[0].id;
-      });
+      group.tasks = group.tasks.filter(task => task !== removedTask[0].id);
     });
     var nextMain = {
       id: this.state.main.id,
@@ -463,7 +454,7 @@ class TopologyEditor extends Component {
       });
       return;
     }
-    if (_.some(this.state.collections, { 'id': e.target[0].form[0].value })) {
+    if (this.state.collections.some(collection => collection.id === e.target[0].form[0].value )) {
       this.setState({
         invalidInput: true
       });
@@ -528,14 +519,10 @@ class TopologyEditor extends Component {
     var nextCollections = this.state.collections;
     var removedCollection = nextCollections.splice(key, 1);
     var nextMainCollections = this.state.main.collections;
-    nextMainCollections = _.filter(nextMainCollections, function (collection) {
-      return collection !== removedCollection[0].id;
-    });
+    nextMainCollections = nextMainCollections.filter(collection => collection !== removedCollection[0].id);
     var nextGroups = this.state.main.groups;
     nextGroups.forEach(function (group) {
-      group.collections = _.filter(group.collections, function (collection) {
-        return collection !== removedCollection[0].id;
-      });
+      group.collections = group.collections.filter(collection => collection !== removedCollection[0].id);
     });
     var nextMain = {
       id: this.state.main.id,
@@ -557,7 +544,7 @@ class TopologyEditor extends Component {
       });
       return;
     }
-    if (_.some(this.state.main.groups, { 'id': e.target[0].form[0].value })) {
+    if (this.state.main.groups.some(group => group.id === e.target[0].form[0].value)) {
       this.setState({
         invalidInput: true
       });
