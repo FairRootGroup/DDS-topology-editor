@@ -85,18 +85,19 @@ class Collection extends Component {
     }
 
     var selectedTasks = [];
-    this.props.tasks.forEach(function (task, index) {
+    this.props.tasks.forEach(function(task, index) {
       for (var i = 0; i < e.target[0].form[index + 1].value; i++) {
         selectedTasks.push(task.id);
       }
     });
     var updatedCollection = {
       id: e.target[0].form[0].value,
+      requirements: [],
       tasks: selectedTasks
     };
 
     if (e.target[0].form['requirements'].value !== '') {
-      updatedCollection.requirement = e.target[0].form['requirements'].value;
+      updatedCollection.requirements.push(e.target[0].form['requirements'].value);
     }
 
     this.editCollectionBtn.hide();
@@ -111,13 +112,13 @@ class Collection extends Component {
   render() {
     var TaskCheckboxes = [];
     let requirementOptions = [];
-    var requirementContainer;
+    let currentRequirement = '';
+    let requirementContainers = [];
     var self = this;
-    let requirement;
 
-    this.props.tasks.forEach(function (task, i) {
+    this.props.tasks.forEach(function(task, i) {
       var count = 0;
-      self.props.collection.tasks.forEach(function (currentTask) {
+      self.props.collection.tasks.forEach(function(currentTask) {
         if (task.id === currentTask) {
           count++;
         }
@@ -132,25 +133,26 @@ class Collection extends Component {
       );
     });
 
-    this.props.requirements.forEach(function (requirement, i) {
+    this.props.requirements.forEach(function(requirement, i) {
       requirementOptions.push(
         <option value={requirement.id} key={'option' + i}>{requirement.id}</option>
       );
     });
 
-    if ('requirement' in this.props.collection) {
-      requirement = this.props.collection.requirement;
-      let el = this.props.requirements.find(requirement => requirement.id === self.props.collection.requirement);
-      requirementContainer =
-        <div>
+    this.props.collection.requirements.forEach(function(requirement, i) {
+      currentRequirement = requirement;
+      let el = self.props.requirements.find(r => r.id === requirement);
+      requirementContainers.push(
+        <div key={'requirement' + i}>
           <span className="requirement-child">
             &nbsp;
-                        <span className="prop-access" title={(el.type === 'hostname') ? 'host name' : ''}>{(el.type === 'hostname') ? 'HN ' : ''}</span>
+            <span className="prop-access" title={(el.type === 'hostname') ? 'host name' : ''}>{(el.type === 'hostname') ? 'HN ' : ''}</span>
             <span className="prop-access" title={(el.type === 'wnname') ? 'SSH worker node name' : ''}>{(el.type === 'wnname') ? 'WN ' : ''}</span>
-            {this.props.collection.requirement}
+            {requirement}
           </span>
-        </div>;
-    }
+        </div>
+      );
+    });
 
     return (
       <div className="collection">
@@ -192,7 +194,7 @@ class Collection extends Component {
                 <div className="ct-box ct-box-requirement">
                   <div className="element-name">Requirement</div>
                   <FormGroup>
-                    <FormControl componentClass="select" name="requirements" placeholder="" defaultValue={requirement} className="accessSelect">
+                    <FormControl componentClass="select" name="requirements" placeholder="" defaultValue={currentRequirement} className="accessSelect">
                       <option value="">-</option>
                       {requirementOptions}
                     </FormControl>
@@ -212,10 +214,10 @@ class Collection extends Component {
           </OverlayTrigger>
         </h5>
         <div className={this.state.bodyVisible ? 'visible-container' : 'invisible-container'}>
-          {this.props.collection.tasks.map(function (task, i) {
+          {this.props.collection.tasks.map(function(task, i) {
             return <span key={i}>{task}</span>;
           })}
-          {requirementContainer}
+          {requirementContainers}
         </div>
       </div>
     );

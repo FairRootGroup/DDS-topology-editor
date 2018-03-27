@@ -210,7 +210,7 @@ class TopologyEditor extends Component {
     var nextProperties = this.state.properties;
     var removedProperty = nextProperties.splice(key, 1);
     var nextTasks = this.state.tasks;
-    nextTasks.forEach(function (task) {
+    nextTasks.forEach(function(task) {
       task.properties = task.properties.filter(property => property.id !== removedProperty[0].id);
     });
     this.setState({
@@ -227,8 +227,8 @@ class TopologyEditor extends Component {
     var oldId = this.state.properties[key].id;
     nextProperties[key] = updatedProperty;
     var nextTasks = this.state.tasks;
-    nextTasks.forEach(function (task) {
-      task.properties.forEach(function (property) {
+    nextTasks.forEach(function(task) {
+      task.properties.forEach(function(property) {
         if (property.id === oldId) {
           property.id = updatedProperty.id;
         }
@@ -281,37 +281,49 @@ class TopologyEditor extends Component {
   handleRemoveRequirement(key) {
     var nextRequirements = this.state.requirements;
     var removedRequirement = nextRequirements.splice(key, 1);
+
     var nextTasks = this.state.tasks;
-    nextTasks.forEach(function (task) {
-      if ('requirement' in task && task.requirement.id === removedRequirement.id) {
-        delete task.requirement;
+    var nextCollections = this.state.collections;
+
+    nextTasks.forEach(function(task) {
+      const i = task.requirements.indexOf(removedRequirement.id);
+      if (i > -1) {
+        task.requirements.splice(i);
       }
     });
+
+    nextCollections.forEach(function(collection) {
+      const i = collection.requirements.indexOf(removedRequirement.id);
+      if (i > -1) {
+        collection.requirements.splice(i);
+      }
+    });
+
     this.setState({
       requirements: nextRequirements,
-      tasks: nextTasks
+      tasks: nextTasks,
+      collections: nextCollections
     });
   }
 
   handleEditRequirement(key, updatedRequirement) {
-    // create new requirements
     let nextRequirements = this.state.requirements;
     let oldId = nextRequirements[key].id;
     nextRequirements[key] = updatedRequirement;
 
-    // create new tasks
     let nextTasks = this.state.tasks;
-    nextTasks.forEach(function (task) {
-      if ('requirement' in task && task.requirement === oldId) {
-        task.requirement = updatedRequirement.id;
+    nextTasks.forEach(function(task) {
+      const i = task.requirements.indexOf(oldId);
+      if (i > -1) {
+        task.requirements[i] = oldId;
       }
     });
 
-    // create new tasks
     let nextCollections = this.state.collections;
-    nextCollections.forEach(function (collection) {
-      if ('requirement' in collection && collection.requirement === oldId) {
-        collection.requirement = updatedRequirement.id;
+    nextCollections.forEach(function(collection) {
+      const i = collection.requirements.indexOf(oldId);
+      if (i > -1) {
+        collection.requirements[i] = oldId;
       }
     });
 
@@ -338,7 +350,7 @@ class TopologyEditor extends Component {
     }
 
     var selectedProperties = [];
-    this.state.properties.forEach(function (property, index) {
+    this.state.properties.forEach(function(property, index) {
       if (e.target[0].form[index + 5].value === 'read') {
         selectedProperties.push({ id: property.id, access: 'read' });
       } else if (e.target[0].form[index + 5].value === 'write') {
@@ -355,8 +367,8 @@ class TopologyEditor extends Component {
       properties: selectedProperties
     };
 
-    if (e.target[0].form['requirements'].value !== '') {
-      newTask.requirement = e.target[0].form['requirements'].value;
+    if (e.target[0].form['requirements'].value !== '') { // TODO: handle multiple
+      newTask.requirements.push(e.target[0].form['requirements'].value);
     }
 
     if (e.target[0].form[2].checked === true) {
@@ -385,8 +397,8 @@ class TopologyEditor extends Component {
 
     // update collections with new task info
     var nextCollections = this.state.collections;
-    nextCollections.forEach(function (collection, colIndex) {
-      collection.tasks.forEach(function (task, index) {
+    nextCollections.forEach(function(collection, colIndex) {
+      collection.tasks.forEach(function(task, index) {
         if (task === oldId) {
           nextCollections[colIndex].tasks[index] = updatedTask.id;
         }
@@ -395,8 +407,8 @@ class TopologyEditor extends Component {
 
     // update groups with new task info
     var nextGroups = this.state.main.groups;
-    nextGroups.forEach(function (group, groupIndex) {
-      group.tasks.forEach(function (task, index) {
+    nextGroups.forEach(function(group, groupIndex) {
+      group.tasks.forEach(function(task, index) {
         if (task === oldId) {
           nextGroups[groupIndex].tasks[index] = updatedTask.id;
         }
@@ -406,7 +418,7 @@ class TopologyEditor extends Component {
     // update main with new task info
     var nextMain = this.state.main;
     nextMain.groups = nextGroups;
-    nextMain.tasks.forEach(function (task, index) {
+    nextMain.tasks.forEach(function(task, index) {
       if (task === oldId) {
         nextMain.tasks[index] = updatedTask.id;
       }
@@ -424,13 +436,13 @@ class TopologyEditor extends Component {
     var nextTasks = this.state.tasks;
     var removedTask = nextTasks.splice(key, 1);
     var nextCollections = this.state.collections;
-    nextCollections.forEach(function (collection) {
+    nextCollections.forEach(function(collection) {
       collection.tasks = collection.tasks.filter(task => task !== removedTask[0].id);
     });
     var nextMainTasks = this.state.main.tasks;
     nextMainTasks = nextMainTasks.filter(task => task !== removedTask[0].id);
     var nextGroups = this.state.main.groups;
-    nextGroups.forEach(function (group) {
+    nextGroups.forEach(function(group) {
       group.tasks = group.tasks.filter(task => task !== removedTask[0].id);
     });
     var nextMain = {
@@ -462,7 +474,7 @@ class TopologyEditor extends Component {
     }
 
     var selectedTasks = [];
-    this.state.tasks.forEach(function (task, index) {
+    this.state.tasks.forEach(function(task, index) {
       for (var i = 0; i < e.target[0].form[index + 1].value; i++) {
         selectedTasks.push(task.id);
       }
@@ -473,8 +485,8 @@ class TopologyEditor extends Component {
       tasks: selectedTasks
     };
 
-    if (e.target[0].form['requirements'].value !== '') {
-      newCollection.requirement = e.target[0].form['requirements'].value;
+    if (e.target[0].form['requirements'].value !== '') { // TODO: handle multiple
+      newCollection.requirements.push(e.target[0].form['requirements'].value);
     }
 
     var nextCollections = this.state.collections.concat([newCollection]);
@@ -491,8 +503,8 @@ class TopologyEditor extends Component {
 
     // update groups with new collection info
     var nextGroups = this.state.main.groups;
-    nextGroups.forEach(function (group, groupIndex) {
-      group.collections.forEach(function (collection, index) {
+    nextGroups.forEach(function(group, groupIndex) {
+      group.collections.forEach(function(collection, index) {
         if (collection === oldId) {
           nextGroups[groupIndex].collections[index] = updatedCollection.id;
         }
@@ -502,7 +514,7 @@ class TopologyEditor extends Component {
     // update main with new collection info
     var nextMain = this.state.main;
     nextMain.groups = nextGroups;
-    nextMain.collections.forEach(function (collection, index) {
+    nextMain.collections.forEach(function(collection, index) {
       if (collection === oldId) {
         nextMain.collections[index] = updatedCollection.id;
       }
@@ -521,7 +533,7 @@ class TopologyEditor extends Component {
     var nextMainCollections = this.state.main.collections;
     nextMainCollections = nextMainCollections.filter(collection => collection !== removedCollection[0].id);
     var nextGroups = this.state.main.groups;
-    nextGroups.forEach(function (group) {
+    nextGroups.forEach(function(group) {
       group.collections = group.collections.filter(collection => collection !== removedCollection[0].id);
     });
     var nextMain = {
@@ -553,13 +565,13 @@ class TopologyEditor extends Component {
     var selectedTasks = [];
     var selectedCollections = [];
     var tasksIndex = 0;
-    this.state.tasks.forEach(function (task, index) {
+    this.state.tasks.forEach(function(task, index) {
       tasksIndex++;
       for (var i = 0; i < e.target[0].form[index + 2].value; i++) {
         selectedTasks.push(task.id);
       }
     });
-    this.state.collections.forEach(function (collection, index) {
+    this.state.collections.forEach(function(collection, index) {
       for (var i = 0; i < e.target[0].form[tasksIndex + index + 2].value; i++) {
         selectedCollections.push(collection.id);
       }
@@ -660,7 +672,7 @@ class TopologyEditor extends Component {
     let CollectionCheckboxes = [];
     let requirementOptions = [];
 
-    this.state.properties.forEach(function (property, i) {
+    this.state.properties.forEach(function(property, i) {
       PropertyCheckboxes.push(
         <div className="ct-box ct-box-property" key={'t-box' + i}>
           <div className="element-name" title={property.id}>{property.id}</div>
@@ -676,7 +688,7 @@ class TopologyEditor extends Component {
       );
     });
 
-    this.state.tasks.forEach(function (task, i) {
+    this.state.tasks.forEach(function(task, i) {
       TaskCheckboxes.push(
         <div className="ct-box ct-box-task" key={'t-box' + i}>
           <div className="element-name" title={task.id}>{task.id}</div>
@@ -687,7 +699,7 @@ class TopologyEditor extends Component {
       );
     });
 
-    this.state.collections.forEach(function (collection, i) {
+    this.state.collections.forEach(function(collection, i) {
       CollectionCheckboxes.push(
         <div className="ct-box ct-box-collection" key={'c-box' + i}>
           <div className="element-name" title={collection.id}>{collection.id}</div>
@@ -698,7 +710,7 @@ class TopologyEditor extends Component {
       );
     });
 
-    this.state.requirements.forEach(function (requirement, i) {
+    this.state.requirements.forEach(function(requirement, i) { // TODO: handle multiple
       requirementOptions.push(
         <option value={requirement.id} key={'option' + i}>{requirement.id}</option>
       );

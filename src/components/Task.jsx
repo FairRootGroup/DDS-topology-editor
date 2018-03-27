@@ -80,7 +80,7 @@ class Task extends Component {
     }
 
     var selectedProperties = [];
-    this.props.properties.forEach(function (property, index) {
+    this.props.properties.forEach(function(property, index) {
       if (e.target[0].form[index + 5].value === 'read') {
         selectedProperties.push({ id: property.id, access: 'read' });
       } else if (e.target[0].form[index + 5].value === 'write') {
@@ -94,11 +94,12 @@ class Task extends Component {
       exe: {
         valueText: e.target[0].form[1].value
       },
+      requirements: [],
       properties: selectedProperties
     };
 
     if (e.target[0].form['requirements'].value !== '') {
-      updatedTask.requirement = e.target[0].form['requirements'].value;
+      updatedTask.requirements.push(e.target[0].form['requirements'].value);
     }
 
     if (e.target[0].form[2].checked === true) {
@@ -125,8 +126,8 @@ class Task extends Component {
   render() {
     var propertyCheckboxes = [];
     let requirementOptions = [];
-    var requirement = '';
-    var requirementContainer;
+    var currentRequirement = '';
+    var requirementContainers = [];
     var exeReachable;
     var envValue;
     var exeReachableCheckbox = false;
@@ -134,9 +135,9 @@ class Task extends Component {
     var envPresent = false;
     var self = this;
 
-    this.props.properties.forEach(function (property, i) {
+    this.props.properties.forEach(function(property, i) {
       var access = '';
-      self.props.task.properties.forEach(function (currentProperty) {
+      self.props.task.properties.forEach(function(currentProperty) {
         if (property.id === currentProperty.id) {
           access = currentProperty.access;
         }
@@ -156,7 +157,7 @@ class Task extends Component {
       );
     });
 
-    this.props.requirements.forEach(function (requirement, i) {
+    this.props.requirements.forEach(function(requirement, i) {
       requirementOptions.push(
         <option value={requirement.id} key={'option' + i}>{requirement.id}</option>
       );
@@ -185,19 +186,20 @@ class Task extends Component {
       }
     }
 
-    if ('requirement' in this.props.task) {
-      requirement = this.props.task.requirement;
-      let el = this.props.requirements.find(requirement => requirement.id === self.props.task.requirement);
-      requirementContainer =
-        <div>
+    this.props.task.requirements.forEach(function(requirement, i) { // TODO: handle multiple
+      currentRequirement = requirement;
+      let el = self.props.requirements.find(r => r.id === requirement);
+      requirementContainers.push(
+        <div key={'requirement' + i}>
           <span className="requirement-child">
             &nbsp;
-                        <span className="prop-access" title={(el.type === 'hostname') ? 'host name' : ''}>{(el.type === 'hostname') ? 'HN ' : ''}</span>
+            <span className="prop-access" title={(el.type === 'hostname') ? 'host name' : ''}>{(el.type === 'hostname') ? 'HN ' : ''}</span>
             <span className="prop-access" title={(el.type === 'wnname') ? 'SSH worker node name' : ''}>{(el.type === 'wnname') ? 'WN ' : ''}</span>
-            {this.props.task.requirement}
+            {requirement}
           </span>
-        </div>;
-    }
+        </div>
+      );
+    });
 
     return (
       <div className="task">
@@ -255,7 +257,7 @@ class Task extends Component {
                 <div className="ct-box ct-box-requirement">
                   <div className="element-name">Requirement</div>
                   <FormGroup>
-                    <FormControl componentClass="select" name="requirements" placeholder="" defaultValue={requirement} className="accessSelect">
+                    <FormControl componentClass="select" name="requirements" placeholder="" defaultValue={currentRequirement} className="accessSelect">
                       <option value="">-</option>
                       {requirementOptions}
                     </FormControl>
@@ -282,17 +284,17 @@ class Task extends Component {
           </li>
           {envValue}
           <div>
-            {this.props.task.properties.map(function (property) {
+            {this.props.task.properties.map(function(property) {
               return (<span title={property.id} key={property.id}>
                 &nbsp;
-                                <span className="prop-access" title={(property.access === 'write') ? 'write' : ''}>{(property.access === 'write') ? 'W ' : ''}</span>
+                <span className="prop-access" title={(property.access === 'write') ? 'write' : ''}>{(property.access === 'write') ? 'W ' : ''}</span>
                 <span className="prop-access" title={(property.access === 'read') ? 'read' : ''}>{(property.access === 'read') ? 'R ' : ''}</span>
                 <span className="prop-access" title={(property.access === 'readwrite') ? 'read & write' : ''}>{(property.access === 'readwrite') ? 'RW ' : ''}</span>
                 {property.id}
               </span>);
             })}
           </div>
-          {requirementContainer}
+          {requirementContainers}
         </ul>
       </div>
     );
