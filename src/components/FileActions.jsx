@@ -8,7 +8,6 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import $ from 'jquery';
 import vkbeautify from 'vkbeautify';
 import { saveAs } from 'filesaver.js';
 
@@ -134,7 +133,7 @@ class FileActions extends Component {
 
   processXML(xmlString) {
     const parser = new DOMParser();
-    var topologyId = '',
+    let topologyId = '',
       variables = [],
       properties = [],
       requirements = [],
@@ -142,128 +141,137 @@ class FileActions extends Component {
       collections = [],
       main = {};
 
-    const $xml = $(parser.parseFromString(xmlString, 'application/xml'));
+    const xml = parser.parseFromString(xmlString, 'application/xml');
 
     // topology name
-    topologyId = $xml.find('topology').attr('id');
+    topologyId = xml.querySelector('topology').getAttribute('id');
 
     // variables
-    $xml.find('topology>var').each(function() {
-      var variable = {};
-      variable.id = $(this).attr('id');
-      variable.value = $(this).attr('value');
+    xml.querySelectorAll('topology>var').forEach(v => {
+      const variable = {};
+
+      variable.id = v.getAttribute('id');
+      variable.value = v.getAttribute('value');
+
       variables.push(variable);
     });
 
     // properties
-    $xml.find('topology>property').each(function() {
-      var property = {};
-      property.id = $(this).attr('id');
+    xml.querySelectorAll('topology>property').forEach(p => {
+      const property = {};
+
+      property.id = p.getAttribute('id');
+
       properties.push(property);
     });
 
     // requirements
-    $xml.find('topology>declrequirement').each(function() {
-      var requirement = {};
+    xml.querySelectorAll('topology>declrequirement').forEach(r => {
+      const requirement = {};
 
-      requirement.id = $(this).attr('id');
-      requirement.type = $(this).attr('type');
-      requirement.value = $(this).attr('value');
+      requirement.id = r.getAttribute('id');
+      requirement.type = r.getAttribute('type');
+      requirement.value = r.getAttribute('value');
 
       requirements.push(requirement);
     });
 
     // tasks
-    $xml.find('topology>decltask').each(function() {
-      var task = {};
+    xml.querySelectorAll('topology>decltask').forEach(t => {
+      const task = {};
 
-      task.id = $(this).attr('id');
+      task.id = t.getAttribute('id');
       task.requirements = [];
 
-      $(this).find('requirements').each(function() {
-        $(this).find('id').each(function() {
-          task.requirements.push($(this).text());
+      t.querySelectorAll('requirements').forEach(r => {
+        r.querySelectorAll('id').forEach(i => {
+          task.requirements.push(i.textContent);
         });
       });
 
-      $(this).find('exe').each(function() {
+      t.querySelectorAll('exe').forEach(e => {
         task.exe = {};
-        if (typeof ($(this).attr('reachable')) !== typeof undefined && ($(this).attr('reachable')) !== false) {
-          task.exe.reachable = $(this).attr('reachable');
+        if (e.hasAttribute('reachable')) {
+          task.exe.reachable = e.getAttribute('reachable');
         }
-        task.exe.valueText = $(this).text();
+        task.exe.valueText = e.textContent;
       });
 
-      $(this).find('env').each(function() {
+      t.querySelectorAll('env').forEach(e => {
         task.env = {};
-        if (typeof ($(this).attr('reachable')) !== typeof undefined && ($(this).attr('reachable')) !== false) {
-          task.env.reachable = $(this).attr('reachable');
+        if (e.hasAttribute('reachable')) {
+          task.env.reachable = e.getAttribute('reachable');
         }
-        task.env.valueText = $(this).text();
+        task.env.valueText = e.textContent;
       });
 
       task.properties = [];
-      $(this).find('properties>id').each(function() {
-        var property = {};
-        property.id = $(this).text();
-        if (typeof ($(this).attr('access')) !== typeof undefined) {
-          property.access = $(this).attr('access');
+      t.querySelectorAll('properties>id').forEach(p => {
+        const property = {};
+        property.id = p.textContent;
+        if (p.hasAttribute('access')) {
+          property.access = p.getAttribute('access');
         } else {
           property.access = 'readwrite';
         }
         task.properties.push(property);
       });
+
       tasks.push(task);
     });
 
     // collections
-    $xml.find('topology>declcollection').each(function() {
-      var collection = {};
-      collection.id = $(this).attr('id');
+    xml.querySelectorAll('topology>declcollection').forEach(c => {
+      const collection = {};
+      collection.id = c.getAttribute('id');
+      collection.tasks = [];
       collection.requirements = [];
 
-      $(this).find('requirements').each(function() {
-        $(this).find('id').each(function() {
-          collection.requirements.push($(this).text());
+      c.querySelectorAll('requirements').forEach(r => {
+        r.querySelectorAll('id').forEach(i => {
+          collection.requirements.push(i.textContent);
         });
       });
 
-      collection.tasks = [];
-      $(this).find('tasks>id').each(function() {
-        collection.tasks.push($(this).text());
+      c.querySelectorAll('tasks>id').forEach(t => {
+        collection.tasks.push(t.textContent);
       });
+
       collections.push(collection);
     });
 
     // main
-    var $main = $xml.find('topology>main');
-    main.id = $main.attr('id');
+    main.id = xml.querySelector('topology>main').getAttribute('id');
     main.tasks = [];
     main.collections = [];
     main.groups = [];
 
-    $xml.find('topology>main>task').each(function() {
-      main.tasks.push($(this).text());
+    xml.querySelectorAll('topology>main>task').forEach(t => {
+      main.tasks.push(t.textContent);
     });
-    $xml.find('topology>main>collection').each(function() {
-      main.collections.push($(this).text());
+
+    xml.querySelectorAll('topology>main>collection').forEach(c => {
+      main.collections.push(c.textContent);
     });
 
     // groups in main
-    $xml.find('topology>main>group').each(function() {
-      var group = {};
+    xml.querySelectorAll('topology>main>group').forEach(g => {
+      const group = {};
       group.tasks = [];
       group.collections = [];
-      group.id = $(this).attr('id');
-      group.n = $(this).attr('n');
-      $(this).find('task').each(function() {
-        group.tasks.push($(this).text());
+      group.id = g.getAttribute('id');
+      group.n = g.getAttribute('n');
+
+      g.querySelectorAll('task').forEach(t => {
+        group.tasks.push(t.textContent);
       });
-      $(this).find('collection').each(function() {
-        group.collections.push($(this).text());
+      g.querySelectorAll('collection').forEach(c => {
+        group.collections.push(c.textContent);
       });
+
       main.groups.push(group);
     });
+
 
     this.props.onFileLoad(topologyId, variables, properties, requirements, tasks, collections, main);
   }
