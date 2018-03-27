@@ -53,7 +53,6 @@ class FileActions extends Component {
 
   handleFetch(e) {
     e.preventDefault();
-    const self = this;
 
     const fileSelections = e.target[0].form['files'];
 
@@ -61,12 +60,12 @@ class FileActions extends Component {
       if (fileSelections.item(i).checked) {
         const github = new GitHub();
 
-        const repo = github.getRepo(self.state.remoteUser, self.state.remoteRepo);
-        repo.getContents('dev', 'Common/Topologies' + '/' + self.state.remoteFiles[i].name, true, function(err, contents) {
+        const repo = github.getRepo(this.state.remoteUser, this.state.remoteRepo);
+        repo.getContents('dev', 'Common/Topologies' + '/' + this.state.remoteFiles[i].name, true, (err, contents) => {
           if (err) {
             console.log(err);
           }
-          self.processXML(contents);
+          this.processXML(contents);
         });
       }
     }
@@ -76,17 +75,16 @@ class FileActions extends Component {
 
   fetchTopologies() {
     let github = new GitHub();
-    let self = this;
 
     this.setState({ error: '' });
 
     let repo = github.getRepo(this.state.remoteUser, this.state.remoteRepo);
-    // console.log(repo);
-    repo.getContents('dev', this.state.remotePath, true, function(err, contents) {
+
+    repo.getContents('dev', this.state.remotePath, true, (err, contents) => {
       if (err) {
         console.log(err);
         if ('response' in err) {
-          self.setState({
+          this.setState({
             error:
               err.response.data.message +
               '. Rate limit: ' +
@@ -97,17 +95,12 @@ class FileActions extends Component {
               new Date(err.response.headers['x-ratelimit-reset'] * 1000) + '.'
           });
         } else {
-          self.setState({ error: JSON.stringify(err) });
+          this.setState({ error: JSON.stringify(err) });
         }
         return;
       }
-      // console.log(contents);
 
-      contents.forEach(function(object) {
-        // console.log(' --- ');
-        // console.log(object.name);
-        // console.log(object);
-
+      contents.forEach(object => {
         if (object.name.substr(object.name.length - 4) !== '.xml') {
           console.log('ignoring file with non-XML extension: ' + object.name);
           return;
@@ -117,16 +110,9 @@ class FileActions extends Component {
         file.name = object.name;
         file.url = object.download_url;
 
-        let nextFiles = self.state.remoteFiles;
+        let nextFiles = this.state.remoteFiles;
         nextFiles.push(file);
-        self.setState({ remoteFiles: nextFiles });
-
-        // repo.getContents('dev', 'Common/Topologies' + '/' + object.name, true, function(err, contents) {
-        //     if (err) {
-        //         console.log(err);
-        //     }
-        //     file.contents = contents;
-        // });
+        this.setState({ remoteFiles: nextFiles });
       });
     });
   }
@@ -184,9 +170,7 @@ class FileActions extends Component {
       task.requirements = [];
 
       t.querySelectorAll('requirements').forEach(r => {
-        r.querySelectorAll('id').forEach(i => {
-          task.requirements.push(i.textContent);
-        });
+        r.querySelectorAll('id').forEach(i => task.requirements.push(i.textContent));
       });
 
       t.querySelectorAll('exe').forEach(e => {
@@ -228,14 +212,10 @@ class FileActions extends Component {
       collection.requirements = [];
 
       c.querySelectorAll('requirements').forEach(r => {
-        r.querySelectorAll('id').forEach(i => {
-          collection.requirements.push(i.textContent);
-        });
+        r.querySelectorAll('id').forEach(i => collection.requirements.push(i.textContent));
       });
 
-      c.querySelectorAll('tasks>id').forEach(t => {
-        collection.tasks.push(t.textContent);
-      });
+      c.querySelectorAll('tasks>id').forEach(t => collection.tasks.push(t.textContent));
 
       collections.push(collection);
     });
@@ -246,13 +226,8 @@ class FileActions extends Component {
     main.collections = [];
     main.groups = [];
 
-    xml.querySelectorAll('topology>main>task').forEach(t => {
-      main.tasks.push(t.textContent);
-    });
-
-    xml.querySelectorAll('topology>main>collection').forEach(c => {
-      main.collections.push(c.textContent);
-    });
+    xml.querySelectorAll('topology>main>task').forEach(t => main.tasks.push(t.textContent));
+    xml.querySelectorAll('topology>main>collection').forEach(c => main.collections.push(c.textContent));
 
     // groups in main
     xml.querySelectorAll('topology>main>group').forEach(g => {
@@ -262,27 +237,21 @@ class FileActions extends Component {
       group.id = g.getAttribute('id');
       group.n = g.getAttribute('n');
 
-      g.querySelectorAll('task').forEach(t => {
-        group.tasks.push(t.textContent);
-      });
-      g.querySelectorAll('collection').forEach(c => {
-        group.collections.push(c.textContent);
-      });
+      g.querySelectorAll('task').forEach(t => group.tasks.push(t.textContent));
+      g.querySelectorAll('collection').forEach(c => group.collections.push(c.textContent));
 
       main.groups.push(group);
     });
-
 
     this.props.onFileLoad(topologyId, variables, properties, requirements, tasks, collections, main);
   }
 
   handleFileLoad(event) {
-    const self = this;
-    var reader = new FileReader();
-    var target = event.target;
+    const reader = new FileReader();
+    const target = event.target;
 
-    reader.onload = function() {
-      self.processXML(reader.result);
+    reader.onload = () => {
+      this.processXML(reader.result);
       target.value = '';
     };
 
@@ -290,28 +259,28 @@ class FileActions extends Component {
   }
 
   handleFileSave() {
-    var xmlDoc = document.implementation.createDocument('', '', null);
-    var root = xmlDoc.createElement('topology');
+    const xmlDoc = document.implementation.createDocument('', '', null);
+    const root = xmlDoc.createElement('topology');
     root.setAttribute('id', this.props.topologyId);
 
     // variables
-    this.props.variables.forEach(function(variable) {
-      var newVariable = xmlDoc.createElement('var');
+    this.props.variables.forEach(variable => {
+      const newVariable = xmlDoc.createElement('var');
       newVariable.setAttribute('id', variable.id);
       newVariable.setAttribute('value', variable.value);
       root.appendChild(newVariable);
     });
 
     // properties
-    this.props.properties.forEach(function(property) {
-      var newProperty = xmlDoc.createElement('property');
+    this.props.properties.forEach(property => {
+      const newProperty = xmlDoc.createElement('property');
       newProperty.setAttribute('id', property.id);
       root.appendChild(newProperty);
     });
 
     // requirements
-    this.props.requirements.forEach(function(requirement) {
-      var newRequirement = xmlDoc.createElement('declrequirement');
+    this.props.requirements.forEach(requirement => {
+      const newRequirement = xmlDoc.createElement('declrequirement');
       newRequirement.setAttribute('id', requirement.id);
       newRequirement.setAttribute('type', requirement.type);
       newRequirement.setAttribute('value', requirement.value);
@@ -321,12 +290,12 @@ class FileActions extends Component {
     });
 
     // tasks
-    this.props.tasks.forEach(function(task) {
-      var newTask = xmlDoc.createElement('decltask');
+    this.props.tasks.forEach(task => {
+      const newTask = xmlDoc.createElement('decltask');
       newTask.setAttribute('id', task.id);
 
       // create and append task exe
-      var taskExe = xmlDoc.createElement('exe');
+      const taskExe = xmlDoc.createElement('exe');
       taskExe.textContent = task.exe.valueText;
       if (typeof task.exe.reachable !== typeof undefined) {
         taskExe.setAttribute('reachable', task.exe.reachable);
@@ -335,9 +304,9 @@ class FileActions extends Component {
       newTask.appendChild(taskExe);
 
       if (task.requirements.length > 0) {
-        var taskRequirements = xmlDoc.createElement('requirements');
-        task.requirements.forEach(function(taskRequirement) {
-          let requirement = xmlDoc.createElement('id');
+        const taskRequirements = xmlDoc.createElement('requirements');
+        task.requirements.forEach(taskRequirement => {
+          const requirement = xmlDoc.createElement('id');
           requirement.textContent = taskRequirement;
           taskRequirements.appendChild(requirement);
         });
@@ -346,7 +315,7 @@ class FileActions extends Component {
 
       // create and append task env (if it exists)
       if (typeof task.env !== typeof undefined) {
-        var taskEnv = xmlDoc.createElement('env');
+        const taskEnv = xmlDoc.createElement('env');
         taskEnv.textContent = task.env.valueText;
         if (typeof task.env.reachable !== typeof undefined) {
           taskEnv.setAttribute('reachable', task.env.reachable);
@@ -357,10 +326,10 @@ class FileActions extends Component {
 
       // create task properties
       if (task.properties.length > 0) {
-        var propertiesContainer = xmlDoc.createElement('properties');
+        const propertiesContainer = xmlDoc.createElement('properties');
 
-        task.properties.forEach(function(property) {
-          var newProperty = xmlDoc.createElement('id');
+        task.properties.forEach(property => {
+          const newProperty = xmlDoc.createElement('id');
           newProperty.textContent = property.id;
           newProperty.setAttribute('access', property.access);
           propertiesContainer.appendChild(newProperty);
@@ -374,24 +343,24 @@ class FileActions extends Component {
     });
 
     // collections
-    this.props.collections.forEach(function(collection) {
-      var newCollection = xmlDoc.createElement('declcollection');
+    this.props.collections.forEach(collection => {
+      const newCollection = xmlDoc.createElement('declcollection');
       newCollection.setAttribute('id', collection.id);
 
       if (collection.requirements.length > 0) {
-        var collectionRequirements = xmlDoc.createElement('requirements');
-        collection.requirements.forEach(function(collectionRequirement) {
-          let requirement = xmlDoc.createElement('id');
+        const collectionRequirements = xmlDoc.createElement('requirements');
+        collection.requirements.forEach(collectionRequirement => {
+          const requirement = xmlDoc.createElement('id');
           requirement.textContent = collectionRequirement;
           collectionRequirements.appendChild(requirement);
         });
         newCollection.appendChild(collectionRequirements);
       }
 
-      var tasks = xmlDoc.createElement('tasks');
+      const tasks = xmlDoc.createElement('tasks');
 
-      collection.tasks.forEach(function(task) {
-        var newTask = xmlDoc.createElement('id');
+      collection.tasks.forEach(task => {
+        const newTask = xmlDoc.createElement('id');
         newTask.textContent = task;
         tasks.appendChild(newTask);
       });
@@ -402,33 +371,33 @@ class FileActions extends Component {
     });
 
     // main
-    var main = xmlDoc.createElement('main');
+    const main = xmlDoc.createElement('main');
     main.setAttribute('id', this.props.main.id);
     // tasks in main
-    this.props.main.tasks.forEach(function(task) {
-      var newTask = xmlDoc.createElement('task');
+    this.props.main.tasks.forEach(task => {
+      const newTask = xmlDoc.createElement('task');
       newTask.textContent = task;
       main.appendChild(newTask);
     });
     // collections in main
-    this.props.main.collections.forEach(function(collection) {
-      var newCollection = xmlDoc.createElement('collection');
+    this.props.main.collections.forEach(collection => {
+      const newCollection = xmlDoc.createElement('collection');
       newCollection.textContent = collection;
       main.appendChild(newCollection);
     });
     // groups in main
-    this.props.main.groups.forEach(function(group) {
-      var newGroup = xmlDoc.createElement('group');
+    this.props.main.groups.forEach(group => {
+      const newGroup = xmlDoc.createElement('group');
       newGroup.setAttribute('id', group.id);
       newGroup.setAttribute('n', group.n);
 
-      group.tasks.forEach(function(task) {
-        var newTask = xmlDoc.createElement('task');
+      group.tasks.forEach(task => {
+        const newTask = xmlDoc.createElement('task');
         newTask.textContent = task;
         newGroup.appendChild(newTask);
       });
-      group.collections.forEach(function(collection) {
-        var newCollection = xmlDoc.createElement('collection');
+      group.collections.forEach(collection => {
+        const newCollection = xmlDoc.createElement('collection');
         newCollection.textContent = collection;
         newGroup.appendChild(newCollection);
       });
@@ -444,7 +413,7 @@ class FileActions extends Component {
 
     xmlString = vkbeautify.xml(xmlString);
 
-    var blob = new Blob([xmlString], { type: 'text/plain;charset=utf-8' });
+    const blob = new Blob([xmlString], { type: 'text/plain;charset=utf-8' });
     saveAs(blob, this.props.topologyId + '.xml');
   }
 
@@ -457,13 +426,13 @@ class FileActions extends Component {
               <span className="glyphicon glyphicon-floppy-open"></span> load<input type="file" onChange={this.handleFileLoad} />
             </Button>
 
-            <OverlayTrigger trigger="click" placement="bottom" ref={(el) => this.fetchBtn = el} onEnter={this.fetchTopologies} onExit={this.cancelFetch} overlay={
+            <OverlayTrigger trigger="click" placement="bottom" ref={el => this.fetchBtn = el} onEnter={this.fetchTopologies} onExit={this.cancelFetch} overlay={
               <Popover className="fetch-popover" title="fetch remote topologies" id="fetchremotetopologies">
                 <p>Fetching topologies from<br /><span className="mono monobg">{this.state.remoteUser}/{this.state.remoteRepo}/{this.state.remotePath}</span></p>
                 <form onSubmit={this.handleFetch}>
                   {this.state.error !== '' ? <p className="error">{this.state.error}</p> : ''}
                   <FormGroup>
-                    {this.state.remoteFiles.map(function(file, i) {
+                    {this.state.remoteFiles.map((file, i) => {
                       return (<Radio title={file.url} key={file.name + i} name="files" className="mono">{file.name}</Radio>);
                     })}
                   </FormGroup>
