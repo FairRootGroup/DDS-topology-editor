@@ -36,6 +36,8 @@ import Popover from 'react-bootstrap/lib/Popover';
     this.editCollectionBtn;
   }
 
+  shouldComponentUpdate = () => true
+
   handleInputChange = (e) => {
     e.preventDefault();
     this.setInputValidity(false);
@@ -117,18 +119,20 @@ import Popover from 'react-bootstrap/lib/Popover';
     });
 
     this.props.collection.requirements.forEach((requirement, i) => {
-      currentRequirement = requirement;
       let el = this.props.requirements.find(r => r.id === requirement);
-      requirementContainers.push(
-        <div key={'requirement' + i}>
-          <span className="requirement-child">
-            &nbsp;
-            <span className="prop-access" title={(el.type === 'hostname') ? 'host name' : ''}>{(el.type === 'hostname') ? 'HN ' : ''}</span>
-            <span className="prop-access" title={(el.type === 'wnname') ? 'SSH worker node name' : ''}>{(el.type === 'wnname') ? 'WN ' : ''}</span>
-            {requirement}
-          </span>
-        </div>
-      );
+      if (el !== undefined) {
+        currentRequirement = requirement;
+        requirementContainers.push(
+          <div key={'requirement' + i}>
+            <span className="requirement-child">
+              &nbsp;
+              <span className="prop-access" title={(el.type === 'hostname') ? 'host name' : ''}>{(el.type === 'hostname') ? 'HN ' : ''}</span>
+              <span className="prop-access" title={(el.type === 'wnname') ? 'SSH worker node name' : ''}>{(el.type === 'wnname') ? 'WN ' : ''}</span>
+              {requirement}
+            </span>
+          </div>
+        );
+      }
     });
 
     return (

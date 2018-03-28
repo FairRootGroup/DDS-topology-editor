@@ -278,22 +278,22 @@ class TopologyEditor extends Component {
     });
   }
 
-  handleRemoveRequirement(key) {
+  handleRemoveRequirement(index) {
     var nextRequirements = this.state.requirements;
-    var removedRequirement = nextRequirements.splice(key, 1);
+    var removedRequirement = nextRequirements.splice(index, 1);
 
     var nextTasks = this.state.tasks;
     var nextCollections = this.state.collections;
 
     nextTasks.forEach(function(task) {
-      const i = task.requirements.indexOf(removedRequirement.id);
+      const i = task.requirements.indexOf(removedRequirement[0].id);
       if (i > -1) {
         task.requirements.splice(i);
       }
     });
 
     nextCollections.forEach(function(collection) {
-      const i = collection.requirements.indexOf(removedRequirement.id);
+      const i = collection.requirements.indexOf(removedRequirement[0].id);
       if (i > -1) {
         collection.requirements.splice(i);
       }
@@ -306,10 +306,10 @@ class TopologyEditor extends Component {
     });
   }
 
-  handleEditRequirement(key, updatedRequirement) {
+  handleEditRequirement(index, updatedRequirement) {
     let nextRequirements = this.state.requirements;
-    let oldId = nextRequirements[key].id;
-    nextRequirements[key] = updatedRequirement;
+    let oldId = nextRequirements[index].id;
+    nextRequirements[index] = updatedRequirement;
 
     let nextTasks = this.state.tasks;
     nextTasks.forEach(function(task) {

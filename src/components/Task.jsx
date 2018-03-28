@@ -187,18 +187,21 @@ class Task extends Component {
     }
 
     this.props.task.requirements.forEach(function(requirement, i) { // TODO: handle multiple
-      currentRequirement = requirement;
       let el = self.props.requirements.find(r => r.id === requirement);
-      requirementContainers.push(
-        <div key={'requirement' + i}>
-          <span className="requirement-child">
-            &nbsp;
-            <span className="prop-access" title={(el.type === 'hostname') ? 'host name' : ''}>{(el.type === 'hostname') ? 'HN ' : ''}</span>
-            <span className="prop-access" title={(el.type === 'wnname') ? 'SSH worker node name' : ''}>{(el.type === 'wnname') ? 'WN ' : ''}</span>
-            {requirement}
-          </span>
-        </div>
-      );
+      if (el !== undefined)
+      {
+        currentRequirement = requirement;
+        requirementContainers.push(
+          <div key={'requirement' + i}>
+            <span className="requirement-child">
+              &nbsp;
+              <span className="prop-access" title={(el.type === 'hostname') ? 'host name' : ''}>{(el.type === 'hostname') ? 'HN ' : ''}</span>
+              <span className="prop-access" title={(el.type === 'wnname') ? 'SSH worker node name' : ''}>{(el.type === 'wnname') ? 'WN ' : ''}</span>
+              {requirement}
+            </span>
+          </div>
+        );
+      }
     });
 
     return (
