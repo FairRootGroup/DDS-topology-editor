@@ -9,6 +9,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+import { action, observable } from 'mobx';
+import { observer } from 'mobx-react';
+
 import Button from 'react-bootstrap/lib/Button';
 import FormControl from 'react-bootstrap/lib/FormControl';
 import FormGroup from 'react-bootstrap/lib/FormGroup';
@@ -17,70 +20,45 @@ import Modal from 'react-bootstrap/lib/Modal';
 import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
 import Popover from 'react-bootstrap/lib/Popover';
 
-class Collection extends Component {
+@observer export default class Collection extends Component {
+  @observable bodyVisible = false;
+  @observable invalidInput = false;
+  @observable showDeleteModal = false;
+
+  @action toggleBodyVisibility = () => { this.bodyVisible = !(this.bodyVisible); }
+  @action setInputValidity = (valid) => { this.invalidInput = valid; }
+  @action openDeleteModal = () => { this.showDeleteModal = true; }
+  @action closeDeleteModal = () => { this.showDeleteModal = false; }
+
   constructor() {
     super();
 
     this.editCollectionBtn;
-
-    this.state = {
-      bodyVisible: false,
-      invalidInput: false,
-      showDeleteModal: false
-    };
-
-    this.closeDeleteModal = this.closeDeleteModal.bind(this);
-    this.openDeleteModal = this.openDeleteModal.bind(this);
-    this.handleInputChange = this.handleInputChange.bind(this);
-    this.hideEditCollectionButton = this.hideEditCollectionButton.bind(this);
-    this.toggleBodyVisibility = this.toggleBodyVisibility.bind(this);
-    this.handleEditCollection = this.handleEditCollection.bind(this);
-    this.handleRemoveCollection = this.handleRemoveCollection.bind(this);
   }
 
-  closeDeleteModal() {
-    this.setState({ showDeleteModal: false });
-  }
-
-  openDeleteModal() {
-    this.setState({ showDeleteModal: true });
-  }
-
-  handleInputChange(e) {
+  handleInputChange = (e) => {
     e.preventDefault();
-    this.setState({
-      invalidInput: false
-    });
+    this.setInputValidity(false);
   }
 
-  hideEditCollectionButton(e) {
+  hideEditCollectionButton = (e) => {
     e.preventDefault();
-    this.setState({
-      invalidInput: false
-    });
+    this.setInputValidity(false);
     this.editCollectionBtn.hide();
   }
 
-  toggleBodyVisibility() {
-    this.setState({ bodyVisible: !this.state.bodyVisible });
-  }
-
-  handleEditCollection(e) {
+  handleEditCollection = (e) => {
     e.preventDefault();
     var self = this;
     if (e.target[0].form[0].value === '') {
-      this.setState({
-        invalidInput: true
-      });
+      this.setInputValidity(true);
       return;
     }
 
     var otherCollections = this.props.collections.filter(collection => collection.id !== self.props.collection.id);
 
     if (otherCollections.some(collection => collection.id === e.target[0].form[0].value)) {
-      this.setState({
-        invalidInput: true
-      });
+      this.setInputValidity(true);
       return;
     }
 
@@ -92,8 +70,8 @@ class Collection extends Component {
     });
     var updatedCollection = {
       id: e.target[0].form[0].value,
-      requirements: [],
-      tasks: selectedTasks
+      tasks: selectedTasks,
+      requirements: []
     };
 
     if (e.target[0].form['requirements'].value !== '') {
@@ -104,8 +82,8 @@ class Collection extends Component {
     this.props.onEditCollection(this.props.elementKey, updatedCollection);
   }
 
-  handleRemoveCollection() {
-    this.setState({ showDeleteModal: false });
+  handleRemoveCollection = () => {
+    this.closeDeleteModal();
     this.props.onRemoveCollection(this.props.elementKey);
   }
 
@@ -114,11 +92,10 @@ class Collection extends Component {
     let requirementOptions = [];
     let currentRequirement = '';
     let requirementContainers = [];
-    var self = this;
 
-    this.props.tasks.forEach(function(task, i) {
+    this.props.tasks.forEach((task, i) => {
       var count = 0;
-      self.props.collection.tasks.forEach(function(currentTask) {
+      this.props.collection.tasks.forEach(function(currentTask) {
         if (task.id === currentTask) {
           count++;
         }
@@ -139,9 +116,9 @@ class Collection extends Component {
       );
     });
 
-    this.props.collection.requirements.forEach(function(requirement, i) {
+    this.props.collection.requirements.forEach((requirement, i) => {
       currentRequirement = requirement;
-      let el = self.props.requirements.find(r => r.id === requirement);
+      let el = this.props.requirements.find(r => r.id === requirement);
       requirementContainers.push(
         <div key={'requirement' + i}>
           <span className="requirement-child">
@@ -160,13 +137,13 @@ class Collection extends Component {
           <span className="glyphicon glyphicon-tasks"></span>
           {this.props.collection.id}
           <span
-            className={this.state.bodyVisible ? 'glyphicon glyphicon-chevron-up' : 'glyphicon glyphicon-chevron-down'}
-            title={this.state.bodyVisible ? 'hide' : 'show'}
+            className={this.bodyVisible ? 'glyphicon glyphicon-chevron-up' : 'glyphicon glyphicon-chevron-down'}
+            title={this.bodyVisible ? 'hide' : 'show'}
             onClick={this.toggleBodyVisibility}>
           </span>
 
           <span className="glyphicon glyphicon-trash" title="remove" onClick={this.openDeleteModal}></span>
-          <Modal show={this.state.showDeleteModal} onHide={this.closeDeleteModal}>
+          <Modal show={this.showDeleteModal} onHide={this.closeDeleteModal}>
             <Modal.Header closeButton>
               <Modal.Title>Delete <strong>{this.props.collection.id}</strong>?</Modal.Title>
             </Modal.Header>
@@ -184,7 +161,7 @@ class Collection extends Component {
               <form onSubmit={this.handleEditCollection}>
                 <InputGroup>
                   <InputGroup.Addon>id</InputGroup.Addon>
-                  <FormControl type="text" onFocus={this.handleInputChange} className={this.state.invalidInput ? 'invalid-input' : ''} defaultValue={this.props.collection.id} />
+                  <FormControl type="text" onFocus={this.handleInputChange} className={this.invalidInput ? 'invalid-input' : ''} defaultValue={this.props.collection.id} />
                 </InputGroup>
 
                 <p>Tasks in this collection:</p>
@@ -213,8 +190,8 @@ class Collection extends Component {
             <span className="glyphicon glyphicon-edit" title="edit"></span>
           </OverlayTrigger>
         </h5>
-        <div className={this.state.bodyVisible ? 'visible-container' : 'invisible-container'}>
-          {this.props.collection.tasks.map(function(task, i) {
+        <div className={this.bodyVisible ? 'visible-container' : 'invisible-container'}>
+          {this.props.collection.tasks.map((task, i) => {
             return <span key={i}>{task}</span>;
           })}
           {requirementContainers}
@@ -233,5 +210,3 @@ Collection.propTypes = {
   onEditCollection: PropTypes.func.isRequired,
   elementKey: PropTypes.number.isRequired
 };
-
-export default Collection;

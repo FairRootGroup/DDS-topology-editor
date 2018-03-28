@@ -364,7 +364,8 @@ class TopologyEditor extends Component {
       exe: {
         valueText: e.target[0].form[1].value
       },
-      properties: selectedProperties
+      properties: selectedProperties,
+      requirements: []
     };
 
     if (e.target[0].form['requirements'].value !== '') { // TODO: handle multiple
@@ -482,7 +483,8 @@ class TopologyEditor extends Component {
 
     let newCollection = {
       id: e.target[0].form[0].value,
-      tasks: selectedTasks
+      tasks: selectedTasks,
+      requirements: []
     };
 
     if (e.target[0].form['requirements'].value !== '') { // TODO: handle multiple

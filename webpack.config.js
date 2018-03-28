@@ -2,6 +2,7 @@ module.exports = {
   entry: [
       './src/index.jsx'
   ],
+  devtool: 'inline-source-map',
   resolve: {
       extensions: ['.js', '.jsx']
   },
