@@ -6,13 +6,13 @@
  *                  copied verbatim in the file "LICENSE"                       *
  ********************************************************************************/
 
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 
 import Property from './Property';
 
 export default class PropertyList extends Component {
-  propTypes = {
+  static propTypes = {
     properties: PropTypes.array.isRequired,
     onRemoveProperty: PropTypes.func.isRequired,
     onEditProperty: PropTypes.func.isRequired
@@ -20,7 +20,7 @@ export default class PropertyList extends Component {
 
   render() {
     return (
-      <div>
+      <Fragment>
         {this.props.properties.map((property, index) => {
           return <Property property={property}
             onRemoveProperty={this.props.onRemoveProperty}
@@ -29,7 +29,7 @@ export default class PropertyList extends Component {
             elementKey={index}
           />;
         })}
-      </div>
+      </Fragment>
     );
   }
 }

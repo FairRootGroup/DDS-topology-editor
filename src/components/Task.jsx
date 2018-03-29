@@ -22,7 +22,7 @@ import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
 import Popover from 'react-bootstrap/lib/Popover';
 
 @observer export default class Task extends Component {
-  propTypes = {
+  static propTypes = {
     task: PropTypes.object.isRequired,
     properties: PropTypes.array.isRequired,
     requirements: PropTypes.array.isRequired,
@@ -33,11 +33,11 @@ import Popover from 'react-bootstrap/lib/Popover';
   };
 
   @observable bodyVisible = false;
-  @observable invalidInput = false;
+  @observable inputValid = true;
   @observable deleteModalVisible = false;
 
   @action toggleBodyVisibility = () => { this.bodyVisible = !(this.bodyVisible); }
-  @action setInputValidity = (valid) => { this.invalidInput = valid; }
+  @action setInputValidity = (valid) => { this.inputValid = valid; }
   @action openDeleteModal = () => { this.deleteModalVisible = true; }
   @action closeDeleteModal = () => { this.deleteModalVisible = false; }
 
@@ -47,19 +47,19 @@ import Popover from 'react-bootstrap/lib/Popover';
 
   hideEditTaskButton = (e) => {
     e.preventDefault();
-    this.setInputValidity(false);
+    this.setInputValidity(true);
     this.editTaskBtn.hide();
   }
 
   handleEditTask = (e) => {
     e.preventDefault();
     if (e.target[0].form[0].value === '' || e.target[0].form[1].value === '') {
-      this.setInputValidity(true);
+      this.setInputValidity(false);
       return;
     }
     var otherTasks = this.props.tasks.filter(task => task.id !== this.props.task.id);
     if (otherTasks.some( task => task.id === e.target[0].form[0].value )) {
-      this.setInputValidity(true);
+      this.setInputValidity(false);
       return;
     }
 
@@ -212,26 +212,26 @@ import Popover from 'react-bootstrap/lib/Popover';
             </Modal.Footer>
           </Modal>
 
-          <OverlayTrigger trigger="click" placement="right" ref={(el) => this.editTaskBtn = el} onClick={() => this.setInputValidity(false)} overlay={
+          <OverlayTrigger trigger="click" placement="right" ref={(el) => this.editTaskBtn = el} onClick={() => this.setInputValidity(true)} overlay={
             <Popover className="add-cg-popover task-popover" title="edit task" id={this.props.task.id}>
               <form onSubmit={this.handleEditTask}>
                 <FormGroup>
                   <InputGroup>
                     <InputGroup.Addon>id</InputGroup.Addon>
-                    <FormControl type="text" onFocus={() => this.setInputValidity(false)} className={this.invalidInput ? 'invalid-input' : ''} defaultValue={this.props.task.id} />
+                    <FormControl type="text" onFocus={() => this.setInputValidity(true)} className={this.inputValid ? '' : 'invalid-input'} defaultValue={this.props.task.id} />
                   </InputGroup>
                 </FormGroup>
                 <FormGroup>
                   <InputGroup>
                     <InputGroup.Addon>exe</InputGroup.Addon>
-                    <FormControl type="text" onFocus={() => this.setInputValidity(false)} className={this.invalidInput ? 'mono invalid-input' : 'mono'} defaultValue={this.props.task.exe.valueText || ''} />
+                    <FormControl type="text" onFocus={() => this.setInputValidity(true)} className={this.inputValid ? 'mono' : 'mono invalid-input'} defaultValue={this.props.task.exe.valueText || ''} />
                   </InputGroup>
                 </FormGroup>
                 <Checkbox defaultChecked={exeReachableCheckbox}>exe reachable (optional)</Checkbox>
                 <FormGroup>
                   <InputGroup>
                     <InputGroup.Addon>env</InputGroup.Addon>
-                    <FormControl type="text" onFocus={() => this.setInputValidity(false)} className="mono" defaultValue={envPresent ? this.props.task.env.valueText || '' : ''} />
+                    <FormControl type="text" onFocus={() => this.setInputValidity(true)} className="mono" defaultValue={envPresent ? this.props.task.env.valueText || '' : ''} />
                   </InputGroup>
                 </FormGroup>
                 <Checkbox defaultChecked={envReachableCheckbox}>env reachable (optional)</Checkbox>

@@ -21,7 +21,7 @@ import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
 import Popover from 'react-bootstrap/lib/Popover';
 
 @observer export default class Collection extends Component {
-  propTypes = {
+  static propTypes = {
     collection: PropTypes.object.isRequired,
     requirements: PropTypes.array.isRequired,
     collections: PropTypes.array.isRequired,
@@ -32,11 +32,11 @@ import Popover from 'react-bootstrap/lib/Popover';
   };
 
   @observable bodyVisible = false;
-  @observable invalidInput = false;
+  @observable inputValid = true;
   @observable deleteModalVisible = false;
 
   @action toggleBodyVisibility = () => { this.bodyVisible = !(this.bodyVisible); }
-  @action setInputValidity = (valid) => { this.invalidInput = valid; }
+  @action setInputValidity = (valid) => { this.inputValid = valid; }
   @action openDeleteModal = () => { this.deleteModalVisible = true; }
   @action closeDeleteModal = () => { this.deleteModalVisible = false; }
 
@@ -46,7 +46,7 @@ import Popover from 'react-bootstrap/lib/Popover';
 
   hideEditCollectionButton = (e) => {
     e.preventDefault();
-    this.setInputValidity(false);
+    this.setInputValidity(true);
     this.editCollectionBtn.hide();
   }
 
@@ -54,14 +54,14 @@ import Popover from 'react-bootstrap/lib/Popover';
     e.preventDefault();
     var self = this;
     if (e.target[0].form[0].value === '') {
-      this.setInputValidity(true);
+      this.setInputValidity(false);
       return;
     }
 
     var otherCollections = this.props.collections.filter(collection => collection.id !== self.props.collection.id);
 
     if (otherCollections.some(collection => collection.id === e.target[0].form[0].value)) {
-      this.setInputValidity(true);
+      this.setInputValidity(false);
       return;
     }
 
@@ -161,12 +161,12 @@ import Popover from 'react-bootstrap/lib/Popover';
             </Modal.Footer>
           </Modal>
 
-          <OverlayTrigger trigger="click" placement="right" ref={(el) => this.editCollectionBtn = el} onClick={() => this.setInputValidity(false)} overlay={
+          <OverlayTrigger trigger="click" placement="right" ref={(el) => this.editCollectionBtn = el} onClick={() => this.setInputValidity(true)} overlay={
             <Popover className="add-cg-popover collection-popover" title="edit collection" id={this.props.collection.id}>
               <form onSubmit={this.handleEditCollection}>
                 <InputGroup>
                   <InputGroup.Addon>id</InputGroup.Addon>
-                  <FormControl type="text" onFocus={() => this.setInputValidity(false)} className={this.invalidInput ? 'invalid-input' : ''} defaultValue={this.props.collection.id} />
+                  <FormControl type="text" onFocus={() => this.setInputValidity(true)} className={this.inputValid ? '' : 'invalid-input'} defaultValue={this.props.collection.id} />
                 </InputGroup>
 
                 <p>Tasks in this collection:</p>

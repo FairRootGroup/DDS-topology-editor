@@ -16,7 +16,7 @@ import Button from 'react-bootstrap/lib/Button';
 import Modal from 'react-bootstrap/lib/Modal';
 
 @observer export default class Property extends Component {
-  propTypes = {
+  static propTypes = {
     property: PropTypes.object.isRequired,
     onRemoveProperty: PropTypes.func.isRequired,
     onEditProperty: PropTypes.func.isRequired,

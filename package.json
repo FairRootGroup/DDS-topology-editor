@@ -24,6 +24,7 @@
     "filesaver.js": "^1.3.4",
     "github-api": "^3.0.0",
     "mobx": "^4.1.1",
+    "mobx-persist": "^0.4.1",
     "mobx-react": "^5.0.0",
     "prop-types": "^15.6.1",
     "react": "~16.2.0",

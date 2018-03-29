@@ -23,7 +23,7 @@ import Popover from 'react-bootstrap/lib/Popover';
 import Radio from 'react-bootstrap/lib/Radio';
 
 @observer export default class Requirement extends Component {
-  propTypes = {
+  static propTypes = {
     requirement: PropTypes.object.isRequired,
     requirements: PropTypes.array.isRequired,
     onRemoveRequirement: PropTypes.func.isRequired,
@@ -32,11 +32,11 @@ import Radio from 'react-bootstrap/lib/Radio';
   };
 
   @observable bodyVisible = false;
-  @observable invalidInput = false;
+  @observable inputValid = true;
   @observable deleteModalVisible = false;
 
   @action toggleBodyVisibility = () => { this.bodyVisible = !(this.bodyVisible); }
-  @action setInputValidity = (valid) => { this.invalidInput = valid; }
+  @action setInputValidity = (valid) => { this.inputValid = valid; }
   @action openDeleteModal = () => { this.deleteModalVisible = true; }
   @action closeDeleteModal = () => { this.deleteModalVisible = false; }
 
@@ -46,7 +46,7 @@ import Radio from 'react-bootstrap/lib/Radio';
 
   hideEditRequirementButton = (e) => {
     e.preventDefault();
-    this.setInputValidity(false);
+    this.setInputValidity(true);
     this.editRequirementBtn.hide();
   }
 
@@ -55,14 +55,14 @@ import Radio from 'react-bootstrap/lib/Radio';
 
     // cancel if ID or value is empty
     if (e.target[0].form[0].value === '' || e.target[0].form[3].value === '') {
-      this.setInputValidity(true);
+      this.setInputValidity(false);
       return;
     }
 
     // cancel if ID already exists (except its own ID)
     var otherRequirements = this.props.requirements.filter(requirement => requirement.id !== this.props.requirement.id);
     if (otherRequirements.some(requirement => requirement.id === e.target[0].form[0].value)) {
-      this.setInputValidity(true);
+      this.setInputValidity(false);
       return;
     }
 
@@ -115,12 +115,12 @@ import Radio from 'react-bootstrap/lib/Radio';
             </Modal.Footer>
           </Modal>
 
-          <OverlayTrigger trigger="click" placement="right" ref={(el) => this.editRequirementBtn = el} onClick={() => this.setInputValidity(false)} overlay={
+          <OverlayTrigger trigger="click" placement="right" ref={(el) => this.editRequirementBtn = el} onClick={() => this.setInputValidity(true)} overlay={
             <Popover className="add-cg-popover requirement-popover" title="edit requirement" id={this.props.requirement.id}>
               <form onSubmit={this.handleEditRequirement}>
                 <InputGroup>
                   <InputGroup.Addon>id</InputGroup.Addon>
-                  <FormControl type="text" onFocus={() => this.setInputValidity(false)} defaultValue={this.props.requirement.id} className={this.invalidInput ? 'invalid-input' : ''} />
+                  <FormControl type="text" onFocus={() => this.setInputValidity(true)} defaultValue={this.props.requirement.id} className={this.inputValid ? '' : 'invalid-input'} />
                 </InputGroup>
                 <FormGroup>
                   <ControlLabel className="pattern-label">Pattern Type</ControlLabel>
@@ -129,7 +129,7 @@ import Radio from 'react-bootstrap/lib/Radio';
                 </FormGroup>
                 <InputGroup>
                   <InputGroup.Addon>pattern</InputGroup.Addon>
-                  <FormControl type="text" onFocus={() => this.setInputValidity(false)} defaultValue={this.props.requirement.value} className={this.invalidInput ? 'mono invalid-input' : 'mono'} />
+                  <FormControl type="text" onFocus={() => this.setInputValidity(true)} defaultValue={this.props.requirement.value} className={this.inputValid ? 'mono' : 'mono invalid-input'} />
                 </InputGroup>
                 <div className="row">
                   <div className="col-xs-12">

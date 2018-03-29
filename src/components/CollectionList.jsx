@@ -6,13 +6,13 @@
  *                  copied verbatim in the file "LICENSE"                       *
  ********************************************************************************/
 
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 
 import Collection from './Collection';
 
 export default class CollectionList extends Component {
-  propTypes = {
+  static propTypes = {
     collections: PropTypes.array.isRequired,
     requirements: PropTypes.array.isRequired,
     tasks: PropTypes.array.isRequired,
@@ -22,7 +22,7 @@ export default class CollectionList extends Component {
 
   render() {
     return (
-      <div>
+      <Fragment>
         {this.props.collections.map((collection, i) => {
           return <Collection collection={collection}
             requirements={this.props.requirements}
@@ -34,7 +34,7 @@ export default class CollectionList extends Component {
             elementKey={i}
           />;
         })}
-      </div>
+      </Fragment>
     );
   }
 }

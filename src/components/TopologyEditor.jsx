@@ -8,6 +8,9 @@
 
 import React, { Component } from 'react';
 
+import { action, observable } from 'mobx';
+import { observer } from 'mobx-react';
+
 import Button from 'react-bootstrap/lib/Button';
 import Checkbox from 'react-bootstrap/lib/Checkbox';
 import ControlLabel from 'react-bootstrap/lib/ControlLabel';
@@ -33,7 +36,26 @@ import RequirementList from './RequirementList';
 import TaskList from './TaskList';
 import MainEditor from './MainEditor';
 
-class TopologyEditor extends Component {
+import store from '../Store';
+
+@observer class TopologyEditor extends Component {
+  @observable inputValid = false;
+  @observable showResetModal = false;
+  @observable propertiesVisible = true;
+  @observable tasksVisible = true;
+  @observable collectionsVisible = true;
+  @observable groupsVisible = true;
+  @observable requirementsVisible = true;
+
+  @action setInputValidity = (valid) => { this.inputValid = valid; }
+  @action openResetModal = () => { this.showResetModal = true; }
+  @action closeResetModal = () => { this.showResetModal = false; }
+  @action togglePropertiesVisibility = () => { this.propertiesVisible = !this.propertiesVisible; }
+  @action toggleTasksVisibility = () => { this.tasksVisible = !this.tasksVisible; }
+  @action toggleCollectionsVisibility = () => { this.collectionsVisible = !this.collectionsVisible; }
+  @action toggleGroupsVisibility = () => { this.groupsVisible = !this.groupsVisible; }
+  @action toggleRequirementsVisibility = () => { this.requirementsVisible = !this.requirementsVisible; }
+
   displayName = 'TopologyEditor';
 
   addPropertyBtn;
@@ -43,7 +65,6 @@ class TopologyEditor extends Component {
   addRequirementBtn;
 
   state = {
-    topologyId: 'new',
     variables: [],
     properties: [],
     requirements: [],
@@ -54,24 +75,12 @@ class TopologyEditor extends Component {
       tasks: [],
       collections: [],
       groups: []
-    },
-    invalidInput: false,
-    fluid: false,
-    showResetModal: false,
-    propertiesVisible: true,
-    tasksVisible: true,
-    collectionsVisible: true,
-    groupsVisible: true,
-    requirementsVisible: true
+    }
   };
 
-  constructor() {
-    super();
-  }
-
   resetState = () => {
+    store.reset();
     this.setState({
-      topologyId: 'new',
       variables: [],
       properties: [],
       requirements: [],
@@ -82,53 +91,12 @@ class TopologyEditor extends Component {
         tasks: [],
         collections: [],
         groups: []
-      },
-      invalidInput: false,
-      fluid: false,
-      showResetModal: false,
-      propertiesVisible: true,
-      tasksVisible: true,
-      collectionsVisible: true,
-      groupsVisible: true,
-      requirementsVisible: true
+      }
     });
   }
 
-  closeResetModal = () => {
-    this.setState({ showResetModal: false });
-  }
-
-  openResetModal = () => {
-    this.setState({ showResetModal: true });
-  }
-
-  toggleFluid = () => {
-    this.setState({ fluid: !this.state.fluid });
-  }
-
-  togglePropertiesVisibility = () => {
-    this.setState({ propertiesVisible: !this.state.propertiesVisible });
-  }
-
-  toggleTasksVisibility = () => {
-    this.setState({ tasksVisible: !this.state.tasksVisible });
-  }
-
-  toggleCollectionsVisibility = () => {
-    this.setState({ collectionsVisible: !this.state.collectionsVisible });
-  }
-
-  toggleGroupsVisibility = () => {
-    this.setState({ groupsVisible: !this.state.groupsVisible });
-  }
-
-  toggleRequirementsVisibility = () => {
-    this.setState({ requirementsVisible: !this.state.requirementsVisible });
-  }
-
-  handleTopologyChange = (topologyId, variables, properties, requirements, tasks, collections, main) => {
+  handleTopologyChange = (variables, properties, requirements, tasks, collections, main) => {
     this.setState({
-      topologyId: topologyId,
       variables: variables,
       properties: properties,
       requirements: requirements,
@@ -138,31 +106,14 @@ class TopologyEditor extends Component {
     });
   }
 
-  handleTopologyIdChange = (topologyId) => {
-    this.setState({
-      topologyId: topologyId
-    });
-  }
-
-  handleInputChange = (e) => {
-    e.preventDefault();
-    this.setState({
-      invalidInput: false
-    });
-  }
-
   handleAddProperty = (e) => {
     e.preventDefault();
     if (e.target[0].form[0].value === '') {
-      this.setState({
-        invalidInput: true
-      });
+      this.setInputValidity(false);
       return;
     }
     if (this.state.properties.some(property => property.id === e.target[0].form[0].value)) {
-      this.setState({
-        invalidInput: true
-      });
+      this.setInputValidity(false);
       return;
     }
     var nextProperties = this.state.properties.concat([{ id: e.target[0].form[0].value }]);
@@ -211,16 +162,12 @@ class TopologyEditor extends Component {
 
     // cancel if ID or value is empty
     if (e.target[0].form[0].value === '' || e.target[0].form[3].value === '') {
-      this.setState({
-        invalidInput: true
-      });
+      this.setInputValidity(false);
       return;
     }
     // cancel if ID already exists
     if (this.state.requirements.some(requirement => requirement.id === e.target[0].form[0].value)) {
-      this.setState({
-        invalidInput: true
-      });
+      this.setInputValidity(false);
       return;
     }
 
@@ -303,15 +250,11 @@ class TopologyEditor extends Component {
   handleAddTask = (e) => {
     e.preventDefault();
     if (e.target[0].form[0].value === '' || e.target[0].form[1].value === '') {
-      this.setState({
-        invalidInput: true
-      });
+      this.setInputValidity(false);
       return;
     }
     if (this.state.tasks.some(task => task.id === e.target[0].form[0].value )) {
-      this.setState({
-        invalidInput: true
-      });
+      this.setInputValidity(false);
       return;
     }
 
@@ -428,15 +371,11 @@ class TopologyEditor extends Component {
   handleAddCollection = (e) => {
     e.preventDefault();
     if (e.target[0].form[0].value === '') {
-      this.setState({
-        invalidInput: true
-      });
+      this.setInputValidity(false);
       return;
     }
     if (this.state.collections.some(collection => collection.id === e.target[0].form[0].value )) {
-      this.setState({
-        invalidInput: true
-      });
+      this.setInputValidity(false);
       return;
     }
 
@@ -519,15 +458,11 @@ class TopologyEditor extends Component {
   handleAddGroup = (e) => {
     e.preventDefault();
     if (e.target[0].form[0].value === '') {
-      this.setState({
-        invalidInput: true
-      });
+      this.setInputValidity(false);
       return;
     }
     if (this.state.main.groups.some(group => group.id === e.target[0].form[0].value)) {
-      this.setState({
-        invalidInput: true
-      });
+      this.setInputValidity(false);
       return;
     }
     var selectedTasks = [];
@@ -596,41 +531,31 @@ class TopologyEditor extends Component {
 
   hideAddPropertyButton = (e) => {
     e.preventDefault();
-    this.setState({
-      invalidInput: false
-    });
+    this.setInputValidity(true);
     this.addPropertyBtn.hide();
   }
 
   hideAddRequirementButton = (e) => {
     e.preventDefault();
-    this.setState({
-      invalidInput: false
-    });
+    this.setInputValidity(true);
     this.addRequirementBtn.hide();
   }
 
   hideAddTaskButton = (e) => {
     e.preventDefault();
-    this.setState({
-      invalidInput: false
-    });
+    this.setInputValidity(true);
     this.addTaskBtn.hide();
   }
 
   hideAddCollectionButton = (e) => {
     e.preventDefault();
-    this.setState({
-      invalidInput: false
-    });
+    this.setInputValidity(true);
     this.addCollectionBtn.hide();
   }
 
   hideAddGroupButton = (e) => {
     e.preventDefault();
-    this.setState({
-      invalidInput: false
-    });
+    this.setInputValidity(true);
     this.addGroupBtn.hide();
   }
 
@@ -686,18 +611,14 @@ class TopologyEditor extends Component {
 
     return (
       <div>
-        <TopBar topologyId={this.state.topologyId}
-          onTopologyIdChange={this.handleTopologyIdChange}
-          fluid={this.state.fluid}
-          onToggleFluid={this.toggleFluid} />
+        <TopBar />
 
-        <div className={this.state.fluid ? 'container-fluid' : 'container'}>
+        <div className={store.fluid ? 'container-fluid' : 'container'}>
           <div className="row">
             <div className="col-xs-3">
               <ul className="list-group left-pane">
                 <FileActions
                   onFileLoad={this.handleTopologyChange}
-                  topologyId={this.state.topologyId}
                   variables={this.state.variables}
                   properties={this.state.properties}
                   requirements={this.state.requirements}
@@ -708,12 +629,12 @@ class TopologyEditor extends Component {
 
                 <li className="list-group-item properties-header">
                   properties
-                  <OverlayTrigger trigger="click" placement="right" ref={(el) => this.addPropertyBtn = el} onClick={this.handleInputChange} overlay={
+                  <OverlayTrigger trigger="click" placement="right" ref={(el) => this.addPropertyBtn = el} onClick={() => this.setInputValidity(true)} overlay={
                     <Popover className="add-cg-popover property-popover" title="add new property" id="addnewproperty">
                       <form onSubmit={this.handleAddProperty}>
                         <InputGroup>
                           <InputGroup.Addon>id&nbsp;</InputGroup.Addon>
-                          <FormControl type="text" autoFocus onFocus={this.handleInputChange} className={this.state.invalidInput ? 'invalid-input' : ''} />
+                          <FormControl type="text" autoFocus onFocus={() => this.setInputValidity(true)} className={this.inputValid ? '' : 'invalid-input'} />
                         </InputGroup>
                         <div className="row">
                           <div className="col-xs-12">
@@ -727,12 +648,12 @@ class TopologyEditor extends Component {
                     <span className="glyphicon glyphicon-plus add-property-btn" title="add new property"></span>
                   </OverlayTrigger>
                   <span
-                    className={this.state.propertiesVisible ? 'glyphicon glyphicon-chevron-up toggle-property-btn' : 'glyphicon glyphicon-chevron-down toggle-property-btn'}
-                    title={this.state.propertiesVisible ? 'hide' : 'show'}
+                    className={this.propertiesVisible ? 'glyphicon glyphicon-chevron-up toggle-property-btn' : 'glyphicon glyphicon-chevron-down toggle-property-btn'}
+                    title={this.propertiesVisible ? 'hide' : 'show'}
                     onClick={this.togglePropertiesVisibility}>
                   </span>
                 </li>
-                <li className={this.state.propertiesVisible ? 'visible-container list-group-item properties' : 'invisible-container list-group-item properties'}>
+                <li className={this.propertiesVisible ? 'visible-container list-group-item properties' : 'invisible-container list-group-item properties'}>
                   <PropertyList properties={this.state.properties}
                     onRemoveProperty={this.handleRemoveProperty}
                     onEditProperty={this.handleEditProperty}
@@ -741,19 +662,19 @@ class TopologyEditor extends Component {
 
                 <li className="list-group-item tasks-header">
                   tasks
-                  <OverlayTrigger trigger="click" placement="right" ref={(el) => this.addTaskBtn = el} onClick={this.handleInputChange} overlay={
+                  <OverlayTrigger trigger="click" placement="right" ref={(el) => this.addTaskBtn = el} onClick={() => this.setInputValidity(true)} overlay={
                     <Popover className="add-cg-popover task-popover" title="add new task" id="addnewtask">
                       <form onSubmit={this.handleAddTask}>
                         <FormGroup>
                           <InputGroup>
                             <InputGroup.Addon>id&nbsp;</InputGroup.Addon>
-                            <FormControl type="text" onFocus={this.handleInputChange} className={this.state.invalidInput ? 'invalid-input' : ''} />
+                            <FormControl type="text" onFocus={() => this.setInputValidity(true)} className={this.inputValid ? '' : 'invalid-input'} />
                           </InputGroup>
                         </FormGroup>
                         <FormGroup>
                           <InputGroup>
                             <InputGroup.Addon>exe</InputGroup.Addon>
-                            <FormControl type="text" onFocus={this.handleInputChange} className={this.state.invalidInput ? 'mono invalid-input' : 'mono'} />
+                            <FormControl type="text" onFocus={() => this.setInputValidity(true)} className={this.inputValid ? 'mono' : 'mono invalid-input'} />
                           </InputGroup>
                         </FormGroup>
                         <Checkbox>exe reachable (optional)</Checkbox>
@@ -791,12 +712,12 @@ class TopologyEditor extends Component {
                     <span className="glyphicon glyphicon-plus add-task-btn" title="add new task"></span>
                   </OverlayTrigger>
                   <span
-                    className={this.state.tasksVisible ? 'glyphicon glyphicon-chevron-up toggle-property-btn' : 'glyphicon glyphicon-chevron-down toggle-property-btn'}
-                    title={this.state.tasksVisible ? 'hide' : 'show'}
+                    className={this.tasksVisible ? 'glyphicon glyphicon-chevron-up toggle-property-btn' : 'glyphicon glyphicon-chevron-down toggle-property-btn'}
+                    title={this.tasksVisible ? 'hide' : 'show'}
                     onClick={this.toggleTasksVisibility}>
                   </span>
                 </li>
-                <li className={this.state.tasksVisible ? 'visible-container list-group-item tasks' : 'invisible-container list-group-item tasks'}>
+                <li className={this.tasksVisible ? 'visible-container list-group-item tasks' : 'invisible-container list-group-item tasks'}>
                   <TaskList properties={this.state.properties}
                     tasks={this.state.tasks}
                     requirements={this.state.requirements}
@@ -807,12 +728,12 @@ class TopologyEditor extends Component {
 
                 <li className="list-group-item collections-header">
                   collections
-                  <OverlayTrigger trigger="click" placement="right" ref={(el) => this.addCollectionBtn = el} onClick={this.handleInputChange} overlay={
+                  <OverlayTrigger trigger="click" placement="right" ref={(el) => this.addCollectionBtn = el} onClick={() => this.setInputValidity(true)} overlay={
                     <Popover className="add-cg-popover collection-popover" title="add new collection" id="addnewcollection">
                       <form onSubmit={this.handleAddCollection}>
                         <InputGroup>
                           <InputGroup.Addon>id</InputGroup.Addon>
-                          <FormControl type="text" onFocus={this.handleInputChange} className={this.state.invalidInput ? 'invalid-input' : ''} />
+                          <FormControl type="text" onFocus={() => this.setInputValidity(true)} className={this.inputValid ? '' : 'invalid-input'} />
                         </InputGroup>
 
                         <p>Tasks in this collection:</p>
@@ -841,12 +762,12 @@ class TopologyEditor extends Component {
                     <span className="glyphicon glyphicon-plus add-collection-btn" title="add new collection"></span>
                   </OverlayTrigger>
                   <span
-                    className={this.state.collectionsVisible ? 'glyphicon glyphicon-chevron-up toggle-property-btn' : 'glyphicon glyphicon-chevron-down toggle-property-btn'}
-                    title={this.state.collectionsVisible ? 'hide' : 'show'}
+                    className={this.collectionsVisible ? 'glyphicon glyphicon-chevron-up toggle-property-btn' : 'glyphicon glyphicon-chevron-down toggle-property-btn'}
+                    title={this.collectionsVisible ? 'hide' : 'show'}
                     onClick={this.toggleCollectionsVisibility}>
                   </span>
                 </li>
-                <li className={this.state.collectionsVisible ? 'visible-container list-group-item collections' : 'invisible-container list-group-item collections'}>
+                <li className={this.collectionsVisible ? 'visible-container list-group-item collections' : 'invisible-container list-group-item collections'}>
                   <CollectionList
                     collections={this.state.collections}
                     tasks={this.state.tasks}
@@ -858,12 +779,12 @@ class TopologyEditor extends Component {
 
                 <li className="list-group-item groups-header">
                   groups
-                  <OverlayTrigger trigger="click" placement="right" ref={(el) => this.addGroupBtn = el} onClick={this.handleInputChange} overlay={
+                  <OverlayTrigger trigger="click" placement="right" ref={(el) => this.addGroupBtn = el} onClick={() => this.setInputValidity(true)} overlay={
                     <Popover className="add-cg-popover group-popover" title="add new group" id="addnewgroup">
                       <form onSubmit={this.handleAddGroup}>
                         <InputGroup>
                           <InputGroup.Addon>id</InputGroup.Addon>
-                          <FormControl type="text" onFocus={this.handleInputChange} className={this.state.invalidInput ? 'invalid-input' : ''} />
+                          <FormControl type="text" onFocus={() => this.setInputValidity(true)} className={this.inputValid ? '' : 'invalid-input'} />
                         </InputGroup>
                         <div className="row">
                           <div className="col-xs-6">
@@ -891,12 +812,12 @@ class TopologyEditor extends Component {
                     <span className="glyphicon glyphicon-plus add-group-btn" title="add new group"></span>
                   </OverlayTrigger>
                   <span
-                    className={this.state.groupsVisible ? 'glyphicon glyphicon-chevron-up toggle-property-btn' : 'glyphicon glyphicon-chevron-down toggle-property-btn'}
-                    title={this.state.groupsVisible ? 'hide' : 'show'}
+                    className={this.groupsVisible ? 'glyphicon glyphicon-chevron-up toggle-property-btn' : 'glyphicon glyphicon-chevron-down toggle-property-btn'}
+                    title={this.groupsVisible ? 'hide' : 'show'}
                     onClick={this.toggleGroupsVisibility}>
                   </span>
                 </li>
-                <li className={this.state.groupsVisible ? 'visible-container list-group-item groups' : 'invisible-container list-group-item groups'}>
+                <li className={this.groupsVisible ? 'visible-container list-group-item groups' : 'invisible-container list-group-item groups'}>
                   <GroupList
                     groups={this.state.main.groups}
                     tasks={this.state.tasks}
@@ -908,12 +829,12 @@ class TopologyEditor extends Component {
 
                 <li className="list-group-item requirements-header">
                   requirements
-                  <OverlayTrigger trigger="click" placement="right" ref={(el) => this.addRequirementBtn = el} onClick={this.handleInputChange} overlay={
+                  <OverlayTrigger trigger="click" placement="right" ref={(el) => this.addRequirementBtn = el} onClick={() => this.setInputValidity(true)} overlay={
                     <Popover className="add-cg-popover requirement-popover" title="add new requirement" id="addnewrequirement">
                       <form onSubmit={this.handleAddRequirement}>
                         <InputGroup>
                           <InputGroup.Addon>id</InputGroup.Addon>
-                          <FormControl type="text" onFocus={this.handleInputChange} className={this.state.invalidInput ? 'invalid-input' : ''} />
+                          <FormControl type="text" onFocus={() => this.setInputValidity(true)} className={this.inputValid ? '' : 'invalid-input'} />
                         </InputGroup>
                         <FormGroup>
                           <ControlLabel className="pattern-label">Pattern Type</ControlLabel>
@@ -922,7 +843,7 @@ class TopologyEditor extends Component {
                         </FormGroup>
                         <InputGroup>
                           <InputGroup.Addon>pattern</InputGroup.Addon>
-                          <FormControl type="text" onFocus={this.handleInputChange} className={this.state.invalidInput ? 'mono invalid-input' : 'mono'} />
+                          <FormControl type="text" onFocus={() => this.setInputValidity(true)} className={this.inputValid ? '' : 'mono invalid-input'} />
                         </InputGroup>
                         <div className="row">
                           <div className="col-xs-12">
@@ -936,12 +857,12 @@ class TopologyEditor extends Component {
                     <span className="glyphicon glyphicon-plus add-requirement-btn" title="add new requirement"></span>
                   </OverlayTrigger>
                   <span
-                    className={this.state.requirementsVisible ? 'glyphicon glyphicon-chevron-up toggle-property-btn' : 'glyphicon glyphicon-chevron-down toggle-property-btn'}
-                    title={this.state.requirementsVisible ? 'hide' : 'show'}
+                    className={this.requirementsVisible ? 'glyphicon glyphicon-chevron-up toggle-property-btn' : 'glyphicon glyphicon-chevron-down toggle-property-btn'}
+                    title={this.requirementsVisible ? 'hide' : 'show'}
                     onClick={this.toggleRequirementsVisibility}>
                   </span>
                 </li>
-                <li className={this.state.requirementsVisible ? 'visible-container list-group-item requirements' : 'invisible-container list-group-item requirements'}>
+                <li className={this.requirementsVisible ? 'visible-container list-group-item requirements' : 'invisible-container list-group-item requirements'}>
                   <RequirementList
                     requirements={this.state.requirements}
                     onRemoveRequirement={this.handleRemoveRequirement}
@@ -952,9 +873,9 @@ class TopologyEditor extends Component {
                 <li className="list-group-item">
                   <button type="button" className="btn btn-sm btn-default" onClick={this.openResetModal}>
                     <span className="glyphicon glyphicon-remove" title="reset the topology"></span> reset
-                                    </button>
+                  </button>
 
-                  <Modal show={this.state.showResetModal} onHide={this.closeResetModal}>
+                  <Modal show={this.showResetModal} onHide={this.closeResetModal}>
                     <Modal.Header closeButton>
                       <Modal.Title>Reset topology?</Modal.Title>
                     </Modal.Header>

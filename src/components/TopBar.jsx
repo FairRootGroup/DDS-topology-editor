@@ -7,19 +7,13 @@
  ********************************************************************************/
 
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 
 import { action, observable } from 'mobx';
 import { observer } from 'mobx-react';
 
-@observer export default class TopBar extends Component {
-  propTypes = {
-    topologyId: PropTypes.string.isRequired,
-    onTopologyIdChange: PropTypes.func.isRequired,
-    fluid: PropTypes.bool.isRequired,
-    onToggleFluid: PropTypes.func.isRequired
-  };
+import store from '../Store';
 
+@observer export default class TopBar extends Component {
   @observable editing = false;
 
   @action toggleEditing = () => { this.editing = !(this.editing); }
@@ -29,7 +23,7 @@ import { observer } from 'mobx-react';
   handleTopologyIdChange = (e) => {
     e.preventDefault();
     this.toggleEditing();
-    this.props.onTopologyIdChange(e.target[0].form[0].value);
+    store.setTopologyId(e.target[0].form[0].value);
   }
 
   render() {
@@ -50,17 +44,17 @@ import { observer } from 'mobx-react';
               <li className="active">
                 {this.editing ?
                   <form className="name-change" onSubmit={this.handleTopologyIdChange}>
-                    <input type="text" autoFocus defaultValue={this.props.topologyId}></input>
+                    <input type="text" autoFocus defaultValue={store.topologyId}></input>
                     <input type="submit" value="ok" ></input>
                   </form>
                   :
-                  <a href="#" onClick={this.toggleEditing}>{this.props.topologyId}</a>}
+                  <a href="#" onClick={this.toggleEditing}>{store.topologyId}</a>}
               </li>
             </ul>
             <ul className="nav navbar-nav navbar-right">
               <li>
-                <a href="#" onClick={this.props.onToggleFluid}>
-                  {this.props.fluid ?
+                <a href="#" onClick={store.toggleFluid}>
+                  {store.fluid ?
                     <span className="glyphicon glyphicon-resize-small"></span>
                     :
                     <span className="glyphicon glyphicon-resize-full"></span>

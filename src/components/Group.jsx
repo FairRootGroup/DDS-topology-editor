@@ -21,7 +21,7 @@ import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
 import Popover from 'react-bootstrap/lib/Popover';
 
 @observer export default class Group extends Component {
-  propTypes = {
+  static propTypes = {
     group: PropTypes.object.isRequired,
     groups: PropTypes.array.isRequired,
     tasks: PropTypes.array.isRequired,
@@ -32,11 +32,11 @@ import Popover from 'react-bootstrap/lib/Popover';
   };
 
   @observable bodyVisible = false;
-  @observable invalidInput = false;
+  @observable inputValid = true;
   @observable deleteModalVisible = false;
 
   @action toggleBodyVisibility = () => { this.bodyVisible = !(this.bodyVisible); }
-  @action setInputValidity = (valid) => { this.invalidInput = valid; }
+  @action setInputValidity = (valid) => { this.inputValid = valid; }
   @action openDeleteModal = () => { this.deleteModalVisible = true; }
   @action closeDeleteModal = () => { this.deleteModalVisible = false; }
 
@@ -46,21 +46,21 @@ import Popover from 'react-bootstrap/lib/Popover';
 
   hideEditGroupButton = (e) => {
     e.preventDefault();
-    this.setInputValidity(false);
+    this.setInputValidity(true);
     this.editGroupBtn.hide();
   }
 
   handleEditGroup = (e) => {
     e.preventDefault();
     if (e.target[0].form[0].value === '') {
-      this.setInputValidity(true);
+      this.setInputValidity(false);
       return;
     }
 
     var otherGroups = this.props.groups.filter(group => group.id !== this.props.group.id);
 
     if (otherGroups.some(group => group.id === e.target[0].form[0].value)) {
-      this.setInputValidity(true);
+      this.setInputValidity(false);
       return;
     }
     var selectedTasks = [];
@@ -159,12 +159,12 @@ import Popover from 'react-bootstrap/lib/Popover';
             </Modal.Footer>
           </Modal>
 
-          <OverlayTrigger trigger="click" placement="right" ref={(el) => this.editGroupBtn = el} onClick={() => this.setInputValidity(false)} overlay={
+          <OverlayTrigger trigger="click" placement="right" ref={(el) => this.editGroupBtn = el} onClick={() => this.setInputValidity(true)} overlay={
             <Popover className="add-cg-popover group-popover" title="edit group" id={this.props.group.id}>
               <form onSubmit={this.handleEditGroup}>
                 <InputGroup>
                   <InputGroup.Addon>id</InputGroup.Addon>
-                  <FormControl type="text" onFocus={() => this.setInputValidity(false)} className={this.invalidInput ? 'invalid-input' : ''} defaultValue={this.props.group.id} />
+                  <FormControl type="text" onFocus={() => this.setInputValidity(true)} className={this.inputValid ? '' : 'invalid-input'} defaultValue={this.props.group.id} />
                 </InputGroup>
                 <div className="row">
                   <div className="col-xs-6">

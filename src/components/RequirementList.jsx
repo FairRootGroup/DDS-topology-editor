@@ -6,13 +6,13 @@
  *                  copied verbatim in the file "LICENSE"                       *
  ********************************************************************************/
 
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 
 import Requirement from './Requirement';
 
 export default class RequirementList extends Component {
-  propTypes = {
+  static propTypes = {
     requirements: PropTypes.array.isRequired,
     onRemoveRequirement: PropTypes.func.isRequired,
     onEditRequirement: PropTypes.func.isRequired
@@ -20,7 +20,7 @@ export default class RequirementList extends Component {
 
   render() {
     return (
-      <div>
+      <Fragment>
         {this.props.requirements.map((requirement, i) => {
           return <Requirement requirement={requirement}
             requirements={this.props.requirements}
@@ -30,7 +30,7 @@ export default class RequirementList extends Component {
             elementKey={i}
           />;
         })}
-      </div>
+      </Fragment>
     );
   }
 }

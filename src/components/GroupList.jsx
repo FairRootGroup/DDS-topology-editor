@@ -6,13 +6,13 @@
  *                  copied verbatim in the file "LICENSE"                       *
  ********************************************************************************/
 
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 
 import Group from './Group';
 
 export default class GroupList extends Component {
-  propTypes = {
+  static propTypes = {
     groups: PropTypes.array.isRequired,
     tasks: PropTypes.array.isRequired,
     collections: PropTypes.array.isRequired,
@@ -22,7 +22,7 @@ export default class GroupList extends Component {
 
   render() {
     return (
-      <div>
+      <Fragment>
         {this.props.groups.map((group, index) => {
           return <Group group={group}
             groups={this.props.groups}
@@ -34,7 +34,7 @@ export default class GroupList extends Component {
             elementKey={index}
           />;
         })}
-      </div>
+      </Fragment>
     );
   }
 }

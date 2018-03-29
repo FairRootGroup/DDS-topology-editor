@@ -16,7 +16,7 @@ import Popover from 'react-bootstrap/lib/Popover';
 import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
 
 export default class MainEditor extends Component {
-  propTypes = {
+  static propTypes = {
     properties: PropTypes.array.isRequired,
     tasks: PropTypes.array.isRequired,
     collections: PropTypes.array.isRequired,

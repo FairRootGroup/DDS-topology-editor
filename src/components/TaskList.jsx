@@ -6,13 +6,13 @@
  *                  copied verbatim in the file "LICENSE"                       *
  ********************************************************************************/
 
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 
 import Task from './Task';
 
 export default class TaskList extends Component {
-  propTypes = {
+  static propTypes = {
     properties: PropTypes.array.isRequired,
     requirements: PropTypes.array.isRequired,
     tasks: PropTypes.array.isRequired,
@@ -22,7 +22,7 @@ export default class TaskList extends Component {
 
   render() {
     return (
-      <div>
+      <Fragment>
         {this.props.tasks.map((task, index) => {
           return <Task task={task}
             properties={this.props.properties}
@@ -34,7 +34,7 @@ export default class TaskList extends Component {
             elementKey={index}
           />;
         })}
-      </div>
+      </Fragment>
     );
   }
 }

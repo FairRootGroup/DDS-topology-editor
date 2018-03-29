@@ -23,10 +23,11 @@ import Radio from 'react-bootstrap/lib/Radio';
 
 import GitHub from 'github-api';
 
+import store from '../Store';
+
 @observer export default class FileActions extends Component {
-  propTypes = {
+  static propTypes = {
     onFileLoad: PropTypes.func.isRequired,
-    topologyId: PropTypes.string.isRequired,
     variables: PropTypes.array.isRequired,
     properties: PropTypes.array.isRequired,
     requirements: PropTypes.array.isRequired,
@@ -39,6 +40,7 @@ import GitHub from 'github-api';
   @observable error = '';
 
   @action updateRemoteFiles = (files) => { this.remoteFiles = files; }
+  @action addRemoteFile = (file) => { this.remoteFiles.push(file); }
   @action setError = (e) => { this.error = e; }
 
   remoteUser = 'AliceO2Group';
@@ -108,22 +110,20 @@ import GitHub from 'github-api';
         file.name = object.name;
         file.url = object.download_url;
 
-        const nextFiles = this.remoteFiles;
-        nextFiles.push(file);
-        this.updateRemoteFiles(nextFiles);
+        this.addRemoteFile(file);
       });
     });
   }
 
   processXML = (xmlString) => {
     const parser = new DOMParser();
-    let topologyId = '',
-      variables = [],
-      properties = [],
-      requirements = [],
-      tasks = [],
-      collections = [],
-      main = {};
+    let topologyId = '';
+    const variables = [];
+    const properties = [];
+    const requirements = [];
+    const tasks = [];
+    const collections = [];
+    const main = {};
 
     const xml = parser.parseFromString(xmlString, 'application/xml');
 
@@ -241,7 +241,9 @@ import GitHub from 'github-api';
       main.groups.push(group);
     });
 
-    this.props.onFileLoad(topologyId, variables, properties, requirements, tasks, collections, main);
+    store.setTopologyId(topologyId);
+
+    this.props.onFileLoad(variables, properties, requirements, tasks, collections, main);
   }
 
   handleFileLoad = (e) => {
@@ -259,7 +261,7 @@ import GitHub from 'github-api';
   handleFileSave = () => {
     const xmlDoc = document.implementation.createDocument('', '', null);
     const root = xmlDoc.createElement('topology');
-    root.setAttribute('id', this.props.topologyId);
+    root.setAttribute('id', store.topologyId);
 
     // variables
     this.props.variables.forEach(variable => {
@@ -412,7 +414,7 @@ import GitHub from 'github-api';
     xmlString = vkbeautify.xml(xmlString);
 
     const blob = new Blob([xmlString], { type: 'text/plain;charset=utf-8' });
-    saveAs(blob, this.props.topologyId + '.xml');
+    saveAs(blob, store.topologyId + '.xml');
   }
 
   render() {
