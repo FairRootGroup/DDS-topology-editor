@@ -22,28 +22,27 @@ import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
 import Popover from 'react-bootstrap/lib/Popover';
 import Radio from 'react-bootstrap/lib/Radio';
 
-@observer class Requirement extends Component {
+@observer export default class Requirement extends Component {
+  propTypes = {
+    requirement: PropTypes.object.isRequired,
+    requirements: PropTypes.array.isRequired,
+    onRemoveRequirement: PropTypes.func.isRequired,
+    onEditRequirement: PropTypes.func.isRequired,
+    elementKey: PropTypes.number.isRequired
+  };
+
   @observable bodyVisible = false;
   @observable invalidInput = false;
-  @observable showDeleteModal = false;
+  @observable deleteModalVisible = false;
 
   @action toggleBodyVisibility = () => { this.bodyVisible = !(this.bodyVisible); }
   @action setInputValidity = (valid) => { this.invalidInput = valid; }
-  @action openDeleteModal = () => { this.showDeleteModal = true; }
-  @action closeDeleteModal = () => { this.showDeleteModal = false; }
+  @action openDeleteModal = () => { this.deleteModalVisible = true; }
+  @action closeDeleteModal = () => { this.deleteModalVisible = false; }
 
-  constructor() {
-    super();
-
-    this.editRequirementBtn;
-  }
+  editRequirementBtn;
 
   shouldComponentUpdate = () => true
-
-  handleInputChange = (e) => {
-    e.preventDefault();
-    this.setInputValidity(false);
-  }
 
   hideEditRequirementButton = (e) => {
     e.preventDefault();
@@ -103,7 +102,7 @@ import Radio from 'react-bootstrap/lib/Radio';
           </span>
 
           <span className="glyphicon glyphicon-trash" title="delete" onClick={this.openDeleteModal}></span>
-          <Modal show={this.showDeleteModal} onHide={this.closeDeleteModal}>
+          <Modal show={this.deleteModalVisible} onHide={this.closeDeleteModal}>
             <Modal.Header closeButton>
               <Modal.Title>Delete <strong>{this.props.requirement.id}</strong>?</Modal.Title>
             </Modal.Header>
@@ -116,12 +115,12 @@ import Radio from 'react-bootstrap/lib/Radio';
             </Modal.Footer>
           </Modal>
 
-          <OverlayTrigger trigger="click" placement="right" ref={(el) => this.editRequirementBtn = el} onClick={this.handleInputChange} overlay={
+          <OverlayTrigger trigger="click" placement="right" ref={(el) => this.editRequirementBtn = el} onClick={() => this.setInputValidity(false)} overlay={
             <Popover className="add-cg-popover requirement-popover" title="edit requirement" id={this.props.requirement.id}>
               <form onSubmit={this.handleEditRequirement}>
                 <InputGroup>
                   <InputGroup.Addon>id</InputGroup.Addon>
-                  <FormControl type="text" onFocus={this.handleInputChange} defaultValue={this.props.requirement.id} className={this.invalidInput ? 'invalid-input' : ''} />
+                  <FormControl type="text" onFocus={() => this.setInputValidity(false)} defaultValue={this.props.requirement.id} className={this.invalidInput ? 'invalid-input' : ''} />
                 </InputGroup>
                 <FormGroup>
                   <ControlLabel className="pattern-label">Pattern Type</ControlLabel>
@@ -130,7 +129,7 @@ import Radio from 'react-bootstrap/lib/Radio';
                 </FormGroup>
                 <InputGroup>
                   <InputGroup.Addon>pattern</InputGroup.Addon>
-                  <FormControl type="text" onFocus={this.handleInputChange} defaultValue={this.props.requirement.value} className={this.invalidInput ? 'mono invalid-input' : 'mono'} />
+                  <FormControl type="text" onFocus={() => this.setInputValidity(false)} defaultValue={this.props.requirement.value} className={this.invalidInput ? 'mono invalid-input' : 'mono'} />
                 </InputGroup>
                 <div className="row">
                   <div className="col-xs-12">
@@ -157,13 +156,3 @@ import Radio from 'react-bootstrap/lib/Radio';
     );
   }
 }
-
-Requirement.propTypes = {
-  requirement: PropTypes.object.isRequired,
-  requirements: PropTypes.array.isRequired,
-  onRemoveRequirement: PropTypes.func.isRequired,
-  onEditRequirement: PropTypes.func.isRequired,
-  elementKey: PropTypes.number.isRequired
-};
-
-export default Requirement;

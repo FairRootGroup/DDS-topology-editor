@@ -9,6 +9,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+import { action, observable } from 'mobx';
+import { observer } from 'mobx-react';
+
 import Button from 'react-bootstrap/lib/Button';
 import Checkbox from 'react-bootstrap/lib/Checkbox';
 import FormControl from 'react-bootstrap/lib/FormControl';
@@ -18,74 +21,55 @@ import Modal from 'react-bootstrap/lib/Modal';
 import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
 import Popover from 'react-bootstrap/lib/Popover';
 
-class Task extends Component {
-  constructor() {
-    super();
+@observer export default class Task extends Component {
+  propTypes = {
+    task: PropTypes.object.isRequired,
+    properties: PropTypes.array.isRequired,
+    requirements: PropTypes.array.isRequired,
+    tasks: PropTypes.array.isRequired,
+    onRemoveTask: PropTypes.func.isRequired,
+    onEditTask: PropTypes.func.isRequired,
+    elementKey: PropTypes.number.isRequired
+  };
 
-    this.editTaskBtn;
+  @observable bodyVisible = false;
+  @observable invalidInput = false;
+  @observable deleteModalVisible = false;
 
-    this.state = {
-      bodyVisible: false,
-      invalidInput: false,
-      showDeleteModal: false
-    };
+  @action toggleBodyVisibility = () => { this.bodyVisible = !(this.bodyVisible); }
+  @action setInputValidity = (valid) => { this.invalidInput = valid; }
+  @action openDeleteModal = () => { this.deleteModalVisible = true; }
+  @action closeDeleteModal = () => { this.deleteModalVisible = false; }
 
-    this.closeDeleteModal = this.closeDeleteModal.bind(this);
-    this.openDeleteModal = this.openDeleteModal.bind(this);
-    this.handleInputChange = this.handleInputChange.bind(this);
-    this.hideEditTaskButton = this.hideEditTaskButton.bind(this);
-    this.toggleBodyVisibility = this.toggleBodyVisibility.bind(this);
-    this.handleEditTask = this.handleEditTask.bind(this);
-    this.handleRemoveTask = this.handleRemoveTask.bind(this);
-  }
+  editTaskBtn;
 
-  closeDeleteModal() {
-    this.setState({ showDeleteModal: false });
-  }
+  shouldComponentUpdate = () => true
 
-  openDeleteModal() {
-    this.setState({ showDeleteModal: true });
-  }
-
-  handleInputChange(e) {
+  hideEditTaskButton = (e) => {
     e.preventDefault();
-    this.setState({ invalidInput: false });
-  }
-
-  hideEditTaskButton(e) {
-    e.preventDefault();
-    this.setState({ invalidInput: false });
+    this.setInputValidity(false);
     this.editTaskBtn.hide();
   }
 
-  toggleBodyVisibility() {
-    this.setState({ bodyVisible: !this.state.bodyVisible });
-  }
-
-  handleEditTask(e) {
+  handleEditTask = (e) => {
     e.preventDefault();
-    var self = this;
     if (e.target[0].form[0].value === '' || e.target[0].form[1].value === '') {
-      this.setState({
-        invalidInput: true
-      });
+      this.setInputValidity(true);
       return;
     }
-    var otherTasks = this.props.tasks.filter(task => task.id !== self.props.task.id);
+    var otherTasks = this.props.tasks.filter(task => task.id !== this.props.task.id);
     if (otherTasks.some( task => task.id === e.target[0].form[0].value )) {
-      this.setState({
-        invalidInput: true
-      });
+      this.setInputValidity(true);
       return;
     }
 
     var selectedProperties = [];
-    this.props.properties.forEach(function(property, index) {
-      if (e.target[0].form[index + 5].value === 'read') {
+    this.props.properties.forEach((property, i) => {
+      if (e.target[0].form[i + 5].value === 'read') {
         selectedProperties.push({ id: property.id, access: 'read' });
-      } else if (e.target[0].form[index + 5].value === 'write') {
+      } else if (e.target[0].form[i + 5].value === 'write') {
         selectedProperties.push({ id: property.id, access: 'write' });
-      } else if (e.target[0].form[index + 5].value === 'readwrite') {
+      } else if (e.target[0].form[i + 5].value === 'readwrite') {
         selectedProperties.push({ id: property.id, access: 'readwrite' });
       }
     });
@@ -118,8 +102,8 @@ class Task extends Component {
     this.props.onEditTask(this.props.elementKey, updatedTask);
   }
 
-  handleRemoveTask() {
-    this.setState({ showDeleteModal: false });
+  handleRemoveTask = () => {
+    this.closeDeleteModal();
     this.props.onRemoveTask(this.props.elementKey);
   }
 
@@ -133,11 +117,10 @@ class Task extends Component {
     var exeReachableCheckbox = false;
     var envReachableCheckbox = false;
     var envPresent = false;
-    var self = this;
 
-    this.props.properties.forEach(function(property, i) {
+    this.props.properties.forEach((property, i) => {
       var access = '';
-      self.props.task.properties.forEach(function(currentProperty) {
+      this.props.task.properties.forEach(currentProperty => {
         if (property.id === currentProperty.id) {
           access = currentProperty.access;
         }
@@ -157,7 +140,7 @@ class Task extends Component {
       );
     });
 
-    this.props.requirements.forEach(function(requirement, i) {
+    this.props.requirements.forEach((requirement, i) => {
       requirementOptions.push(
         <option value={requirement.id} key={'option' + i}>{requirement.id}</option>
       );
@@ -186,8 +169,8 @@ class Task extends Component {
       }
     }
 
-    this.props.task.requirements.forEach(function(requirement, i) { // TODO: handle multiple
-      let el = self.props.requirements.find(r => r.id === requirement);
+    this.props.task.requirements.forEach((requirement, i) => { // TODO: handle multiple
+      let el = this.props.requirements.find(r => r.id === requirement);
       if (el !== undefined)
       {
         currentRequirement = requirement;
@@ -210,13 +193,13 @@ class Task extends Component {
           <span className="glyphicon glyphicon-tasks"></span>
           <span className="element-title" title={this.props.task.id}>{this.props.task.id}</span>
           <span
-            className={this.state.bodyVisible ? 'glyphicon glyphicon-chevron-up' : 'glyphicon glyphicon-chevron-down'}
-            title={this.state.bodyVisible ? 'hide' : 'show'}
+            className={this.bodyVisible ? 'glyphicon glyphicon-chevron-up' : 'glyphicon glyphicon-chevron-down'}
+            title={this.bodyVisible ? 'hide' : 'show'}
             onClick={this.toggleBodyVisibility}>
           </span>
 
           <span className="glyphicon glyphicon-trash" title="delete" onClick={this.openDeleteModal}></span>
-          <Modal show={this.state.showDeleteModal} onHide={this.closeDeleteModal}>
+          <Modal show={this.deleteModalVisible} onHide={this.closeDeleteModal}>
             <Modal.Header closeButton>
               <Modal.Title>Delete <strong>{this.props.task.id}</strong>?</Modal.Title>
             </Modal.Header>
@@ -229,26 +212,26 @@ class Task extends Component {
             </Modal.Footer>
           </Modal>
 
-          <OverlayTrigger trigger="click" placement="right" ref={(el) => this.editTaskBtn = el} onClick={this.handleInputChange} overlay={
+          <OverlayTrigger trigger="click" placement="right" ref={(el) => this.editTaskBtn = el} onClick={() => this.setInputValidity(false)} overlay={
             <Popover className="add-cg-popover task-popover" title="edit task" id={this.props.task.id}>
               <form onSubmit={this.handleEditTask}>
                 <FormGroup>
                   <InputGroup>
                     <InputGroup.Addon>id</InputGroup.Addon>
-                    <FormControl type="text" onFocus={this.handleInputChange} className={this.state.invalidInput ? 'invalid-input' : ''} defaultValue={this.props.task.id} />
+                    <FormControl type="text" onFocus={() => this.setInputValidity(false)} className={this.invalidInput ? 'invalid-input' : ''} defaultValue={this.props.task.id} />
                   </InputGroup>
                 </FormGroup>
                 <FormGroup>
                   <InputGroup>
                     <InputGroup.Addon>exe</InputGroup.Addon>
-                    <FormControl type="text" onFocus={this.handleInputChange} className={this.state.invalidInput ? 'mono invalid-input' : 'mono'} defaultValue={this.props.task.exe.valueText || ''} />
+                    <FormControl type="text" onFocus={() => this.setInputValidity(false)} className={this.invalidInput ? 'mono invalid-input' : 'mono'} defaultValue={this.props.task.exe.valueText || ''} />
                   </InputGroup>
                 </FormGroup>
                 <Checkbox defaultChecked={exeReachableCheckbox}>exe reachable (optional)</Checkbox>
                 <FormGroup>
                   <InputGroup>
                     <InputGroup.Addon>env</InputGroup.Addon>
-                    <FormControl type="text" onFocus={this.handleInputChange} className="mono" defaultValue={envPresent ? this.props.task.env.valueText || '' : ''} />
+                    <FormControl type="text" onFocus={() => this.setInputValidity(false)} className="mono" defaultValue={envPresent ? this.props.task.env.valueText || '' : ''} />
                   </InputGroup>
                 </FormGroup>
                 <Checkbox defaultChecked={envReachableCheckbox}>env reachable (optional)</Checkbox>
@@ -279,7 +262,7 @@ class Task extends Component {
             <span className="glyphicon glyphicon-edit" title="edit task"></span>
           </OverlayTrigger>
         </h5>
-        <ul className={this.state.bodyVisible ? 'visible-container' : 'invisible-container'}>
+        <ul className={this.bodyVisible ? 'visible-container' : 'invisible-container'}>
           <li>
             <span><strong>exe:</strong></span>
             <input className="code" readOnly value={this.props.task.exe.valueText} title={this.props.task.exe.valueText}></input>
@@ -287,7 +270,7 @@ class Task extends Component {
           </li>
           {envValue}
           <div>
-            {this.props.task.properties.map(function(property) {
+            {this.props.task.properties.map(property => {
               return (<span title={property.id} key={property.id}>
                 &nbsp;
                 <span className="prop-access" title={(property.access === 'write') ? 'write' : ''}>{(property.access === 'write') ? 'W ' : ''}</span>
@@ -303,15 +286,3 @@ class Task extends Component {
     );
   }
 }
-
-Task.propTypes = {
-  task: PropTypes.object.isRequired,
-  properties: PropTypes.array.isRequired,
-  requirements: PropTypes.array.isRequired,
-  tasks: PropTypes.array.isRequired,
-  onRemoveTask: PropTypes.func.isRequired,
-  onEditTask: PropTypes.func.isRequired,
-  elementKey: PropTypes.number.isRequired
-};
-
-export default Task;

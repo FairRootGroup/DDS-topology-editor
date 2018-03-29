@@ -21,27 +21,28 @@ import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
 import Popover from 'react-bootstrap/lib/Popover';
 
 @observer export default class Collection extends Component {
+  propTypes = {
+    collection: PropTypes.object.isRequired,
+    requirements: PropTypes.array.isRequired,
+    collections: PropTypes.array.isRequired,
+    tasks: PropTypes.array.isRequired,
+    onRemoveCollection: PropTypes.func.isRequired,
+    onEditCollection: PropTypes.func.isRequired,
+    elementKey: PropTypes.number.isRequired
+  };
+
   @observable bodyVisible = false;
   @observable invalidInput = false;
-  @observable showDeleteModal = false;
+  @observable deleteModalVisible = false;
 
   @action toggleBodyVisibility = () => { this.bodyVisible = !(this.bodyVisible); }
   @action setInputValidity = (valid) => { this.invalidInput = valid; }
-  @action openDeleteModal = () => { this.showDeleteModal = true; }
-  @action closeDeleteModal = () => { this.showDeleteModal = false; }
+  @action openDeleteModal = () => { this.deleteModalVisible = true; }
+  @action closeDeleteModal = () => { this.deleteModalVisible = false; }
 
-  constructor() {
-    super();
-
-    this.editCollectionBtn;
-  }
+  editCollectionBtn;
 
   shouldComponentUpdate = () => true
-
-  handleInputChange = (e) => {
-    e.preventDefault();
-    this.setInputValidity(false);
-  }
 
   hideEditCollectionButton = (e) => {
     e.preventDefault();
@@ -65,7 +66,7 @@ import Popover from 'react-bootstrap/lib/Popover';
     }
 
     var selectedTasks = [];
-    this.props.tasks.forEach(function(task, index) {
+    this.props.tasks.forEach((task, index) => {
       for (var i = 0; i < e.target[0].form[index + 1].value; i++) {
         selectedTasks.push(task.id);
       }
@@ -97,7 +98,7 @@ import Popover from 'react-bootstrap/lib/Popover';
 
     this.props.tasks.forEach((task, i) => {
       var count = 0;
-      this.props.collection.tasks.forEach(function(currentTask) {
+      this.props.collection.tasks.forEach(currentTask => {
         if (task.id === currentTask) {
           count++;
         }
@@ -112,7 +113,7 @@ import Popover from 'react-bootstrap/lib/Popover';
       );
     });
 
-    this.props.requirements.forEach(function(requirement, i) {
+    this.props.requirements.forEach((requirement, i) => {
       requirementOptions.push(
         <option value={requirement.id} key={'option' + i}>{requirement.id}</option>
       );
@@ -147,7 +148,7 @@ import Popover from 'react-bootstrap/lib/Popover';
           </span>
 
           <span className="glyphicon glyphicon-trash" title="remove" onClick={this.openDeleteModal}></span>
-          <Modal show={this.showDeleteModal} onHide={this.closeDeleteModal}>
+          <Modal show={this.deleteModalVisible} onHide={this.closeDeleteModal}>
             <Modal.Header closeButton>
               <Modal.Title>Delete <strong>{this.props.collection.id}</strong>?</Modal.Title>
             </Modal.Header>
@@ -160,12 +161,12 @@ import Popover from 'react-bootstrap/lib/Popover';
             </Modal.Footer>
           </Modal>
 
-          <OverlayTrigger trigger="click" placement="right" ref={(el) => this.editCollectionBtn = el} onClick={this.handleInputChange} overlay={
+          <OverlayTrigger trigger="click" placement="right" ref={(el) => this.editCollectionBtn = el} onClick={() => this.setInputValidity(false)} overlay={
             <Popover className="add-cg-popover collection-popover" title="edit collection" id={this.props.collection.id}>
               <form onSubmit={this.handleEditCollection}>
                 <InputGroup>
                   <InputGroup.Addon>id</InputGroup.Addon>
-                  <FormControl type="text" onFocus={this.handleInputChange} className={this.invalidInput ? 'invalid-input' : ''} defaultValue={this.props.collection.id} />
+                  <FormControl type="text" onFocus={() => this.setInputValidity(false)} className={this.invalidInput ? 'invalid-input' : ''} defaultValue={this.props.collection.id} />
                 </InputGroup>
 
                 <p>Tasks in this collection:</p>
@@ -204,13 +205,3 @@ import Popover from 'react-bootstrap/lib/Popover';
     );
   }
 }
-
-Collection.propTypes = {
-  collection: PropTypes.object.isRequired,
-  requirements: PropTypes.array.isRequired,
-  collections: PropTypes.array.isRequired,
-  tasks: PropTypes.array.isRequired,
-  onRemoveCollection: PropTypes.func.isRequired,
-  onEditCollection: PropTypes.func.isRequired,
-  elementKey: PropTypes.number.isRequired
-};

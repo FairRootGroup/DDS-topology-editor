@@ -11,18 +11,25 @@ import PropTypes from 'prop-types';
 
 import Task from './Task';
 
-class TaskList extends Component {
+export default class TaskList extends Component {
+  propTypes = {
+    properties: PropTypes.array.isRequired,
+    requirements: PropTypes.array.isRequired,
+    tasks: PropTypes.array.isRequired,
+    onRemoveTask: PropTypes.func.isRequired,
+    onEditTask: PropTypes.func.isRequired
+  };
+
   render() {
-    var self = this;
     return (
       <div>
-        {this.props.tasks.map(function (task, index) {
+        {this.props.tasks.map((task, index) => {
           return <Task task={task}
-            properties={self.props.properties}
-            requirements={self.props.requirements}
-            tasks={self.props.tasks}
-            onRemoveTask={self.props.onRemoveTask}
-            onEditTask={self.props.onEditTask}
+            properties={this.props.properties}
+            requirements={this.props.requirements}
+            tasks={this.props.tasks}
+            onRemoveTask={this.props.onRemoveTask}
+            onEditTask={this.props.onEditTask}
             key={index}
             elementKey={index}
           />;
@@ -31,13 +38,3 @@ class TaskList extends Component {
     );
   }
 }
-
-TaskList.propTypes = {
-  properties: PropTypes.array.isRequired,
-  requirements: PropTypes.array.isRequired,
-  tasks: PropTypes.array.isRequired,
-  onRemoveTask: PropTypes.func.isRequired,
-  onEditTask: PropTypes.func.isRequired
-};
-
-export default TaskList;

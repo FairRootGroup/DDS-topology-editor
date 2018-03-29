@@ -9,6 +9,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+import { action, observable } from 'mobx';
+import { observer } from 'mobx-react';
+
 import Button from 'react-bootstrap/lib/Button';
 import FormControl from 'react-bootstrap/lib/FormControl';
 import FormGroup from 'react-bootstrap/lib/FormGroup';
@@ -17,83 +20,59 @@ import Modal from 'react-bootstrap/lib/Modal';
 import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
 import Popover from 'react-bootstrap/lib/Popover';
 
-class Group extends Component {
-  constructor() {
-    super();
+@observer export default class Group extends Component {
+  propTypes = {
+    group: PropTypes.object.isRequired,
+    groups: PropTypes.array.isRequired,
+    tasks: PropTypes.array.isRequired,
+    collections: PropTypes.array.isRequired,
+    onRemoveGroup: PropTypes.func.isRequired,
+    onEditGroup: PropTypes.func.isRequired,
+    elementKey: PropTypes.number.isRequired
+  };
 
-    this.editGroupBtn;
+  @observable bodyVisible = false;
+  @observable invalidInput = false;
+  @observable deleteModalVisible = false;
 
-    this.state = {
-      bodyVisible: false,
-      invalidInput: false,
-      showDeleteModal: false
-    };
+  @action toggleBodyVisibility = () => { this.bodyVisible = !(this.bodyVisible); }
+  @action setInputValidity = (valid) => { this.invalidInput = valid; }
+  @action openDeleteModal = () => { this.deleteModalVisible = true; }
+  @action closeDeleteModal = () => { this.deleteModalVisible = false; }
 
-    this.closeDeleteModal = this.closeDeleteModal.bind(this);
-    this.openDeleteModal = this.openDeleteModal.bind(this);
-    this.handleInputChange = this.handleInputChange.bind(this);
-    this.hideEditGroupButton = this.hideEditGroupButton.bind(this);
-    this.toggleBodyVisibility = this.toggleBodyVisibility.bind(this);
-    this.handleEditGroup = this.handleEditGroup.bind(this);
-    this.handleRemoveGroup = this.handleRemoveGroup.bind(this);
+  editGroupBtn;
 
-  }
+  shouldComponentUpdate = () => true
 
-  closeDeleteModal() {
-    this.setState({ showDeleteModal: false });
-  }
-
-  openDeleteModal() {
-    this.setState({ showDeleteModal: true });
-  }
-
-  handleInputChange(e) {
+  hideEditGroupButton = (e) => {
     e.preventDefault();
-    this.setState({
-      invalidInput: false
-    });
-  }
-
-  hideEditGroupButton(e) {
-    e.preventDefault();
-    this.setState({
-      invalidInput: false
-    });
+    this.setInputValidity(false);
     this.editGroupBtn.hide();
   }
 
-  toggleBodyVisibility() {
-    this.setState({ bodyVisible: !this.state.bodyVisible });
-  }
-
-  handleEditGroup(e) {
+  handleEditGroup = (e) => {
     e.preventDefault();
-    var self = this;
     if (e.target[0].form[0].value === '') {
-      this.setState({
-        invalidInput: true
-      });
+      this.setInputValidity(true);
       return;
     }
 
-    var otherGroups = this.props.groups.filter(group => group.id !== self.props.group.id);
+    var otherGroups = this.props.groups.filter(group => group.id !== this.props.group.id);
 
     if (otherGroups.some(group => group.id === e.target[0].form[0].value)) {
-      this.setState({
-        invalidInput: true
-      });
+      this.setInputValidity(true);
       return;
     }
     var selectedTasks = [];
     var selectedCollections = [];
     var tasksIndex = 0;
-    this.props.tasks.forEach(function (task, index) {
+    this.props.tasks.forEach((task, index) => {
       tasksIndex++;
       for (var i = 0; i < e.target[0].form[index + 2].value; i++) {
         selectedTasks.push(task.id);
       }
     });
-    this.props.collections.forEach(function (collection, index) {
+    this.props.collections.forEach((collection, index) => {
       for (var i = 0; i < e.target[0].form[tasksIndex + index + 2].value; i++) {
         selectedCollections.push(collection.id);
       }
@@ -112,19 +91,18 @@ class Group extends Component {
     this.props.onEditGroup(nextGroups);
   }
 
-  handleRemoveGroup() {
-    this.setState({ showDeleteModal: false });
+  handleRemoveGroup = () => {
+    this.closeDeleteModal();
     this.props.onRemoveGroup(this.props.elementKey);
   }
 
   render() {
     var TaskCheckboxes = [];
     var CollectionCheckboxes = [];
-    var self = this;
 
-    this.props.tasks.forEach(function (task, i) {
+    this.props.tasks.forEach((task, i) => {
       var count = 0;
-      self.props.group.tasks.forEach(function (currentTask) {
+      this.props.group.tasks.forEach(currentTask => {
         if (task.id === currentTask) {
           count++;
         }
@@ -139,9 +117,9 @@ class Group extends Component {
       );
     });
 
-    this.props.collections.forEach(function (collection, i) {
+    this.props.collections.forEach((collection, i) => {
       var count = 0;
-      self.props.group.collections.forEach(function (currentCollection) {
+      this.props.group.collections.forEach(currentCollection => {
         if (collection.id === currentCollection) {
           count++;
         }
@@ -162,13 +140,13 @@ class Group extends Component {
           <span className="glyphicon glyphicon-tasks"></span>
           {this.props.group.id}
           <span
-            className={this.state.bodyVisible ? 'glyphicon glyphicon-chevron-up' : 'glyphicon glyphicon-chevron-down'}
-            title={this.state.bodyVisible ? 'hide' : 'show'}
+            className={this.bodyVisible ? 'glyphicon glyphicon-chevron-up' : 'glyphicon glyphicon-chevron-down'}
+            title={this.bodyVisible ? 'hide' : 'show'}
             onClick={this.toggleBodyVisibility}>
           </span>
 
           <span className="glyphicon glyphicon-trash" title="remove" onClick={this.openDeleteModal}></span>
-          <Modal show={this.state.showDeleteModal} onHide={this.closeDeleteModal}>
+          <Modal show={this.deleteModalVisible} onHide={this.closeDeleteModal}>
             <Modal.Header closeButton>
               <Modal.Title>Delete <strong>{this.props.group.id}</strong>?</Modal.Title>
             </Modal.Header>
@@ -181,19 +159,19 @@ class Group extends Component {
             </Modal.Footer>
           </Modal>
 
-          <OverlayTrigger trigger="click" placement="right" ref={(el) => this.editGroupBtn = el} onClick={this.handleInputChange} overlay={
+          <OverlayTrigger trigger="click" placement="right" ref={(el) => this.editGroupBtn = el} onClick={() => this.setInputValidity(false)} overlay={
             <Popover className="add-cg-popover group-popover" title="edit group" id={this.props.group.id}>
               <form onSubmit={this.handleEditGroup}>
                 <InputGroup>
                   <InputGroup.Addon>id</InputGroup.Addon>
-                  <FormControl type="text" onFocus={this.handleInputChange} className={this.state.invalidInput ? 'invalid-input' : ''} defaultValue={this.props.group.id} />
+                  <FormControl type="text" onFocus={() => this.setInputValidity(false)} className={this.invalidInput ? 'invalid-input' : ''} defaultValue={this.props.group.id} />
                 </InputGroup>
                 <div className="row">
                   <div className="col-xs-6">
                     <InputGroup>
                       <InputGroup.Addon>n</InputGroup.Addon>
                       <FormGroup>
-                        <FormControl className="add-cg-tc-counter" type="number" min="1" defaultValue={this.props.group.n} />
+                        <FormControl className="add-cg-tc-counter" type="text" defaultValue={this.props.group.n} />
                       </FormGroup>
                     </InputGroup>
                   </div>
@@ -214,16 +192,16 @@ class Group extends Component {
             <span className="glyphicon glyphicon-edit" title="edit"></span>
           </OverlayTrigger>
         </h5>
-        <div className={this.state.bodyVisible ? 'visible-container' : 'invisible-container'}>
+        <div className={this.bodyVisible ? 'visible-container' : 'invisible-container'}>
           <div><strong> n: </strong><span className="plain">{this.props.group.n}</span></div>
           <hr />
           <div className="group-tasks">
-            {this.props.group.tasks.map(function (task, i) {
+            {this.props.group.tasks.map((task, i) => {
               return <span key={i}>{task}</span>;
             })}
           </div>
           <div className="group-collections">
-            {this.props.group.collections.map(function (collection, i) {
+            {this.props.group.collections.map((collection, i) => {
               return <span key={i}>{collection}</span>;
             })}
           </div>
@@ -232,15 +210,3 @@ class Group extends Component {
     );
   }
 }
-
-Group.propTypes = {
-  group: PropTypes.object.isRequired,
-  groups: PropTypes.array.isRequired,
-  tasks: PropTypes.array.isRequired,
-  collections: PropTypes.array.isRequired,
-  onRemoveGroup: PropTypes.func.isRequired,
-  onEditGroup: PropTypes.func.isRequired,
-  elementKey: PropTypes.number.isRequired
-};
-
-export default Group;

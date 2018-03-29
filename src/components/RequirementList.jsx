@@ -11,29 +11,26 @@ import PropTypes from 'prop-types';
 
 import Requirement from './Requirement';
 
-class RequirementList extends Component {
+export default class RequirementList extends Component {
+  propTypes = {
+    requirements: PropTypes.array.isRequired,
+    onRemoveRequirement: PropTypes.func.isRequired,
+    onEditRequirement: PropTypes.func.isRequired
+  };
+
   render() {
-    var self = this;
     return (
       <div>
-        {this.props.requirements.map(function (requirement, index) {
+        {this.props.requirements.map((requirement, i) => {
           return <Requirement requirement={requirement}
-            requirements={self.props.requirements}
-            onRemoveRequirement={self.props.onRemoveRequirement}
-            onEditRequirement={self.props.onEditRequirement}
-            key={index}
-            elementKey={index}
+            requirements={this.props.requirements}
+            onRemoveRequirement={this.props.onRemoveRequirement}
+            onEditRequirement={this.props.onEditRequirement}
+            key={i}
+            elementKey={i}
           />;
         })}
       </div>
     );
   }
 }
-
-RequirementList.propTypes = {
-  requirements: PropTypes.array.isRequired,
-  onRemoveRequirement: PropTypes.func.isRequired,
-  onEditRequirement: PropTypes.func.isRequired
-};
-
-export default RequirementList;

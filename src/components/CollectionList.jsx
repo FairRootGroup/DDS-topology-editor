@@ -11,33 +11,30 @@ import PropTypes from 'prop-types';
 
 import Collection from './Collection';
 
-class CollectionList extends Component {
+export default class CollectionList extends Component {
+  propTypes = {
+    collections: PropTypes.array.isRequired,
+    requirements: PropTypes.array.isRequired,
+    tasks: PropTypes.array.isRequired,
+    onRemoveCollection: PropTypes.func.isRequired,
+    onEditCollection: PropTypes.func.isRequired
+  };
+
   render() {
-    var self = this;
     return (
       <div>
-        {this.props.collections.map(function (collection, index) {
+        {this.props.collections.map((collection, i) => {
           return <Collection collection={collection}
-            requirements={self.props.requirements}
-            collections={self.props.collections}
-            tasks={self.props.tasks}
-            onRemoveCollection={self.props.onRemoveCollection}
-            onEditCollection={self.props.onEditCollection}
-            key={index}
-            elementKey={index}
+            requirements={this.props.requirements}
+            collections={this.props.collections}
+            tasks={this.props.tasks}
+            onRemoveCollection={this.props.onRemoveCollection}
+            onEditCollection={this.props.onEditCollection}
+            key={i}
+            elementKey={i}
           />;
         })}
       </div>
     );
   }
 }
-
-CollectionList.propTypes = {
-  collections: PropTypes.array.isRequired,
-  requirements: PropTypes.array.isRequired,
-  tasks: PropTypes.array.isRequired,
-  onRemoveCollection: PropTypes.func.isRequired,
-  onEditCollection: PropTypes.func.isRequired
-};
-
-export default CollectionList;

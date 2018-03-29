@@ -9,28 +9,24 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-class TopBar extends Component {
-  constructor() {
-    super();
+import { action, observable } from 'mobx';
+import { observer } from 'mobx-react';
 
-    this.state = {
-      beeingEdited: false
-    };
+@observer export default class TopBar extends Component {
+  propTypes = {
+    topologyId: PropTypes.string.isRequired,
+    onTopologyIdChange: PropTypes.func.isRequired,
+    fluid: PropTypes.bool.isRequired,
+    onToggleFluid: PropTypes.func.isRequired
+  };
 
-    this.toggleEditing = this.toggleEditing.bind(this);
-    this.handleToggleFluid = this.handleToggleFluid.bind(this);
-    this.handleTopologyIdChange = this.handleTopologyIdChange.bind(this);
-  }
+  @observable editing = false;
 
-  toggleEditing() {
-    this.setState({ beeingEdited: !this.state.beeingEdited });
-  }
+  @action toggleEditing = () => { this.editing = !(this.editing); }
 
-  handleToggleFluid() {
-    this.props.onToggleFluid();
-  }
+  shouldComponentUpdate = () => true
 
-  handleTopologyIdChange(e) {
+  handleTopologyIdChange = (e) => {
     e.preventDefault();
     this.toggleEditing();
     this.props.onTopologyIdChange(e.target[0].form[0].value);
@@ -52,7 +48,7 @@ class TopBar extends Component {
           <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul className="nav navbar-nav">
               <li className="active">
-                {this.state.beeingEdited ?
+                {this.editing ?
                   <form className="name-change" onSubmit={this.handleTopologyIdChange}>
                     <input type="text" autoFocus defaultValue={this.props.topologyId}></input>
                     <input type="submit" value="ok" ></input>
@@ -63,7 +59,7 @@ class TopBar extends Component {
             </ul>
             <ul className="nav navbar-nav navbar-right">
               <li>
-                <a href="#" onClick={this.handleToggleFluid}>
+                <a href="#" onClick={this.props.onToggleFluid}>
                   {this.props.fluid ?
                     <span className="glyphicon glyphicon-resize-small"></span>
                     :
@@ -78,12 +74,3 @@ class TopBar extends Component {
     );
   }
 }
-
-TopBar.propTypes = {
-  topologyId: PropTypes.string.isRequired,
-  onTopologyIdChange: PropTypes.func.isRequired,
-  fluid: PropTypes.bool.isRequired,
-  onToggleFluid: PropTypes.func.isRequired
-};
-
-export default TopBar;

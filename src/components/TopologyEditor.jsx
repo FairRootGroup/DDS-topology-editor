@@ -36,74 +36,40 @@ import MainEditor from './MainEditor';
 class TopologyEditor extends Component {
   displayName = 'TopologyEditor';
 
-  constructor() {
-    super();
+  addPropertyBtn;
+  addTaskBtn;
+  addCollectionBtn;
+  addGroupBtn;
+  addRequirementBtn;
 
-    this.addPropertyBtn;
-    this.addTaskBtn;
-    this.addCollectionBtn;
-    this.addGroupBtn;
-    this.addRequirementBtn;
-
-    this.state = {
-      topologyId: 'new',
-      variables: [],
-      properties: [],
-      requirements: [],
+  state = {
+    topologyId: 'new',
+    variables: [],
+    properties: [],
+    requirements: [],
+    tasks: [],
+    collections: [],
+    main: {
+      id: 'main',
       tasks: [],
       collections: [],
-      main: {
-        id: 'main',
-        tasks: [],
-        collections: [],
-        groups: []
-      },
-      invalidInput: false,
-      fluid: false,
-      showResetModal: false,
-      propertiesVisible: true,
-      tasksVisible: true,
-      collectionsVisible: true,
-      groupsVisible: true,
-      requirementsVisible: true
-    };
+      groups: []
+    },
+    invalidInput: false,
+    fluid: false,
+    showResetModal: false,
+    propertiesVisible: true,
+    tasksVisible: true,
+    collectionsVisible: true,
+    groupsVisible: true,
+    requirementsVisible: true
+  };
 
-    this.resetState = this.resetState.bind(this);
-    this.closeResetModal = this.closeResetModal.bind(this);
-    this.openResetModal = this.openResetModal.bind(this);
-    this.toggleFluid = this.toggleFluid.bind(this);
-    this.togglePropertiesVisibility = this.togglePropertiesVisibility.bind(this);
-    this.toggleTasksVisibility = this.toggleTasksVisibility.bind(this);
-    this.toggleCollectionsVisibility = this.toggleCollectionsVisibility.bind(this);
-    this.toggleGroupsVisibility = this.toggleGroupsVisibility.bind(this);
-    this.toggleRequirementsVisibility = this.toggleRequirementsVisibility.bind(this);
-    this.handleTopologyChange = this.handleTopologyChange.bind(this);
-    this.handleTopologyIdChange = this.handleTopologyIdChange.bind(this);
-    this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleAddProperty = this.handleAddProperty.bind(this);
-    this.handleRemoveProperty = this.handleRemoveProperty.bind(this);
-    this.handleEditProperty = this.handleEditProperty.bind(this);
-    this.handleAddRequirement = this.handleAddRequirement.bind(this);
-    this.handleRemoveRequirement = this.handleRemoveRequirement.bind(this);
-    this.handleEditRequirement = this.handleEditRequirement.bind(this);
-    this.handleAddTask = this.handleAddTask.bind(this);
-    this.handleEditTask = this.handleEditTask.bind(this);
-    this.handleRemoveTask = this.handleRemoveTask.bind(this);
-    this.handleAddCollection = this.handleAddCollection.bind(this);
-    this.handleEditCollection = this.handleEditCollection.bind(this);
-    this.handleRemoveCollection = this.handleRemoveCollection.bind(this);
-    this.handleAddGroup = this.handleAddGroup.bind(this);
-    this.handleEditGroup = this.handleEditGroup.bind(this);
-    this.handleRemoveGroup = this.handleRemoveGroup.bind(this);
-    this.handleEditMain = this.handleEditMain.bind(this);
-    this.hideAddPropertyButton = this.hideAddPropertyButton.bind(this);
-    this.hideAddRequirementButton = this.hideAddRequirementButton.bind(this);
-    this.hideAddTaskButton = this.hideAddTaskButton.bind(this);
-    this.hideAddCollectionButton = this.hideAddCollectionButton.bind(this);
-    this.hideAddGroupButton = this.hideAddGroupButton.bind(this);
+  constructor() {
+    super();
   }
 
-  resetState() {
+  resetState = () => {
     this.setState({
       topologyId: 'new',
       variables: [],
@@ -128,39 +94,39 @@ class TopologyEditor extends Component {
     });
   }
 
-  closeResetModal() {
+  closeResetModal = () => {
     this.setState({ showResetModal: false });
   }
 
-  openResetModal() {
+  openResetModal = () => {
     this.setState({ showResetModal: true });
   }
 
-  toggleFluid() {
+  toggleFluid = () => {
     this.setState({ fluid: !this.state.fluid });
   }
 
-  togglePropertiesVisibility() {
+  togglePropertiesVisibility = () => {
     this.setState({ propertiesVisible: !this.state.propertiesVisible });
   }
 
-  toggleTasksVisibility() {
+  toggleTasksVisibility = () => {
     this.setState({ tasksVisible: !this.state.tasksVisible });
   }
 
-  toggleCollectionsVisibility() {
+  toggleCollectionsVisibility = () => {
     this.setState({ collectionsVisible: !this.state.collectionsVisible });
   }
 
-  toggleGroupsVisibility() {
+  toggleGroupsVisibility = () => {
     this.setState({ groupsVisible: !this.state.groupsVisible });
   }
 
-  toggleRequirementsVisibility() {
+  toggleRequirementsVisibility = () => {
     this.setState({ requirementsVisible: !this.state.requirementsVisible });
   }
 
-  handleTopologyChange(topologyId, variables, properties, requirements, tasks, collections, main) {
+  handleTopologyChange = (topologyId, variables, properties, requirements, tasks, collections, main) => {
     this.setState({
       topologyId: topologyId,
       variables: variables,
@@ -172,20 +138,20 @@ class TopologyEditor extends Component {
     });
   }
 
-  handleTopologyIdChange(topologyId) {
+  handleTopologyIdChange = (topologyId) => {
     this.setState({
       topologyId: topologyId
     });
   }
 
-  handleInputChange(e) {
+  handleInputChange = (e) => {
     e.preventDefault();
     this.setState({
       invalidInput: false
     });
   }
 
-  handleAddProperty(e) {
+  handleAddProperty = (e) => {
     e.preventDefault();
     if (e.target[0].form[0].value === '') {
       this.setState({
@@ -206,11 +172,11 @@ class TopologyEditor extends Component {
     });
   }
 
-  handleRemoveProperty(key) {
+  handleRemoveProperty = (key) => {
     var nextProperties = this.state.properties;
     var removedProperty = nextProperties.splice(key, 1);
     var nextTasks = this.state.tasks;
-    nextTasks.forEach(function(task) {
+    nextTasks.forEach(task => {
       task.properties = task.properties.filter(property => property.id !== removedProperty[0].id);
     });
     this.setState({
@@ -219,7 +185,7 @@ class TopologyEditor extends Component {
     });
   }
 
-  handleEditProperty(key, updatedProperty) {
+  handleEditProperty = (key, updatedProperty) => {
     if (this.state.properties.some(property => property.id === updatedProperty.id)) {
       return;
     }
@@ -227,8 +193,8 @@ class TopologyEditor extends Component {
     var oldId = this.state.properties[key].id;
     nextProperties[key] = updatedProperty;
     var nextTasks = this.state.tasks;
-    nextTasks.forEach(function(task) {
-      task.properties.forEach(function(property) {
+    nextTasks.forEach(task => {
+      task.properties.forEach(property => {
         if (property.id === oldId) {
           property.id = updatedProperty.id;
         }
@@ -240,7 +206,7 @@ class TopologyEditor extends Component {
     });
   }
 
-  handleAddRequirement(e) {
+  handleAddRequirement = (e) => {
     e.preventDefault();
 
     // cancel if ID or value is empty
@@ -278,21 +244,21 @@ class TopologyEditor extends Component {
     });
   }
 
-  handleRemoveRequirement(index) {
+  handleRemoveRequirement = (index) => {
     var nextRequirements = this.state.requirements;
     var removedRequirement = nextRequirements.splice(index, 1);
 
     var nextTasks = this.state.tasks;
     var nextCollections = this.state.collections;
 
-    nextTasks.forEach(function(task) {
+    nextTasks.forEach(task => {
       const i = task.requirements.indexOf(removedRequirement[0].id);
       if (i > -1) {
         task.requirements.splice(i);
       }
     });
 
-    nextCollections.forEach(function(collection) {
+    nextCollections.forEach(collection => {
       const i = collection.requirements.indexOf(removedRequirement[0].id);
       if (i > -1) {
         collection.requirements.splice(i);
@@ -306,13 +272,13 @@ class TopologyEditor extends Component {
     });
   }
 
-  handleEditRequirement(index, updatedRequirement) {
+  handleEditRequirement = (index, updatedRequirement) => {
     let nextRequirements = this.state.requirements;
     let oldId = nextRequirements[index].id;
     nextRequirements[index] = updatedRequirement;
 
     let nextTasks = this.state.tasks;
-    nextTasks.forEach(function(task) {
+    nextTasks.forEach(task => {
       const i = task.requirements.indexOf(oldId);
       if (i > -1) {
         task.requirements[i] = oldId;
@@ -320,7 +286,7 @@ class TopologyEditor extends Component {
     });
 
     let nextCollections = this.state.collections;
-    nextCollections.forEach(function(collection) {
+    nextCollections.forEach(collection => {
       const i = collection.requirements.indexOf(oldId);
       if (i > -1) {
         collection.requirements[i] = oldId;
@@ -334,7 +300,7 @@ class TopologyEditor extends Component {
     });
   }
 
-  handleAddTask(e) {
+  handleAddTask = (e) => {
     e.preventDefault();
     if (e.target[0].form[0].value === '' || e.target[0].form[1].value === '') {
       this.setState({
@@ -350,7 +316,7 @@ class TopologyEditor extends Component {
     }
 
     var selectedProperties = [];
-    this.state.properties.forEach(function(property, index) {
+    this.state.properties.forEach((property, index) => {
       if (e.target[0].form[index + 5].value === 'read') {
         selectedProperties.push({ id: property.id, access: 'read' });
       } else if (e.target[0].form[index + 5].value === 'write') {
@@ -391,15 +357,15 @@ class TopologyEditor extends Component {
     });
   }
 
-  handleEditTask(key, updatedTask) {
+  handleEditTask = (key, updatedTask) => {
     var nextTasks = this.state.tasks;
     var oldId = nextTasks[key].id;
     nextTasks[key] = updatedTask;
 
     // update collections with new task info
     var nextCollections = this.state.collections;
-    nextCollections.forEach(function(collection, colIndex) {
-      collection.tasks.forEach(function(task, index) {
+    nextCollections.forEach((collection, colIndex) => {
+      collection.tasks.forEach((task, index) => {
         if (task === oldId) {
           nextCollections[colIndex].tasks[index] = updatedTask.id;
         }
@@ -408,8 +374,8 @@ class TopologyEditor extends Component {
 
     // update groups with new task info
     var nextGroups = this.state.main.groups;
-    nextGroups.forEach(function(group, groupIndex) {
-      group.tasks.forEach(function(task, index) {
+    nextGroups.forEach((group, groupIndex) => {
+      group.tasks.forEach((task, index) => {
         if (task === oldId) {
           nextGroups[groupIndex].tasks[index] = updatedTask.id;
         }
@@ -419,7 +385,7 @@ class TopologyEditor extends Component {
     // update main with new task info
     var nextMain = this.state.main;
     nextMain.groups = nextGroups;
-    nextMain.tasks.forEach(function(task, index) {
+    nextMain.tasks.forEach((task, index) => {
       if (task === oldId) {
         nextMain.tasks[index] = updatedTask.id;
       }
@@ -433,17 +399,17 @@ class TopologyEditor extends Component {
     });
   }
 
-  handleRemoveTask(key) {
+  handleRemoveTask = (key) => {
     var nextTasks = this.state.tasks;
     var removedTask = nextTasks.splice(key, 1);
     var nextCollections = this.state.collections;
-    nextCollections.forEach(function(collection) {
+    nextCollections.forEach(collection => {
       collection.tasks = collection.tasks.filter(task => task !== removedTask[0].id);
     });
     var nextMainTasks = this.state.main.tasks;
     nextMainTasks = nextMainTasks.filter(task => task !== removedTask[0].id);
     var nextGroups = this.state.main.groups;
-    nextGroups.forEach(function(group) {
+    nextGroups.forEach(group => {
       group.tasks = group.tasks.filter(task => task !== removedTask[0].id);
     });
     var nextMain = {
@@ -459,7 +425,7 @@ class TopologyEditor extends Component {
     });
   }
 
-  handleAddCollection(e) {
+  handleAddCollection = (e) => {
     e.preventDefault();
     if (e.target[0].form[0].value === '') {
       this.setState({
@@ -475,7 +441,7 @@ class TopologyEditor extends Component {
     }
 
     var selectedTasks = [];
-    this.state.tasks.forEach(function(task, index) {
+    this.state.tasks.forEach((task, index) => {
       for (var i = 0; i < e.target[0].form[index + 1].value; i++) {
         selectedTasks.push(task.id);
       }
@@ -498,15 +464,15 @@ class TopologyEditor extends Component {
     });
   }
 
-  handleEditCollection(key, updatedCollection) {
+  handleEditCollection = (key, updatedCollection) => {
     var nextCollections = this.state.collections;
     var oldId = nextCollections[key].id;
     nextCollections[key] = updatedCollection;
 
     // update groups with new collection info
     var nextGroups = this.state.main.groups;
-    nextGroups.forEach(function(group, groupIndex) {
-      group.collections.forEach(function(collection, index) {
+    nextGroups.forEach((group, groupIndex) => {
+      group.collections.forEach((collection, index) => {
         if (collection === oldId) {
           nextGroups[groupIndex].collections[index] = updatedCollection.id;
         }
@@ -516,7 +482,7 @@ class TopologyEditor extends Component {
     // update main with new collection info
     var nextMain = this.state.main;
     nextMain.groups = nextGroups;
-    nextMain.collections.forEach(function(collection, index) {
+    nextMain.collections.forEach((collection, index) => {
       if (collection === oldId) {
         nextMain.collections[index] = updatedCollection.id;
       }
@@ -529,13 +495,13 @@ class TopologyEditor extends Component {
     });
   }
 
-  handleRemoveCollection(key) {
+  handleRemoveCollection = (key) => {
     var nextCollections = this.state.collections;
     var removedCollection = nextCollections.splice(key, 1);
     var nextMainCollections = this.state.main.collections;
     nextMainCollections = nextMainCollections.filter(collection => collection !== removedCollection[0].id);
     var nextGroups = this.state.main.groups;
-    nextGroups.forEach(function(group) {
+    nextGroups.forEach(group => {
       group.collections = group.collections.filter(collection => collection !== removedCollection[0].id);
     });
     var nextMain = {
@@ -550,7 +516,7 @@ class TopologyEditor extends Component {
     });
   }
 
-  handleAddGroup(e) {
+  handleAddGroup = (e) => {
     e.preventDefault();
     if (e.target[0].form[0].value === '') {
       this.setState({
@@ -567,13 +533,13 @@ class TopologyEditor extends Component {
     var selectedTasks = [];
     var selectedCollections = [];
     var tasksIndex = 0;
-    this.state.tasks.forEach(function(task, index) {
+    this.state.tasks.forEach((task, index) => {
       tasksIndex++;
       for (var i = 0; i < e.target[0].form[index + 2].value; i++) {
         selectedTasks.push(task.id);
       }
     });
-    this.state.collections.forEach(function(collection, index) {
+    this.state.collections.forEach((collection, index) => {
       for (var i = 0; i < e.target[0].form[tasksIndex + index + 2].value; i++) {
         selectedCollections.push(collection.id);
       }
@@ -596,7 +562,7 @@ class TopologyEditor extends Component {
     this.addGroupBtn.hide();
   }
 
-  handleEditGroup(groups) {
+  handleEditGroup = (groups) => {
     var nextMain = {
       id: this.state.main.id,
       tasks: this.state.main.tasks,
@@ -608,7 +574,7 @@ class TopologyEditor extends Component {
     });
   }
 
-  handleRemoveGroup(key) {
+  handleRemoveGroup = (key) => {
     var nextGroups = this.state.main.groups;
     nextGroups.splice(key, 1);
     var nextMain = {
@@ -622,13 +588,13 @@ class TopologyEditor extends Component {
     });
   }
 
-  handleEditMain(main) {
+  handleEditMain = (main) => {
     this.setState({
       main: main
     });
   }
 
-  hideAddPropertyButton(e) {
+  hideAddPropertyButton = (e) => {
     e.preventDefault();
     this.setState({
       invalidInput: false
@@ -636,7 +602,7 @@ class TopologyEditor extends Component {
     this.addPropertyBtn.hide();
   }
 
-  hideAddRequirementButton(e) {
+  hideAddRequirementButton = (e) => {
     e.preventDefault();
     this.setState({
       invalidInput: false
@@ -644,7 +610,7 @@ class TopologyEditor extends Component {
     this.addRequirementBtn.hide();
   }
 
-  hideAddTaskButton(e) {
+  hideAddTaskButton = (e) => {
     e.preventDefault();
     this.setState({
       invalidInput: false
@@ -652,7 +618,7 @@ class TopologyEditor extends Component {
     this.addTaskBtn.hide();
   }
 
-  hideAddCollectionButton(e) {
+  hideAddCollectionButton = (e) => {
     e.preventDefault();
     this.setState({
       invalidInput: false
@@ -660,7 +626,7 @@ class TopologyEditor extends Component {
     this.addCollectionBtn.hide();
   }
 
-  hideAddGroupButton(e) {
+  hideAddGroupButton = (e) => {
     e.preventDefault();
     this.setState({
       invalidInput: false
@@ -674,7 +640,7 @@ class TopologyEditor extends Component {
     let CollectionCheckboxes = [];
     let requirementOptions = [];
 
-    this.state.properties.forEach(function(property, i) {
+    this.state.properties.forEach((property, i) => {
       PropertyCheckboxes.push(
         <div className="ct-box ct-box-property" key={'t-box' + i}>
           <div className="element-name" title={property.id}>{property.id}</div>
@@ -690,7 +656,7 @@ class TopologyEditor extends Component {
       );
     });
 
-    this.state.tasks.forEach(function(task, i) {
+    this.state.tasks.forEach((task, i) => {
       TaskCheckboxes.push(
         <div className="ct-box ct-box-task" key={'t-box' + i}>
           <div className="element-name" title={task.id}>{task.id}</div>
@@ -701,7 +667,7 @@ class TopologyEditor extends Component {
       );
     });
 
-    this.state.collections.forEach(function(collection, i) {
+    this.state.collections.forEach((collection, i) => {
       CollectionCheckboxes.push(
         <div className="ct-box ct-box-collection" key={'c-box' + i}>
           <div className="element-name" title={collection.id}>{collection.id}</div>
@@ -712,7 +678,7 @@ class TopologyEditor extends Component {
       );
     });
 
-    this.state.requirements.forEach(function(requirement, i) { // TODO: handle multiple
+    this.state.requirements.forEach((requirement, i) => { // TODO: handle multiple
       requirementOptions.push(
         <option value={requirement.id} key={'option' + i}>{requirement.id}</option>
       );

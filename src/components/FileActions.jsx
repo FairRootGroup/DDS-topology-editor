@@ -11,6 +11,9 @@ import PropTypes from 'prop-types';
 import vkbeautify from 'vkbeautify';
 import { saveAs } from 'filesaver.js';
 
+import { action, observable } from 'mobx';
+import { observer } from 'mobx-react';
+
 import Button from 'react-bootstrap/lib/Button';
 import ButtonGroup from 'react-bootstrap/lib/ButtonGroup';
 import FormGroup from 'react-bootstrap/lib/FormGroup';
@@ -20,38 +23,36 @@ import Radio from 'react-bootstrap/lib/Radio';
 
 import GitHub from 'github-api';
 
-class FileActions extends Component {
-  constructor() {
-    super();
+@observer export default class FileActions extends Component {
+  propTypes = {
+    onFileLoad: PropTypes.func.isRequired,
+    topologyId: PropTypes.string.isRequired,
+    variables: PropTypes.array.isRequired,
+    properties: PropTypes.array.isRequired,
+    requirements: PropTypes.array.isRequired,
+    tasks: PropTypes.array.isRequired,
+    collections: PropTypes.array.isRequired,
+    main: PropTypes.object.isRequired
+  };
 
-    this.fetchBtn;
+  @observable remoteFiles = [];
+  @observable error = '';
 
-    this.state = {
-      remoteFiles: [],
-      remoteUser: 'AliceO2Group',
-      remoteRepo: 'AliceO2',
-      remotePath: 'Common/Topologies',
-      error: ''
-    };
+  @action updateRemoteFiles = (files) => { this.remoteFiles = files; }
+  @action setError = (e) => { this.error = e; }
 
-    this.hideFetchButton = this.hideFetchButton.bind(this);
-    this.cancelFetch = this.cancelFetch.bind(this);
-    this.handleFetch = this.handleFetch.bind(this);
-    this.fetchTopologies = this.fetchTopologies.bind(this);
-    this.handleFileLoad = this.handleFileLoad.bind(this);
-    this.handleFileSave = this.handleFileSave.bind(this);
+  remoteUser = 'AliceO2Group';
+  remoteRepo = 'AliceO2';
+  remotePath = 'Common/Topologies';
+
+  fetchBtn;
+
+  cancelFetch = () => {
+    this.updateRemoteFiles([]);
+    this.setError('');
   }
 
-  hideFetchButton(e) {
-    e.preventDefault();
-    this.fetchBtn.hide();
-  }
-
-  cancelFetch() {
-    this.setState({ remoteFiles: [], error: '' });
-  }
-
-  handleFetch(e) {
+  handleFetch = (e) => {
     e.preventDefault();
 
     const fileSelections = e.target[0].form['files'];
@@ -60,8 +61,8 @@ class FileActions extends Component {
       if (fileSelections.item(i).checked) {
         const github = new GitHub();
 
-        const repo = github.getRepo(this.state.remoteUser, this.state.remoteRepo);
-        repo.getContents('dev', 'Common/Topologies' + '/' + this.state.remoteFiles[i].name, true, (err, contents) => {
+        const repo = github.getRepo(this.remoteUser, this.remoteRepo);
+        repo.getContents('dev', 'Common/Topologies' + '/' + this.remoteFiles[i].name, true, (err, contents) => {
           if (err) {
             console.log(err);
           }
@@ -73,29 +74,26 @@ class FileActions extends Component {
     this.fetchBtn.hide();
   }
 
-  fetchTopologies() {
-    let github = new GitHub();
+  fetchTopologies = () => {
+    const github = new GitHub();
 
-    this.setState({ error: '' });
+    this.setError('');
 
-    let repo = github.getRepo(this.state.remoteUser, this.state.remoteRepo);
+    const repo = github.getRepo(this.remoteUser, this.remoteRepo);
 
-    repo.getContents('dev', this.state.remotePath, true, (err, contents) => {
+    repo.getContents('dev', this.remotePath, true, (err, contents) => {
       if (err) {
         console.log(err);
         if ('response' in err) {
-          this.setState({
-            error:
-              err.response.data.message +
-              '. Rate limit: ' +
-              err.response.headers['x-ratelimit-limit'] +
-              ', remaining: ' +
-              err.response.headers['x-ratelimit-remaining'] +
-              ', reset in: ' +
-              new Date(err.response.headers['x-ratelimit-reset'] * 1000) + '.'
-          });
+          this.setError(err.response.data.message +
+                        '. Rate limit: ' +
+                        err.response.headers['x-ratelimit-limit'] +
+                        ', remaining: ' +
+                        err.response.headers['x-ratelimit-remaining'] +
+                        ', reset in: ' +
+                        new Date(err.response.headers['x-ratelimit-reset'] * 1000) + '.');
         } else {
-          this.setState({ error: JSON.stringify(err) });
+          this.setError(JSON.stringify(err));
         }
         return;
       }
@@ -106,18 +104,18 @@ class FileActions extends Component {
           return;
         }
 
-        let file = {};
+        const file = {};
         file.name = object.name;
         file.url = object.download_url;
 
-        let nextFiles = this.state.remoteFiles;
+        const nextFiles = this.remoteFiles;
         nextFiles.push(file);
-        this.setState({ remoteFiles: nextFiles });
+        this.updateRemoteFiles(nextFiles);
       });
     });
   }
 
-  processXML(xmlString) {
+  processXML = (xmlString) => {
     const parser = new DOMParser();
     let topologyId = '',
       variables = [],
@@ -246,19 +244,19 @@ class FileActions extends Component {
     this.props.onFileLoad(topologyId, variables, properties, requirements, tasks, collections, main);
   }
 
-  handleFileLoad(event) {
+  handleFileLoad = (e) => {
     const reader = new FileReader();
-    const target = event.target;
+    const target = e.target;
 
     reader.onload = () => {
       this.processXML(reader.result);
       target.value = '';
     };
 
-    reader.readAsText(event.target.files[0]);
+    reader.readAsText(e.target.files[0]);
   }
 
-  handleFileSave() {
+  handleFileSave = () => {
     const xmlDoc = document.implementation.createDocument('', '', null);
     const root = xmlDoc.createElement('topology');
     root.setAttribute('id', this.props.topologyId);
@@ -428,18 +426,18 @@ class FileActions extends Component {
 
             <OverlayTrigger trigger="click" placement="bottom" ref={el => this.fetchBtn = el} onEnter={this.fetchTopologies} onExit={this.cancelFetch} overlay={
               <Popover className="fetch-popover" title="fetch remote topologies" id="fetchremotetopologies">
-                <p>Fetching topologies from<br /><span className="mono monobg">{this.state.remoteUser}/{this.state.remoteRepo}/{this.state.remotePath}</span></p>
+                <p>Fetching topologies from<br /><span className="mono monobg">{this.remoteUser}/{this.remoteRepo}/{this.remotePath}</span></p>
                 <form onSubmit={this.handleFetch}>
-                  {this.state.error !== '' ? <p className="error">{this.state.error}</p> : ''}
+                  {this.error !== '' ? <p className="error">{this.error}</p> : ''}
                   <FormGroup>
-                    {this.state.remoteFiles.map((file, i) => {
+                    {this.remoteFiles.map((file, i) => {
                       return (<Radio title={file.url} key={file.name + i} name="files" className="mono">{file.name}</Radio>);
                     })}
                   </FormGroup>
                   <div className="row">
                     <div className="col-xs-12">
                       <Button className="add-cg-popover-btn" type="submit" bsSize="small" bsStyle="primary">load</Button>
-                      <Button className="add-cg-popover-btn" bsSize="small" bsStyle="default" onClick={this.hideFetchButton}>cancel</Button>
+                      <Button className="add-cg-popover-btn" bsSize="small" bsStyle="default" onClick={() => this.fetchBtn.hide()}>cancel</Button>
                     </div>
                   </div>
                 </form>
@@ -447,28 +445,15 @@ class FileActions extends Component {
             }>
               <Button bsSize="small" title="fetch topology file from a remote repository">
                 <span className="glyphicon glyphicon-cloud-download"></span> fetch
-                            </Button>
+              </Button>
             </OverlayTrigger>
 
             <Button bsSize="small" onClick={this.handleFileSave} title="save the topology to disk">
               <span className="glyphicon glyphicon-floppy-save"></span> save
-                        </Button>
+            </Button>
           </ButtonGroup>
         </div>
       </li>
     );
   }
 }
-
-FileActions.propTypes = {
-  onFileLoad: PropTypes.func.isRequired,
-  topologyId: PropTypes.string.isRequired,
-  variables: PropTypes.array.isRequired,
-  properties: PropTypes.array.isRequired,
-  requirements: PropTypes.array.isRequired,
-  tasks: PropTypes.array.isRequired,
-  collections: PropTypes.array.isRequired,
-  main: PropTypes.object.isRequired
-};
-
-export default FileActions;

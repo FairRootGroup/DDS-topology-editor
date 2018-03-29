@@ -11,18 +11,25 @@ import PropTypes from 'prop-types';
 
 import Group from './Group';
 
-class GroupList extends Component {
+export default class GroupList extends Component {
+  propTypes = {
+    groups: PropTypes.array.isRequired,
+    tasks: PropTypes.array.isRequired,
+    collections: PropTypes.array.isRequired,
+    onRemoveGroup: PropTypes.func.isRequired,
+    onEditGroup: PropTypes.func.isRequired
+  };
+
   render() {
-    var self = this;
     return (
       <div>
-        {this.props.groups.map(function (group, index) {
+        {this.props.groups.map((group, index) => {
           return <Group group={group}
-            groups={self.props.groups}
-            tasks={self.props.tasks}
-            collections={self.props.collections}
-            onRemoveGroup={self.props.onRemoveGroup}
-            onEditGroup={self.props.onEditGroup}
+            groups={this.props.groups}
+            tasks={this.props.tasks}
+            collections={this.props.collections}
+            onRemoveGroup={this.props.onRemoveGroup}
+            onEditGroup={this.props.onEditGroup}
             key={index}
             elementKey={index}
           />;
@@ -31,13 +38,3 @@ class GroupList extends Component {
     );
   }
 }
-
-GroupList.propTypes = {
-  groups: PropTypes.array.isRequired,
-  tasks: PropTypes.array.isRequired,
-  collections: PropTypes.array.isRequired,
-  onRemoveGroup: PropTypes.func.isRequired,
-  onEditGroup: PropTypes.func.isRequired
-};
-
-export default GroupList;

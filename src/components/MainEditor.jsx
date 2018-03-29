@@ -15,34 +15,23 @@ import FormControl from 'react-bootstrap/lib/FormControl';
 import Popover from 'react-bootstrap/lib/Popover';
 import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
 
-class MainEditor extends Component {
-  constructor() {
-    super();
+export default class MainEditor extends Component {
+  propTypes = {
+    properties: PropTypes.array.isRequired,
+    tasks: PropTypes.array.isRequired,
+    collections: PropTypes.array.isRequired,
+    main: PropTypes.object.isRequired,
+    onEditMain: PropTypes.func.isRequired
+  };
 
-    this.editTasksInMainBtn;
-    this.editCollectionsInMainBtn;
+  editTasksInMainBtn;
+  editCollectionsInMainBtn;
 
-    this.hideEditTasksInMainBtn = this.hideEditTasksInMainBtn.bind(this);
-    this.hideEditCollectionsInMainBtn = this.hideEditCollectionsInMainBtn.bind(this);
-    this.handleEditTasksInMain = this.handleEditTasksInMain.bind(this);
-    this.handleEditCollectionsInMain = this.handleEditCollectionsInMain.bind(this);
-  }
-
-  hideEditTasksInMainBtn(e) {
-    e.preventDefault();
-    this.editTasksInMainBtn.hide();
-  }
-
-  hideEditCollectionsInMainBtn(e) {
-    e.preventDefault();
-    this.editCollectionsInMainBtn.hide();
-  }
-
-  handleEditTasksInMain(e) {
+  handleEditTasksInMain = (e) => {
     e.preventDefault();
 
     var selectedTasks = [];
-    this.props.tasks.forEach(function (task, index) {
+    this.props.tasks.forEach((task, index) => {
       for (var i = 0; i < e.target[0].form[index].value; i++) {
         selectedTasks.push(task.id);
       }
@@ -58,11 +47,11 @@ class MainEditor extends Component {
     this.props.onEditMain(nextMain);
   }
 
-  handleEditCollectionsInMain(e) {
+  handleEditCollectionsInMain = (e) => {
     e.preventDefault();
 
     var selectedCollections = [];
-    this.props.collections.forEach(function (collection, index) {
+    this.props.collections.forEach((collection, index) => {
       for (var i = 0; i < e.target[0].form[index].value; i++) {
         selectedCollections.push(collection.id);
       }
@@ -81,11 +70,10 @@ class MainEditor extends Component {
   render() {
     var TaskCheckboxes = [];
     var CollectionCheckboxes = [];
-    var self = this;
 
-    this.props.tasks.forEach(function (task, i) {
+    this.props.tasks.forEach((task, i) => {
       var count = 0;
-      self.props.main.tasks.forEach(function (currentTask) {
+      this.props.main.tasks.forEach(currentTask => {
         if (task.id === currentTask) {
           count++;
         }
@@ -100,9 +88,9 @@ class MainEditor extends Component {
       );
     });
 
-    this.props.collections.forEach(function (collection, i) {
+    this.props.collections.forEach((collection, i) => {
       var count = 0;
-      self.props.main.collections.forEach(function (currentCollection) {
+      this.props.main.collections.forEach(currentCollection => {
         if (collection.id === currentCollection) {
           count++;
         }
@@ -128,14 +116,14 @@ class MainEditor extends Component {
               <div className="col-xs-4 centered main-element main-element-tasks">
                 <h5 className="main-header">
                   tasks in main
-                                    <OverlayTrigger trigger="click" placement="bottom" ref={(el) => this.editTasksInMainBtn = el} overlay={
+                  <OverlayTrigger trigger="click" placement="bottom" ref={(el) => this.editTasksInMainBtn = el} overlay={
                     <Popover className="add-cg-popover task-popover" title="modify tasks in main" id="tasksinmain">
                       <form onSubmit={this.handleEditTasksInMain}>
                         {TaskCheckboxes}
                         <div className="row">
                           <div className="col-xs-12">
                             <Button className="add-cg-popover-btn" type="submit" bsSize="small" bsStyle="primary">edit</Button>
-                            <Button className="add-cg-popover-btn" bsSize="small" bsStyle="default" onClick={this.hideEditTasksInMainBtn}>cancel</Button>
+                            <Button className="add-cg-popover-btn" bsSize="small" bsStyle="default" onClick={() => this.editTasksInMainBtn.hide()}>cancel</Button>
                           </div>
                         </div>
                       </form>
@@ -145,7 +133,7 @@ class MainEditor extends Component {
                   </OverlayTrigger>
                 </h5>
                 <div className="group-tasks">
-                  {this.props.main.tasks.map(function (task, i) {
+                  {this.props.main.tasks.map((task, i) => {
                     return <span key={i}>{task}</span>;
                   })}
                 </div>
@@ -153,14 +141,14 @@ class MainEditor extends Component {
               <div className="col-xs-4 centered main-element main-element-collections">
                 <h5 className="main-header">
                   collections in main
-                                    <OverlayTrigger trigger="click" placement="bottom" ref={(el) => this.editCollectionsInMainBtn = el} overlay={
+                  <OverlayTrigger trigger="click" placement="bottom" ref={(el) => this.editCollectionsInMainBtn = el} overlay={
                     <Popover className="add-cg-popover collection-popover" title="modify collections in main" id="collectionsinmain">
                       <form onSubmit={this.handleEditCollectionsInMain}>
                         {CollectionCheckboxes}
                         <div className="row">
                           <div className="col-xs-12">
                             <Button className="add-cg-popover-btn" type="submit" bsSize="small" bsStyle="primary">edit</Button>
-                            <Button className="add-cg-popover-btn" bsSize="small" bsStyle="default" onClick={this.hideEditCollectionsInMainBtn}>cancel</Button>
+                            <Button className="add-cg-popover-btn" bsSize="small" bsStyle="default" onClick={() => this.editCollectionsInMainBtn.hide()}>cancel</Button>
                           </div>
                         </div>
                       </form>
@@ -170,14 +158,14 @@ class MainEditor extends Component {
                   </OverlayTrigger>
                 </h5>
                 <div className="group-collections">
-                  {this.props.main.collections.map(function (collection, i) {
+                  {this.props.main.collections.map((collection, i) => {
                     return <span key={i}>{collection}</span>;
                   })}
                 </div>
               </div>
               <div className="col-xs-4 centered main-element main-element-groups">
                 <h5 className="main-header">groups</h5>
-                {this.props.main.groups.map(function (group, index) {
+                {this.props.main.groups.map((group, index) => {
                   return <div className="group-groups" key={index}><span>{group.id} <Badge>{group.n}</Badge></span></div>;
                 })}
               </div>
@@ -188,13 +176,3 @@ class MainEditor extends Component {
     );
   }
 }
-
-MainEditor.propTypes = {
-  properties: PropTypes.array.isRequired,
-  tasks: PropTypes.array.isRequired,
-  collections: PropTypes.array.isRequired,
-  main: PropTypes.object.isRequired,
-  onEditMain: PropTypes.func.isRequired
-};
-
-export default MainEditor;

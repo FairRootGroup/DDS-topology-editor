@@ -15,15 +15,22 @@ import { observer } from 'mobx-react';
 import Button from 'react-bootstrap/lib/Button';
 import Modal from 'react-bootstrap/lib/Modal';
 
-@observer class Property extends Component {
+@observer export default class Property extends Component {
+  propTypes = {
+    property: PropTypes.object.isRequired,
+    onRemoveProperty: PropTypes.func.isRequired,
+    onEditProperty: PropTypes.func.isRequired,
+    elementKey: PropTypes.number.isRequired
+  };
+
   @observable bodyVisible = false;
   @observable editing = false;
-  @observable showDeleteModal = false;
+  @observable deleteModalVisible = false;
 
   @action toggleBodyVisibility = () => { this.bodyVisible = !(this.bodyVisible); }
   @action toggleEditing = () => { if (!this.editing) { this.editing = true; this.bodyVisible = true; } else { this.editing = false; } }
-  @action openDeleteModal = () => { this.showDeleteModal = true; }
-  @action closeDeleteModal = () => { this.showDeleteModal = false; }
+  @action openDeleteModal = () => { this.deleteModalVisible = true; }
+  @action closeDeleteModal = () => { this.deleteModalVisible = false; }
 
   shouldComponentUpdate = () => true
 
@@ -57,7 +64,7 @@ import Modal from 'react-bootstrap/lib/Modal';
           </span>
 
           <span className="glyphicon glyphicon-trash" title="delete" onClick={this.openDeleteModal}></span>
-          <Modal show={this.showDeleteModal} onHide={this.closeDeleteModal}>
+          <Modal show={this.deleteModalVisible} onHide={this.closeDeleteModal}>
             <Modal.Header closeButton>
               <Modal.Title>Delete <strong>{this.props.property.id}</strong>?</Modal.Title>
             </Modal.Header>
@@ -89,12 +96,3 @@ import Modal from 'react-bootstrap/lib/Modal';
     );
   }
 }
-
-Property.propTypes = {
-  property: PropTypes.object.isRequired,
-  onRemoveProperty: PropTypes.func.isRequired,
-  onEditProperty: PropTypes.func.isRequired,
-  elementKey: PropTypes.number.isRequired
-};
-
-export default Property;
