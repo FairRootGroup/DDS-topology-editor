@@ -55,7 +55,7 @@ import store, { MGroup } from '../Store';
       return;
     }
 
-    var otherGroups = store.groups.filter(g => g.id !== this.props.group.id);
+    var otherGroups = store.main.groups.filter(g => g.id !== this.props.group.id);
     if (otherGroups.some(g => g.id === e.target[0].form[0].value)) {
       this.setInputValidity(false);
       return;

@@ -96,12 +96,14 @@ class Store {
   @action removeVariable = (i) => {
     this.variables.splice(i, 1);
   }
+
   @action removeProperty = (i) => {
     const removedPropertyId = this.properties.splice(i, 1)[0].id;
     this.tasks.forEach(task => {
       task.properties = task.properties.filter(property => property.id !== removedPropertyId);
     });
   }
+
   @action removeRequirement = (i) => {
     const removedRequirementId = this.requirements.splice(i, 1)[0].id;
 
@@ -113,6 +115,7 @@ class Store {
       collection.requirements = collection.requirements.filter(requirement => requirement !== removedRequirementId);
     });
   }
+
   @action removeTask = (i) => {
     const removedTaskId = this.tasks.splice(i, 1)[0].id;
 
@@ -124,6 +127,7 @@ class Store {
       group.tasks = group.tasks.filter(task => task !== removedTaskId);
     });
   }
+
   @action removeCollection = (i) => {
     const removedCollectionId = this.collections.splice(i, 1)[0].id;
     this.main.collections = this.main.collections.filter(collection => collection !== removedCollectionId);
@@ -131,6 +135,7 @@ class Store {
       group.collections = group.collections.filter(collection => collection !== removedCollectionId);
     });
   }
+
   @action removeMainGroup = (i) => {
     this.main.groups.splice(i, 1);
   }
@@ -148,6 +153,7 @@ class Store {
       });
     });
   }
+
   @action editRequirement = (i, updatedRequirement) => {
     const oldId = this.requirements[i].id;
     this.requirements[i] = updatedRequirement;
@@ -166,6 +172,7 @@ class Store {
       }
     });
   }
+
   @action editTask = (i, updatedTask) => {
     const oldId = this.tasks[i].id;
     this.tasks[i] = updatedTask;
@@ -195,6 +202,7 @@ class Store {
       }
     });
   }
+
   @action editCollection = (i, updatedCollection) => {
     const oldId = this.collections[i].id;
     this.collections[i] = updatedCollection;
@@ -215,6 +223,7 @@ class Store {
       }
     });
   }
+
   @action editMainGroup = (i, updatedGroup) => {
     this.main.groups[i] = updatedGroup;
   }

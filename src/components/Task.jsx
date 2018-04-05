@@ -89,7 +89,7 @@ import store, { MTask } from '../Store';
       }
     });
 
-    if (e.target[0].form['requirements'].value !== '') { // TODO: use this 'name' approach to replace dumb indexes everywhere
+    if (e.target[0].form['requirements'].value !== '') {
       task.requirements.push(e.target[0].form['requirements'].value);
     }
 
