@@ -37,6 +37,8 @@ import store, { MGroup } from '../Store';
 
   shouldComponentUpdate = () => true
 
+  addGroupBtn;
+
   handleAddGroup = (e) => {
     e.preventDefault();
 

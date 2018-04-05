@@ -242,7 +242,7 @@ const store = new Store();
 
 export default store;
 
-hydrate('some', store);
+hydrate('topologyEditor', store);
 
 autorun(() => {
   // console.log('store.fluid: ' + store.fluid);
