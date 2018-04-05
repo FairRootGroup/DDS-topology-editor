@@ -22,13 +22,12 @@ import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
 import Popover from 'react-bootstrap/lib/Popover';
 import Radio from 'react-bootstrap/lib/Radio';
 
+import store, { MRequirement } from '../Store';
+
 @observer export default class Requirement extends Component {
   static propTypes = {
     requirement: PropTypes.object.isRequired,
-    requirements: PropTypes.array.isRequired,
-    onRemoveRequirement: PropTypes.func.isRequired,
-    onEditRequirement: PropTypes.func.isRequired,
-    elementKey: PropTypes.number.isRequired
+    index: PropTypes.number.isRequired
   };
 
   @observable bodyVisible = false;
@@ -60,33 +59,30 @@ import Radio from 'react-bootstrap/lib/Radio';
     }
 
     // cancel if ID already exists (except its own ID)
-    var otherRequirements = this.props.requirements.filter(requirement => requirement.id !== this.props.requirement.id);
-    if (otherRequirements.some(requirement => requirement.id === e.target[0].form[0].value)) {
+    const otherRequirements = store.requirements.filter(r => r.id !== this.props.requirement.id);
+    if (otherRequirements.some(r => r.id === e.target[0].form[0].value)) {
       this.setInputValidity(false);
       return;
     }
 
+    const requirement = new MRequirement;
+    requirement.id = e.target[0].form[0].value;
+    requirement.value = e.target[0].form[3].value;
+
     // set the type according to the radio button value
-    let type = '';
     if (e.target[0].form[1].checked) {
-      type = 'hostname';
+      requirement.type = 'hostname';
     } else {
-      type = 'wnname';
+      requirement.type = 'wnname';
     }
 
-    let updatedRequirement = {
-      id: e.target[0].form[0].value,
-      type: type,
-      value: e.target[0].form[3].value
-    };
-
+    store.editRequirement(this.props.index, requirement);
     this.editRequirementBtn.hide();
-    this.props.onEditRequirement(this.props.elementKey, updatedRequirement);
   }
 
   handleRemoveRequirement = () => {
+    store.removeRequirement(this.props.index);
     this.closeDeleteModal();
-    this.props.onRemoveRequirement(this.props.elementKey);
   }
 
   render() {

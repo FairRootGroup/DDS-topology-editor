@@ -7,32 +7,20 @@
  ********************************************************************************/
 
 import React, { Component, Fragment } from 'react';
-import PropTypes from 'prop-types';
+import { observer } from 'mobx-react';
 
 import Group from './Group';
 
-export default class GroupList extends Component {
-  static propTypes = {
-    groups: PropTypes.array.isRequired,
-    tasks: PropTypes.array.isRequired,
-    collections: PropTypes.array.isRequired,
-    onRemoveGroup: PropTypes.func.isRequired,
-    onEditGroup: PropTypes.func.isRequired
-  };
+import store from '../Store';
+
+@observer export default class GroupList extends Component {
+  shouldComponentUpdate = () => true
 
   render() {
     return (
       <Fragment>
-        {this.props.groups.map((group, index) => {
-          return <Group group={group}
-            groups={this.props.groups}
-            tasks={this.props.tasks}
-            collections={this.props.collections}
-            onRemoveGroup={this.props.onRemoveGroup}
-            onEditGroup={this.props.onEditGroup}
-            key={index}
-            elementKey={index}
-          />;
+        {store.main.groups.map((g, i) => {
+          return <Group group={g} key={i} index={i} />;
         })}
       </Fragment>
     );

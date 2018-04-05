@@ -7,7 +7,8 @@
  ********************************************************************************/
 
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+
+import { observer } from 'mobx-react';
 
 import Badge from 'react-bootstrap/lib/Badge';
 import Button from 'react-bootstrap/lib/Button';
@@ -15,72 +16,64 @@ import FormControl from 'react-bootstrap/lib/FormControl';
 import Popover from 'react-bootstrap/lib/Popover';
 import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
 
-export default class MainEditor extends Component {
-  static propTypes = {
-    properties: PropTypes.array.isRequired,
-    tasks: PropTypes.array.isRequired,
-    collections: PropTypes.array.isRequired,
-    main: PropTypes.object.isRequired,
-    onEditMain: PropTypes.func.isRequired
-  };
+import store, { MMain } from '../Store';
 
+@observer export default class MainEditor extends Component {
   editTasksInMainBtn;
   editCollectionsInMainBtn;
+
+  shouldComponentUpdate = () => true
 
   handleEditTasksInMain = (e) => {
     e.preventDefault();
 
-    var selectedTasks = [];
-    this.props.tasks.forEach((task, index) => {
+    const main = new MMain;
+    main.id = store.main.id;
+    main.collections = store.main.collections;
+    main.groups = store.main.groups;
+
+    store.tasks.forEach((t, index) => {
       for (var i = 0; i < e.target[0].form[index].value; i++) {
-        selectedTasks.push(task.id);
+        main.tasks.push(t.id);
       }
     });
-    var nextMain = {
-      id: this.props.main.id,
-      tasks: selectedTasks,
-      collections: this.props.main.collections,
-      groups: this.props.main.groups
-    };
 
     this.editTasksInMainBtn.hide();
-    this.props.onEditMain(nextMain);
+    store.setMain(main);
   }
 
   handleEditCollectionsInMain = (e) => {
     e.preventDefault();
 
-    var selectedCollections = [];
-    this.props.collections.forEach((collection, index) => {
+    const main = new MMain;
+    main.id = store.main.id;
+    main.tasks = store.main.tasks;
+    main.groups = store.main.groups;
+
+    store.collections.forEach((c, index) => {
       for (var i = 0; i < e.target[0].form[index].value; i++) {
-        selectedCollections.push(collection.id);
+        main.collections.push(c.id);
       }
     });
-    var nextMain = {
-      id: this.props.main.id,
-      tasks: this.props.main.tasks,
-      collections: selectedCollections,
-      groups: this.props.main.groups
-    };
 
+    store.setMain(main);
     this.editCollectionsInMainBtn.hide();
-    this.props.onEditMain(nextMain);
   }
 
   render() {
-    var TaskCheckboxes = [];
-    var CollectionCheckboxes = [];
+    const TaskCheckboxes = [];
+    const CollectionCheckboxes = [];
 
-    this.props.tasks.forEach((task, i) => {
+    store.tasks.forEach((t, i) => {
       var count = 0;
-      this.props.main.tasks.forEach(currentTask => {
-        if (task.id === currentTask) {
+      store.main.tasks.forEach(currentTask => {
+        if (t.id === currentTask) {
           count++;
         }
       });
       TaskCheckboxes.push(
         <div className="ct-box ct-box-task" key={'t-box' + i}>
-          <div className="element-name" title={task.id}>{task.id}</div>
+          <div className="element-name" title={t.id}>{t.id}</div>
           <div className="form-group">
             <FormControl className="add-cg-tc-counter" type="number" min="0" defaultValue={count} />
           </div>
@@ -88,16 +81,16 @@ export default class MainEditor extends Component {
       );
     });
 
-    this.props.collections.forEach((collection, i) => {
+    store.collections.forEach((c, i) => {
       var count = 0;
-      this.props.main.collections.forEach(currentCollection => {
-        if (collection.id === currentCollection) {
+      store.main.collections.forEach(currentCollection => {
+        if (c.id === currentCollection) {
           count++;
         }
       });
       CollectionCheckboxes.push(
         <div className="ct-box ct-box-collection" key={'c-box' + i}>
-          <div className="element-name" title={collection.id}>{collection.id}</div>
+          <div className="element-name" title={c.id}>{c.id}</div>
           <div className="form-group">
             <FormControl className="add-cg-tc-counter" type="number" min="0" defaultValue={count} />
           </div>
@@ -109,7 +102,7 @@ export default class MainEditor extends Component {
       <div>
         <div className="panel panel-default">
           <div className="panel-heading">
-            <p className="panel-title">{this.props.main.id}</p>
+            <p className="panel-title">{store.main.id}</p>
           </div>
           <div id="main-editor-body" className="panel-body">
             <div className="row">
@@ -133,7 +126,7 @@ export default class MainEditor extends Component {
                   </OverlayTrigger>
                 </h5>
                 <div className="group-tasks">
-                  {this.props.main.tasks.map((task, i) => {
+                  {store.main.tasks.map((task, i) => {
                     return <span key={i}>{task}</span>;
                   })}
                 </div>
@@ -158,15 +151,15 @@ export default class MainEditor extends Component {
                   </OverlayTrigger>
                 </h5>
                 <div className="group-collections">
-                  {this.props.main.collections.map((collection, i) => {
+                  {store.main.collections.map((collection, i) => {
                     return <span key={i}>{collection}</span>;
                   })}
                 </div>
               </div>
               <div className="col-xs-4 centered main-element main-element-groups">
                 <h5 className="main-header">groups</h5>
-                {this.props.main.groups.map((group, index) => {
-                  return <div className="group-groups" key={index}><span>{group.id} <Badge>{group.n}</Badge></span></div>;
+                {store.main.groups.map((g, index) => {
+                  return <div className="group-groups" key={index}><span>{g.id} <Badge>{g.n}</Badge></span></div>;
                 })}
               </div>
             </div>

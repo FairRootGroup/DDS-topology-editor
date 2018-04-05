@@ -7,27 +7,20 @@
  ********************************************************************************/
 
 import React, { Component, Fragment } from 'react';
-import PropTypes from 'prop-types';
+import { observer } from 'mobx-react';
 
 import Property from './Property';
 
-export default class PropertyList extends Component {
-  static propTypes = {
-    properties: PropTypes.array.isRequired,
-    onRemoveProperty: PropTypes.func.isRequired,
-    onEditProperty: PropTypes.func.isRequired
-  };
+import store from '../Store';
+
+@observer export default class PropertyList extends Component {
+  shouldComponentUpdate = () => true
 
   render() {
     return (
       <Fragment>
-        {this.props.properties.map((property, index) => {
-          return <Property property={property}
-            onRemoveProperty={this.props.onRemoveProperty}
-            onEditProperty={this.props.onEditProperty}
-            key={index}
-            elementKey={index}
-          />;
+        {store.properties.map((p, i) => {
+          return <Property property={p} key={i} index={i} />;
         })}
       </Fragment>
     );

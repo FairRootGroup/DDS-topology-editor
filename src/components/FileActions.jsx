@@ -7,7 +7,6 @@
  ********************************************************************************/
 
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import vkbeautify from 'vkbeautify';
 import { saveAs } from 'filesaver.js';
 
@@ -23,19 +22,9 @@ import Radio from 'react-bootstrap/lib/Radio';
 
 import GitHub from 'github-api';
 
-import store from '../Store';
+import store, { MCollection, MGroup, MMain, MProperty, MRequirement, MTask, MTaskProperty, MVariable } from '../Store';
 
 @observer export default class FileActions extends Component {
-  static propTypes = {
-    onFileLoad: PropTypes.func.isRequired,
-    variables: PropTypes.array.isRequired,
-    properties: PropTypes.array.isRequired,
-    requirements: PropTypes.array.isRequired,
-    tasks: PropTypes.array.isRequired,
-    collections: PropTypes.array.isRequired,
-    main: PropTypes.object.isRequired
-  };
-
   @observable remoteFiles = [];
   @observable error = '';
 
@@ -117,41 +106,42 @@ import store from '../Store';
 
   processXML = (xmlString) => {
     const parser = new DOMParser();
-    let topologyId = '';
     const variables = [];
     const properties = [];
     const requirements = [];
     const tasks = [];
     const collections = [];
-    const main = {};
+    const main = new MMain;
 
     const xml = parser.parseFromString(xmlString, 'application/xml');
 
     // topology name
-    topologyId = xml.querySelector('topology').getAttribute('id');
+    store.setTopologyId(xml.querySelector('topology').getAttribute('id'));
 
     // variables
     xml.querySelectorAll('topology>var').forEach(v => {
-      const variable = {};
+      const variable = new MVariable;
 
       variable.id = v.getAttribute('id');
       variable.value = v.getAttribute('value');
 
       variables.push(variable);
     });
+    store.setVariables(variables);
 
     // properties
     xml.querySelectorAll('topology>property').forEach(p => {
-      const property = {};
+      const property = new MProperty;
 
       property.id = p.getAttribute('id');
 
       properties.push(property);
     });
+    store.setProperties(properties);
 
     // requirements
     xml.querySelectorAll('topology>declrequirement').forEach(r => {
-      const requirement = {};
+      const requirement = new MRequirement;
 
       requirement.id = r.getAttribute('id');
       requirement.type = r.getAttribute('type');
@@ -159,37 +149,34 @@ import store from '../Store';
 
       requirements.push(requirement);
     });
+    store.setRequirements(requirements);
 
     // tasks
     xml.querySelectorAll('topology>decltask').forEach(t => {
-      const task = {};
+      const task = new MTask;
 
       task.id = t.getAttribute('id');
-      task.requirements = [];
 
       t.querySelectorAll('requirements').forEach(r => {
         r.querySelectorAll('id').forEach(i => task.requirements.push(i.textContent));
       });
 
       t.querySelectorAll('exe').forEach(e => {
-        task.exe = {};
         if (e.hasAttribute('reachable')) {
-          task.exe.reachable = e.getAttribute('reachable');
+          task.exeReachable = e.getAttribute('reachable');
         }
-        task.exe.valueText = e.textContent;
+        task.exeValue = e.textContent;
       });
 
       t.querySelectorAll('env').forEach(e => {
-        task.env = {};
         if (e.hasAttribute('reachable')) {
-          task.env.reachable = e.getAttribute('reachable');
+          task.envReachable = e.getAttribute('reachable');
         }
-        task.env.valueText = e.textContent;
+        task.envValue = e.textContent;
       });
 
-      task.properties = [];
       t.querySelectorAll('properties>id').forEach(p => {
-        const property = {};
+        const property = new MTaskProperty;
         property.id = p.textContent;
         if (p.hasAttribute('access')) {
           property.access = p.getAttribute('access');
@@ -201,13 +188,12 @@ import store from '../Store';
 
       tasks.push(task);
     });
+    store.setTasks(tasks);
 
     // collections
     xml.querySelectorAll('topology>declcollection').forEach(c => {
-      const collection = {};
+      const collection = new MCollection;
       collection.id = c.getAttribute('id');
-      collection.tasks = [];
-      collection.requirements = [];
 
       c.querySelectorAll('requirements').forEach(r => {
         r.querySelectorAll('id').forEach(i => collection.requirements.push(i.textContent));
@@ -217,21 +203,17 @@ import store from '../Store';
 
       collections.push(collection);
     });
+    store.setCollections(collections);
 
     // main
     main.id = xml.querySelector('topology>main').getAttribute('id');
-    main.tasks = [];
-    main.collections = [];
-    main.groups = [];
 
     xml.querySelectorAll('topology>main>task').forEach(t => main.tasks.push(t.textContent));
     xml.querySelectorAll('topology>main>collection').forEach(c => main.collections.push(c.textContent));
 
     // groups in main
     xml.querySelectorAll('topology>main>group').forEach(g => {
-      const group = {};
-      group.tasks = [];
-      group.collections = [];
+      const group = new MGroup;
       group.id = g.getAttribute('id');
       group.n = g.getAttribute('n');
 
@@ -240,10 +222,7 @@ import store from '../Store';
 
       main.groups.push(group);
     });
-
-    store.setTopologyId(topologyId);
-
-    this.props.onFileLoad(variables, properties, requirements, tasks, collections, main);
+    store.setMain(main);
   }
 
   handleFileLoad = (e) => {
@@ -264,7 +243,7 @@ import store from '../Store';
     root.setAttribute('id', store.topologyId);
 
     // variables
-    this.props.variables.forEach(variable => {
+    store.variables.forEach(variable => {
       const newVariable = xmlDoc.createElement('var');
       newVariable.setAttribute('id', variable.id);
       newVariable.setAttribute('value', variable.value);
@@ -272,14 +251,14 @@ import store from '../Store';
     });
 
     // properties
-    this.props.properties.forEach(property => {
+    store.properties.forEach(property => {
       const newProperty = xmlDoc.createElement('property');
       newProperty.setAttribute('id', property.id);
       root.appendChild(newProperty);
     });
 
     // requirements
-    this.props.requirements.forEach(requirement => {
+    store.requirements.forEach(requirement => {
       const newRequirement = xmlDoc.createElement('declrequirement');
       newRequirement.setAttribute('id', requirement.id);
       newRequirement.setAttribute('type', requirement.type);
@@ -290,15 +269,15 @@ import store from '../Store';
     });
 
     // tasks
-    this.props.tasks.forEach(task => {
+    store.tasks.forEach(task => {
       const newTask = xmlDoc.createElement('decltask');
       newTask.setAttribute('id', task.id);
 
       // create and append task exe
       const taskExe = xmlDoc.createElement('exe');
-      taskExe.textContent = task.exe.valueText;
-      if (typeof task.exe.reachable !== typeof undefined) {
-        taskExe.setAttribute('reachable', task.exe.reachable);
+      taskExe.textContent = task.exeValue;
+      if (task.exeReachable !== '') {
+        taskExe.setAttribute('reachable', task.exeReachable);
       }
 
       newTask.appendChild(taskExe);
@@ -314,11 +293,11 @@ import store from '../Store';
       }
 
       // create and append task env (if it exists)
-      if (typeof task.env !== typeof undefined) {
+      if (task.envValue !== '') {
         const taskEnv = xmlDoc.createElement('env');
-        taskEnv.textContent = task.env.valueText;
-        if (typeof task.env.reachable !== typeof undefined) {
-          taskEnv.setAttribute('reachable', task.env.reachable);
+        taskEnv.textContent = task.envValue;
+        if (task.envReachable !== '') {
+          taskEnv.setAttribute('reachable', task.envReachable);
         }
 
         newTask.appendChild(taskEnv);
@@ -343,7 +322,7 @@ import store from '../Store';
     });
 
     // collections
-    this.props.collections.forEach(collection => {
+    store.collections.forEach(collection => {
       const newCollection = xmlDoc.createElement('declcollection');
       newCollection.setAttribute('id', collection.id);
 
@@ -372,21 +351,21 @@ import store from '../Store';
 
     // main
     const main = xmlDoc.createElement('main');
-    main.setAttribute('id', this.props.main.id);
+    main.setAttribute('id', store.main.id);
     // tasks in main
-    this.props.main.tasks.forEach(task => {
+    store.main.tasks.forEach(task => {
       const newTask = xmlDoc.createElement('task');
       newTask.textContent = task;
       main.appendChild(newTask);
     });
     // collections in main
-    this.props.main.collections.forEach(collection => {
+    store.main.collections.forEach(collection => {
       const newCollection = xmlDoc.createElement('collection');
       newCollection.textContent = collection;
       main.appendChild(newCollection);
     });
     // groups in main
-    this.props.main.groups.forEach(group => {
+    store.main.groups.forEach(group => {
       const newGroup = xmlDoc.createElement('group');
       newGroup.setAttribute('id', group.id);
       newGroup.setAttribute('n', group.n);

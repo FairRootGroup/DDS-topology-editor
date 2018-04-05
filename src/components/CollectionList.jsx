@@ -7,32 +7,20 @@
  ********************************************************************************/
 
 import React, { Component, Fragment } from 'react';
-import PropTypes from 'prop-types';
+import { observer } from 'mobx-react';
 
 import Collection from './Collection';
 
-export default class CollectionList extends Component {
-  static propTypes = {
-    collections: PropTypes.array.isRequired,
-    requirements: PropTypes.array.isRequired,
-    tasks: PropTypes.array.isRequired,
-    onRemoveCollection: PropTypes.func.isRequired,
-    onEditCollection: PropTypes.func.isRequired
-  };
+import store from '../Store';
+
+@observer export default class CollectionList extends Component {
+  shouldComponentUpdate = () => true
 
   render() {
     return (
       <Fragment>
-        {this.props.collections.map((collection, i) => {
-          return <Collection collection={collection}
-            requirements={this.props.requirements}
-            collections={this.props.collections}
-            tasks={this.props.tasks}
-            onRemoveCollection={this.props.onRemoveCollection}
-            onEditCollection={this.props.onEditCollection}
-            key={i}
-            elementKey={i}
-          />;
+        {store.collections.map((c, i) => {
+          return <Collection collection={c} key={i} index={i} />;
         })}
       </Fragment>
     );

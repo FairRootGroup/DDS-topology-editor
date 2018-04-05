@@ -15,12 +15,12 @@ import { observer } from 'mobx-react';
 import Button from 'react-bootstrap/lib/Button';
 import Modal from 'react-bootstrap/lib/Modal';
 
+import store, { MProperty } from '../Store';
+
 @observer export default class Property extends Component {
   static propTypes = {
     property: PropTypes.object.isRequired,
-    onRemoveProperty: PropTypes.func.isRequired,
-    onEditProperty: PropTypes.func.isRequired,
-    elementKey: PropTypes.number.isRequired
+    index: PropTypes.number.isRequired
   };
 
   @observable bodyVisible = false;
@@ -36,19 +36,22 @@ import Modal from 'react-bootstrap/lib/Modal';
 
   handleEditProperty = (e) => {
     e.preventDefault();
-    if (e.target[0].form[0].value === '') {
+
+    if (e.target[0].form[0].value === '' || store.hasProperty(e.target[0].form[0].value)) {
+      this.toggleEditing();
       return;
     }
-    var updatedProperty = {
-      id: e.target[0].form[0].value
-    };
+
+    const property = new MProperty;
+    property.id = e.target[0].form[0].value;
+
+    store.editProperty(this.props.index, property);
     this.toggleEditing();
-    this.props.onEditProperty(this.props.elementKey, updatedProperty);
   }
 
   handleRemoveProperty = () => {
+    store.removeProperty(this.props.index);
     this.closeDeleteModal();
-    this.props.onRemoveProperty(this.props.elementKey);
   }
 
   render() {

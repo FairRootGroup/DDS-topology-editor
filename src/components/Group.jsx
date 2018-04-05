@@ -20,15 +20,12 @@ import Modal from 'react-bootstrap/lib/Modal';
 import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
 import Popover from 'react-bootstrap/lib/Popover';
 
+import store, { MGroup } from '../Store';
+
 @observer export default class Group extends Component {
   static propTypes = {
     group: PropTypes.object.isRequired,
-    groups: PropTypes.array.isRequired,
-    tasks: PropTypes.array.isRequired,
-    collections: PropTypes.array.isRequired,
-    onRemoveGroup: PropTypes.func.isRequired,
-    onEditGroup: PropTypes.func.isRequired,
-    elementKey: PropTypes.number.isRequired
+    index: PropTypes.number.isRequired
   };
 
   @observable bodyVisible = false;
@@ -52,55 +49,50 @@ import Popover from 'react-bootstrap/lib/Popover';
 
   handleEditGroup = (e) => {
     e.preventDefault();
+
     if (e.target[0].form[0].value === '') {
       this.setInputValidity(false);
       return;
     }
 
-    var otherGroups = this.props.groups.filter(group => group.id !== this.props.group.id);
-
-    if (otherGroups.some(group => group.id === e.target[0].form[0].value)) {
+    var otherGroups = store.groups.filter(g => g.id !== this.props.group.id);
+    if (otherGroups.some(g => g.id === e.target[0].form[0].value)) {
       this.setInputValidity(false);
       return;
     }
-    var selectedTasks = [];
-    var selectedCollections = [];
+
+    const group = new MGroup;
+    group.id = e.target[0].form[0].value;
+    group.n = e.target[0].form[1].value;
+
     var tasksIndex = 0;
-    this.props.tasks.forEach((task, index) => {
+    store.tasks.forEach((t, index) => {
       tasksIndex++;
       for (var i = 0; i < e.target[0].form[index + 2].value; i++) {
-        selectedTasks.push(task.id);
+        group.tasks.push(t.id);
       }
     });
-    this.props.collections.forEach((collection, index) => {
+    store.collections.forEach((c, index) => {
       for (var i = 0; i < e.target[0].form[tasksIndex + index + 2].value; i++) {
-        selectedCollections.push(collection.id);
+        group.collections.push(c.id);
       }
     });
-    var newGroup = {
-      id: e.target[0].form[0].value,
-      n: e.target[0].form[1].value,
-      tasks: selectedTasks,
-      collections: selectedCollections
-    };
 
-    var nextGroups = this.props.groups;
-    nextGroups[this.props.elementKey] = newGroup;
-
+    store.editMainGroup(this.props.index, group);
     this.editGroupBtn.hide();
-    this.props.onEditGroup(nextGroups);
+
   }
 
   handleRemoveGroup = () => {
+    store.removeMainGroup(this.props.index);
     this.closeDeleteModal();
-    this.props.onRemoveGroup(this.props.elementKey);
   }
 
   render() {
     var TaskCheckboxes = [];
     var CollectionCheckboxes = [];
 
-    this.props.tasks.forEach((task, i) => {
+    store.tasks.forEach((task, i) => {
       var count = 0;
       this.props.group.tasks.forEach(currentTask => {
         if (task.id === currentTask) {
@@ -117,7 +109,7 @@ import Popover from 'react-bootstrap/lib/Popover';
       );
     });
 
-    this.props.collections.forEach((collection, i) => {
+    store.collections.forEach((collection, i) => {
       var count = 0;
       this.props.group.collections.forEach(currentCollection => {
         if (collection.id === currentCollection) {

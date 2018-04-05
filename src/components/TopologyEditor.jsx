@@ -6,7 +6,7 @@
  *                  copied verbatim in the file 'LICENSE'                       *
  ********************************************************************************/
 
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 
 import { action, observable } from 'mobx';
 import { observer } from 'mobx-react';
@@ -36,7 +36,7 @@ import RequirementList from './RequirementList';
 import TaskList from './TaskList';
 import MainEditor from './MainEditor';
 
-import store from '../Store';
+import store, { MCollection, MGroup, MProperty, MRequirement, MTask } from '../Store';
 
 @observer class TopologyEditor extends Component {
   @observable inputValid = false;
@@ -64,498 +64,151 @@ import store from '../Store';
   addGroupBtn;
   addRequirementBtn;
 
-  state = {
-    variables: [],
-    properties: [],
-    requirements: [],
-    tasks: [],
-    collections: [],
-    main: {
-      id: 'main',
-      tasks: [],
-      collections: [],
-      groups: []
-    }
-  };
-
-  resetState = () => {
-    store.reset();
-    this.setState({
-      variables: [],
-      properties: [],
-      requirements: [],
-      tasks: [],
-      collections: [],
-      main: {
-        id: 'main',
-        tasks: [],
-        collections: [],
-        groups: []
-      }
-    });
-  }
-
-  handleTopologyChange = (variables, properties, requirements, tasks, collections, main) => {
-    this.setState({
-      variables: variables,
-      properties: properties,
-      requirements: requirements,
-      tasks: tasks,
-      collections: collections,
-      main: main
-    });
-  }
-
   handleAddProperty = (e) => {
     e.preventDefault();
+
     if (e.target[0].form[0].value === '') {
       this.setInputValidity(false);
       return;
     }
-    if (this.state.properties.some(property => property.id === e.target[0].form[0].value)) {
+    if (store.hasProperty(e.target[0].form[0].value)) {
       this.setInputValidity(false);
       return;
     }
-    var nextProperties = this.state.properties.concat([{ id: e.target[0].form[0].value }]);
+    const property = new MProperty;
+    property.id = e.target[0].form[0].value;
+
+    store.addProperty(property);
     this.addPropertyBtn.hide();
-    this.setState({
-      properties: nextProperties
-    });
-  }
-
-  handleRemoveProperty = (key) => {
-    var nextProperties = this.state.properties;
-    var removedProperty = nextProperties.splice(key, 1);
-    var nextTasks = this.state.tasks;
-    nextTasks.forEach(task => {
-      task.properties = task.properties.filter(property => property.id !== removedProperty[0].id);
-    });
-    this.setState({
-      properties: nextProperties,
-      tasks: nextTasks
-    });
-  }
-
-  handleEditProperty = (key, updatedProperty) => {
-    if (this.state.properties.some(property => property.id === updatedProperty.id)) {
-      return;
-    }
-    var nextProperties = this.state.properties;
-    var oldId = this.state.properties[key].id;
-    nextProperties[key] = updatedProperty;
-    var nextTasks = this.state.tasks;
-    nextTasks.forEach(task => {
-      task.properties.forEach(property => {
-        if (property.id === oldId) {
-          property.id = updatedProperty.id;
-        }
-      });
-    });
-    this.setState({
-      properties: nextProperties,
-      tasks: nextTasks
-    });
   }
 
   handleAddRequirement = (e) => {
     e.preventDefault();
 
     // cancel if ID or value is empty
-    if (e.target[0].form[0].value === '' || e.target[0].form[3].value === '') {
+    if (e.target[0].form[0].value === '' || e.target[0].form[3].value === '') { // TODO: unify this two ifs
       this.setInputValidity(false);
       return;
     }
     // cancel if ID already exists
-    if (this.state.requirements.some(requirement => requirement.id === e.target[0].form[0].value)) {
+    if (store.hasRequirement(e.target[0].form[0].value)) {
       this.setInputValidity(false);
       return;
     }
 
+    const requirement = new MRequirement;
+    requirement.id = e.target[0].form[0].value;
+    requirement.value = e.target[0].form[3].value;
+
     // set the type according to the radio button value
-    let type = '';
-    if (e.target[0].form[1].checked) {
-      type = 'hostname';
-    } else {
-      type = 'wnname';
-    }
+    e.target[0].form[1].checked ? requirement.type = 'hostname' : requirement.type = 'wnname';
 
-    // create next requirements out of existing and new value
-    let nextRequirements = this.state.requirements.concat([{
-      id: e.target[0].form[0].value,
-      type: type,
-      value: e.target[0].form[3].value
-    }]);
+    store.addRequirement(requirement);
     this.addRequirementBtn.hide();
-    this.setState({
-      requirements: nextRequirements
-    });
-  }
-
-  handleRemoveRequirement = (index) => {
-    var nextRequirements = this.state.requirements;
-    var removedRequirement = nextRequirements.splice(index, 1);
-
-    var nextTasks = this.state.tasks;
-    var nextCollections = this.state.collections;
-
-    nextTasks.forEach(task => {
-      const i = task.requirements.indexOf(removedRequirement[0].id);
-      if (i > -1) {
-        task.requirements.splice(i);
-      }
-    });
-
-    nextCollections.forEach(collection => {
-      const i = collection.requirements.indexOf(removedRequirement[0].id);
-      if (i > -1) {
-        collection.requirements.splice(i);
-      }
-    });
-
-    this.setState({
-      requirements: nextRequirements,
-      tasks: nextTasks,
-      collections: nextCollections
-    });
-  }
-
-  handleEditRequirement = (index, updatedRequirement) => {
-    let nextRequirements = this.state.requirements;
-    let oldId = nextRequirements[index].id;
-    nextRequirements[index] = updatedRequirement;
-
-    let nextTasks = this.state.tasks;
-    nextTasks.forEach(task => {
-      const i = task.requirements.indexOf(oldId);
-      if (i > -1) {
-        task.requirements[i] = oldId;
-      }
-    });
-
-    let nextCollections = this.state.collections;
-    nextCollections.forEach(collection => {
-      const i = collection.requirements.indexOf(oldId);
-      if (i > -1) {
-        collection.requirements[i] = oldId;
-      }
-    });
-
-    this.setState({
-      requirements: nextRequirements,
-      tasks: nextTasks,
-      collections: nextCollections
-    });
   }
 
   handleAddTask = (e) => {
     e.preventDefault();
+
+    // cancel if ID or exe is empty
     if (e.target[0].form[0].value === '' || e.target[0].form[1].value === '') {
       this.setInputValidity(false);
       return;
     }
-    if (this.state.tasks.some(task => task.id === e.target[0].form[0].value )) {
+    // cancel if ID already exists
+    if (store.hasTask(e.target[0].form[0].value)) {
       this.setInputValidity(false);
       return;
     }
 
-    var selectedProperties = [];
-    this.state.properties.forEach((property, index) => {
-      if (e.target[0].form[index + 5].value === 'read') {
-        selectedProperties.push({ id: property.id, access: 'read' });
-      } else if (e.target[0].form[index + 5].value === 'write') {
-        selectedProperties.push({ id: property.id, access: 'write' });
-      } else if (e.target[0].form[index + 5].value === 'readwrite') {
-        selectedProperties.push({ id: property.id, access: 'readwrite' });
-      }
-    });
-    var newTask = {
-      id: e.target[0].form[0].value,
-      exe: {
-        valueText: e.target[0].form[1].value
-      },
-      properties: selectedProperties,
-      requirements: []
-    };
+    const task = new MTask;
+    task.id = e.target[0].form[0].value;
 
-    if (e.target[0].form['requirements'].value !== '') { // TODO: handle multiple
-      newTask.requirements.push(e.target[0].form['requirements'].value);
-    }
-
-    if (e.target[0].form[2].checked === true) {
-      newTask.exe.reachable = 'true';
+    task.exeValue = e.target[0].form[1].value;
+    if (e.target[0].form[2].checked) {
+      task.exeReachable = 'true';
     }
 
     if (e.target[0].form[3].value !== '') {
-      newTask.env = {};
-      newTask.env.valueText = e.target[0].form[3].value;
-      if (e.target[0].form[4].checked == true) {
-        newTask.env.reachable = 'true';
+      task.envValue = e.target[0].form[3].value;
+      if (e.target[0].form[4].checked) {
+        task.envReachable = 'true';
       }
     }
 
-    var nextTasks = this.state.tasks.concat([newTask]);
-    this.addTaskBtn.hide();
-    this.setState({
-      tasks: nextTasks
-    });
-  }
-
-  handleEditTask = (key, updatedTask) => {
-    var nextTasks = this.state.tasks;
-    var oldId = nextTasks[key].id;
-    nextTasks[key] = updatedTask;
-
-    // update collections with new task info
-    var nextCollections = this.state.collections;
-    nextCollections.forEach((collection, colIndex) => {
-      collection.tasks.forEach((task, index) => {
-        if (task === oldId) {
-          nextCollections[colIndex].tasks[index] = updatedTask.id;
-        }
-      });
-    });
-
-    // update groups with new task info
-    var nextGroups = this.state.main.groups;
-    nextGroups.forEach((group, groupIndex) => {
-      group.tasks.forEach((task, index) => {
-        if (task === oldId) {
-          nextGroups[groupIndex].tasks[index] = updatedTask.id;
-        }
-      });
-    });
-
-    // update main with new task info
-    var nextMain = this.state.main;
-    nextMain.groups = nextGroups;
-    nextMain.tasks.forEach((task, index) => {
-      if (task === oldId) {
-        nextMain.tasks[index] = updatedTask.id;
+    store.properties.forEach((p, i) => {
+      if (e.target[0].form[i + 5].value === 'read') {
+        task.properties.push({ id: p.id, access: 'read' }); // TODO: check if this works
+      } else if (e.target[0].form[i + 5].value === 'write') {
+        task.properties.push({ id: p.id, access: 'write' });
+      } else if (e.target[0].form[i + 5].value === 'readwrite') {
+        task.properties.push({ id: p.id, access: 'readwrite' });
       }
     });
 
-    // update state
-    this.setState({
-      tasks: nextTasks,
-      collections: nextCollections,
-      main: nextMain
-    });
-  }
+    if (e.target[0].form['requirements'].value !== '') { // TODO: handle multiple
+      task.requirements.push(e.target[0].form['requirements'].value);
+    }
 
-  handleRemoveTask = (key) => {
-    var nextTasks = this.state.tasks;
-    var removedTask = nextTasks.splice(key, 1);
-    var nextCollections = this.state.collections;
-    nextCollections.forEach(collection => {
-      collection.tasks = collection.tasks.filter(task => task !== removedTask[0].id);
-    });
-    var nextMainTasks = this.state.main.tasks;
-    nextMainTasks = nextMainTasks.filter(task => task !== removedTask[0].id);
-    var nextGroups = this.state.main.groups;
-    nextGroups.forEach(group => {
-      group.tasks = group.tasks.filter(task => task !== removedTask[0].id);
-    });
-    var nextMain = {
-      id: this.state.main.id,
-      tasks: nextMainTasks,
-      collections: this.state.main.collections,
-      groups: nextGroups
-    };
-    this.setState({
-      tasks: nextTasks,
-      collections: nextCollections,
-      main: nextMain
-    });
+    store.addTask(task);
+    this.addTaskBtn.hide();
   }
 
   handleAddCollection = (e) => {
     e.preventDefault();
+
     if (e.target[0].form[0].value === '') {
       this.setInputValidity(false);
       return;
     }
-    if (this.state.collections.some(collection => collection.id === e.target[0].form[0].value )) {
+    if (store.hasCollection(e.target[0].form[0].value)) {
       this.setInputValidity(false);
       return;
     }
 
-    var selectedTasks = [];
-    this.state.tasks.forEach((task, index) => {
-      for (var i = 0; i < e.target[0].form[index + 1].value; i++) {
-        selectedTasks.push(task.id);
+    const collection = new MCollection;
+    collection.id = e.target[0].form[0].value;
+
+    store.tasks.forEach((t, j) => {
+      for (let i = 0; i < e.target[0].form[j + 1].value; i++) {
+        collection.tasks.push(t.id);
       }
     });
-
-    let newCollection = {
-      id: e.target[0].form[0].value,
-      tasks: selectedTasks,
-      requirements: []
-    };
 
     if (e.target[0].form['requirements'].value !== '') { // TODO: handle multiple
-      newCollection.requirements.push(e.target[0].form['requirements'].value);
+      collection.requirements.push(e.target[0].form['requirements'].value);
     }
 
-    var nextCollections = this.state.collections.concat([newCollection]);
+    store.addCollection(collection);
     this.addCollectionBtn.hide();
-    this.setState({
-      collections: nextCollections
-    });
-  }
-
-  handleEditCollection = (key, updatedCollection) => {
-    var nextCollections = this.state.collections;
-    var oldId = nextCollections[key].id;
-    nextCollections[key] = updatedCollection;
-
-    // update groups with new collection info
-    var nextGroups = this.state.main.groups;
-    nextGroups.forEach((group, groupIndex) => {
-      group.collections.forEach((collection, index) => {
-        if (collection === oldId) {
-          nextGroups[groupIndex].collections[index] = updatedCollection.id;
-        }
-      });
-    });
-
-    // update main with new collection info
-    var nextMain = this.state.main;
-    nextMain.groups = nextGroups;
-    nextMain.collections.forEach((collection, index) => {
-      if (collection === oldId) {
-        nextMain.collections[index] = updatedCollection.id;
-      }
-    });
-
-    // update state
-    this.setState({
-      collections: nextCollections,
-      main: nextMain
-    });
-  }
-
-  handleRemoveCollection = (key) => {
-    var nextCollections = this.state.collections;
-    var removedCollection = nextCollections.splice(key, 1);
-    var nextMainCollections = this.state.main.collections;
-    nextMainCollections = nextMainCollections.filter(collection => collection !== removedCollection[0].id);
-    var nextGroups = this.state.main.groups;
-    nextGroups.forEach(group => {
-      group.collections = group.collections.filter(collection => collection !== removedCollection[0].id);
-    });
-    var nextMain = {
-      id: this.state.main.id,
-      tasks: this.state.main.tasks,
-      collections: nextMainCollections,
-      groups: nextGroups
-    };
-    this.setState({
-      collections: nextCollections,
-      main: nextMain
-    });
   }
 
   handleAddGroup = (e) => {
     e.preventDefault();
-    if (e.target[0].form[0].value === '') {
+
+    if (e.target[0].form[0].value === '' || store.hasMainGroup(e.target[0].form[0].value)) {
       this.setInputValidity(false);
       return;
     }
-    if (this.state.main.groups.some(group => group.id === e.target[0].form[0].value)) {
-      this.setInputValidity(false);
-      return;
-    }
-    var selectedTasks = [];
-    var selectedCollections = [];
-    var tasksIndex = 0;
-    this.state.tasks.forEach((task, index) => {
+
+    const group = new MGroup;
+    group.id = e.target[0].form[0].value;
+    group.n = e.target[0].form[1].value;
+
+    let tasksIndex = 0;
+    store.tasks.forEach((t, j) => {
       tasksIndex++;
-      for (var i = 0; i < e.target[0].form[index + 2].value; i++) {
-        selectedTasks.push(task.id);
+      for (let i = 0; i < e.target[0].form[j + 2].value; i++) {
+        group.tasks.push(t.id);
       }
     });
-    this.state.collections.forEach((collection, index) => {
-      for (var i = 0; i < e.target[0].form[tasksIndex + index + 2].value; i++) {
-        selectedCollections.push(collection.id);
+    store.collections.forEach((c, j) => {
+      for (let i = 0; i < e.target[0].form[tasksIndex + j + 2].value; i++) {
+        group.collections.push(c.id);
       }
     });
-    var nextGroups = this.state.main.groups.concat([{
-      id: e.target[0].form[0].value,
-      n: e.target[0].form[1].value,
-      tasks: selectedTasks,
-      collections: selectedCollections
-    }]);
-    var nextMain = {
-      id: this.state.main.id,
-      tasks: this.state.main.tasks,
-      collections: this.state.main.collections,
-      groups: nextGroups
-    };
-    this.setState({
-      main: nextMain
-    });
-    this.addGroupBtn.hide();
-  }
 
-  handleEditGroup = (groups) => {
-    var nextMain = {
-      id: this.state.main.id,
-      tasks: this.state.main.tasks,
-      collections: this.state.main.collections,
-      groups: groups
-    };
-    this.setState({
-      main: nextMain
-    });
-  }
-
-  handleRemoveGroup = (key) => {
-    var nextGroups = this.state.main.groups;
-    nextGroups.splice(key, 1);
-    var nextMain = {
-      id: this.state.main.id,
-      tasks: this.state.main.tasks,
-      collections: this.state.main.collections,
-      groups: nextGroups
-    };
-    this.setState({
-      main: nextMain
-    });
-  }
-
-  handleEditMain = (main) => {
-    this.setState({
-      main: main
-    });
-  }
-
-  hideAddPropertyButton = (e) => {
-    e.preventDefault();
-    this.setInputValidity(true);
-    this.addPropertyBtn.hide();
-  }
-
-  hideAddRequirementButton = (e) => {
-    e.preventDefault();
-    this.setInputValidity(true);
-    this.addRequirementBtn.hide();
-  }
-
-  hideAddTaskButton = (e) => {
-    e.preventDefault();
-    this.setInputValidity(true);
-    this.addTaskBtn.hide();
-  }
-
-  hideAddCollectionButton = (e) => {
-    e.preventDefault();
-    this.setInputValidity(true);
-    this.addCollectionBtn.hide();
-  }
-
-  hideAddGroupButton = (e) => {
-    e.preventDefault();
-    this.setInputValidity(true);
+    store.addMainGroup(group);
     this.addGroupBtn.hide();
   }
 
@@ -565,7 +218,7 @@ import store from '../Store';
     let CollectionCheckboxes = [];
     let requirementOptions = [];
 
-    this.state.properties.forEach((property, i) => {
+    store.properties.forEach((property, i) => {
       PropertyCheckboxes.push(
         <div className="ct-box ct-box-property" key={'t-box' + i}>
           <div className="element-name" title={property.id}>{property.id}</div>
@@ -581,7 +234,7 @@ import store from '../Store';
       );
     });
 
-    this.state.tasks.forEach((task, i) => {
+    store.tasks.forEach((task, i) => {
       TaskCheckboxes.push(
         <div className="ct-box ct-box-task" key={'t-box' + i}>
           <div className="element-name" title={task.id}>{task.id}</div>
@@ -592,7 +245,7 @@ import store from '../Store';
       );
     });
 
-    this.state.collections.forEach((collection, i) => {
+    store.collections.forEach((collection, i) => {
       CollectionCheckboxes.push(
         <div className="ct-box ct-box-collection" key={'c-box' + i}>
           <div className="element-name" title={collection.id}>{collection.id}</div>
@@ -603,29 +256,21 @@ import store from '../Store';
       );
     });
 
-    this.state.requirements.forEach((requirement, i) => { // TODO: handle multiple
+    store.requirements.forEach((requirement, i) => { // TODO: handle multiple
       requirementOptions.push(
         <option value={requirement.id} key={'option' + i}>{requirement.id}</option>
       );
     });
 
     return (
-      <div>
+      <Fragment>
         <TopBar />
 
         <div className={store.fluid ? 'container-fluid' : 'container'}>
           <div className="row">
             <div className="col-xs-3">
               <ul className="list-group left-pane">
-                <FileActions
-                  onFileLoad={this.handleTopologyChange}
-                  variables={this.state.variables}
-                  properties={this.state.properties}
-                  requirements={this.state.requirements}
-                  tasks={this.state.tasks}
-                  collections={this.state.collections}
-                  main={this.state.main}
-                />
+                <FileActions />
 
                 <li className="list-group-item properties-header">
                   properties
@@ -639,7 +284,7 @@ import store from '../Store';
                         <div className="row">
                           <div className="col-xs-12">
                             <Button className="add-cg-popover-btn" type="submit" bsSize="small" bsStyle="primary">add</Button>
-                            <Button className="add-cg-popover-btn" bsSize="small" bsStyle="default" onClick={this.hideAddPropertyButton}>cancel</Button>
+                            <Button className="add-cg-popover-btn" bsSize="small" bsStyle="default" onClick={() => { this.setInputValidity(true); this.addPropertyBtn.hide(); }}>cancel</Button>
                           </div>
                         </div>
                       </form>
@@ -654,10 +299,7 @@ import store from '../Store';
                   </span>
                 </li>
                 <li className={this.propertiesVisible ? 'visible-container list-group-item properties' : 'invisible-container list-group-item properties'}>
-                  <PropertyList properties={this.state.properties}
-                    onRemoveProperty={this.handleRemoveProperty}
-                    onEditProperty={this.handleEditProperty}
-                  />
+                  <PropertyList />
                 </li>
 
                 <li className="list-group-item tasks-header">
@@ -703,7 +345,7 @@ import store from '../Store';
                         <div className="row">
                           <div className="col-xs-12">
                             <Button className="add-cg-popover-btn" type="submit" bsSize="small" bsStyle="primary">add</Button>
-                            <Button className="add-cg-popover-btn" bsSize="small" bsStyle="default" onClick={this.hideAddTaskButton}>cancel</Button>
+                            <Button className="add-cg-popover-btn" bsSize="small" bsStyle="default" onClick={() => { this.setInputValidity(true); this.addTaskBtn.hide(); }}>cancel</Button>
                           </div>
                         </div>
                       </form>
@@ -718,12 +360,7 @@ import store from '../Store';
                   </span>
                 </li>
                 <li className={this.tasksVisible ? 'visible-container list-group-item tasks' : 'invisible-container list-group-item tasks'}>
-                  <TaskList properties={this.state.properties}
-                    tasks={this.state.tasks}
-                    requirements={this.state.requirements}
-                    onRemoveTask={this.handleRemoveTask}
-                    onEditTask={this.handleEditTask}
-                  />
+                  <TaskList />
                 </li>
 
                 <li className="list-group-item collections-header">
@@ -753,7 +390,7 @@ import store from '../Store';
                         <div className="row">
                           <div className="col-xs-12">
                             <Button className="add-cg-popover-btn" type="submit" bsSize="small" bsStyle="primary">add</Button>
-                            <Button className="add-cg-popover-btn" bsSize="small" bsStyle="default" onClick={this.hideAddCollectionButton}>cancel</Button>
+                            <Button className="add-cg-popover-btn" bsSize="small" bsStyle="default" onClick={() => { this.setInputValidity(true); this.addCollectionBtn.hide(); }}>cancel</Button>
                           </div>
                         </div>
                       </form>
@@ -768,13 +405,7 @@ import store from '../Store';
                   </span>
                 </li>
                 <li className={this.collectionsVisible ? 'visible-container list-group-item collections' : 'invisible-container list-group-item collections'}>
-                  <CollectionList
-                    collections={this.state.collections}
-                    tasks={this.state.tasks}
-                    requirements={this.state.requirements}
-                    onRemoveCollection={this.handleRemoveCollection}
-                    onEditCollection={this.handleEditCollection}
-                  />
+                  <CollectionList />
                 </li>
 
                 <li className="list-group-item groups-header">
@@ -803,7 +434,7 @@ import store from '../Store';
                         <div className="row">
                           <div className="col-xs-12">
                             <Button className="add-cg-popover-btn" type="submit" bsSize="small" bsStyle="primary">add</Button>
-                            <Button className="add-cg-popover-btn" bsSize="small" bsStyle="default" onClick={this.hideAddGroupButton}>cancel</Button>
+                            <Button className="add-cg-popover-btn" bsSize="small" bsStyle="default" onClick={() => { this.setInputValidity(true); this.addGroupBtn.hide(); }}>cancel</Button>
                           </div>
                         </div>
                       </form>
@@ -818,13 +449,7 @@ import store from '../Store';
                   </span>
                 </li>
                 <li className={this.groupsVisible ? 'visible-container list-group-item groups' : 'invisible-container list-group-item groups'}>
-                  <GroupList
-                    groups={this.state.main.groups}
-                    tasks={this.state.tasks}
-                    collections={this.state.collections}
-                    onRemoveGroup={this.handleRemoveGroup}
-                    onEditGroup={this.handleEditGroup}
-                  />
+                  <GroupList />
                 </li>
 
                 <li className="list-group-item requirements-header">
@@ -848,7 +473,7 @@ import store from '../Store';
                         <div className="row">
                           <div className="col-xs-12">
                             <Button className="add-cg-popover-btn" type="submit" bsSize="small" bsStyle="primary">add</Button>
-                            <Button className="add-cg-popover-btn" bsSize="small" bsStyle="default" onClick={this.hideAddRequirementButton}>cancel</Button>
+                            <Button className="add-cg-popover-btn" bsSize="small" bsStyle="default" onClick={() => { this.setInputValidity(true); this.addRequirementBtn.hide(); }}>cancel</Button>
                           </div>
                         </div>
                       </form>
@@ -863,11 +488,7 @@ import store from '../Store';
                   </span>
                 </li>
                 <li className={this.requirementsVisible ? 'visible-container list-group-item requirements' : 'invisible-container list-group-item requirements'}>
-                  <RequirementList
-                    requirements={this.state.requirements}
-                    onRemoveRequirement={this.handleRemoveRequirement}
-                    onEditRequirement={this.handleEditRequirement}
-                  />
+                  <RequirementList />
                 </li>
 
                 <li className="list-group-item">
@@ -884,7 +505,7 @@ import store from '../Store';
                       <p>Unsaved changes will be lost.</p>
                     </Modal.Body>
                     <Modal.Footer>
-                      <Button bsStyle="danger" onClick={this.resetState}>Reset</Button>
+                      <Button bsStyle="danger" onClick={() => { store.reset(); this.closeResetModal();} }>Reset</Button>
                       <Button onClick={this.closeResetModal}>Cancel</Button>
                     </Modal.Footer>
                   </Modal>
@@ -892,16 +513,11 @@ import store from '../Store';
               </ul>
             </div>
             <div className="col-xs-9">
-              <MainEditor properties={this.state.properties}
-                tasks={this.state.tasks}
-                collections={this.state.collections}
-                main={this.state.main}
-                onEditMain={this.handleEditMain}
-              />
+              <MainEditor />
             </div>
           </div>
         </div>
-      </div>
+      </Fragment>
     );
   }
 }

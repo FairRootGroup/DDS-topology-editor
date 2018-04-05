@@ -20,15 +20,12 @@ import Modal from 'react-bootstrap/lib/Modal';
 import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
 import Popover from 'react-bootstrap/lib/Popover';
 
+import store, { MCollection } from '../Store';
+
 @observer export default class Collection extends Component {
   static propTypes = {
     collection: PropTypes.object.isRequired,
-    requirements: PropTypes.array.isRequired,
-    collections: PropTypes.array.isRequired,
-    tasks: PropTypes.array.isRequired,
-    onRemoveCollection: PropTypes.func.isRequired,
-    onEditCollection: PropTypes.func.isRequired,
-    elementKey: PropTypes.number.isRequired
+    index: PropTypes.number.isRequired
   };
 
   @observable bodyVisible = false;
@@ -52,42 +49,38 @@ import Popover from 'react-bootstrap/lib/Popover';
 
   handleEditCollection = (e) => {
     e.preventDefault();
-    var self = this;
+
     if (e.target[0].form[0].value === '') {
       this.setInputValidity(false);
       return;
     }
 
-    var otherCollections = this.props.collections.filter(collection => collection.id !== self.props.collection.id);
-
-    if (otherCollections.some(collection => collection.id === e.target[0].form[0].value)) {
+    var otherCollections = store.collections.filter(c => c.id !== this.props.collection.id);
+    if (otherCollections.some(c => c.id === e.target[0].form[0].value)) {
       this.setInputValidity(false);
       return;
     }
 
-    var selectedTasks = [];
-    this.props.tasks.forEach((task, index) => {
+    const collection = new MCollection;
+    collection.id = e.target[0].form[0].value;
+
+    store.tasks.forEach((t, index) => {
       for (var i = 0; i < e.target[0].form[index + 1].value; i++) {
-        selectedTasks.push(task.id);
+        collection.tasks.push(t.id);
       }
     });
-    var updatedCollection = {
-      id: e.target[0].form[0].value,
-      tasks: selectedTasks,
-      requirements: []
-    };
 
     if (e.target[0].form['requirements'].value !== '') {
-      updatedCollection.requirements.push(e.target[0].form['requirements'].value);
+      collection.requirements.push(e.target[0].form['requirements'].value);
     }
 
+    store.editCollection(this.props.index, collection);
     this.editCollectionBtn.hide();
-    this.props.onEditCollection(this.props.elementKey, updatedCollection);
   }
 
   handleRemoveCollection = () => {
+    store.removeCollection(this.props.index);
     this.closeDeleteModal();
-    this.props.onRemoveCollection(this.props.elementKey);
   }
 
   render() {
@@ -96,7 +89,7 @@ import Popover from 'react-bootstrap/lib/Popover';
     let currentRequirement = '';
     let requirementContainers = [];
 
-    this.props.tasks.forEach((task, i) => {
+    store.tasks.forEach((task, i) => {
       var count = 0;
       this.props.collection.tasks.forEach(currentTask => {
         if (task.id === currentTask) {
@@ -113,14 +106,14 @@ import Popover from 'react-bootstrap/lib/Popover';
       );
     });
 
-    this.props.requirements.forEach((requirement, i) => {
+    store.requirements.forEach((requirement, i) => {
       requirementOptions.push(
         <option value={requirement.id} key={'option' + i}>{requirement.id}</option>
       );
     });
 
     this.props.collection.requirements.forEach((requirement, i) => {
-      let el = this.props.requirements.find(r => r.id === requirement);
+      let el = store.requirements.find(r => r.id === requirement);
       if (el !== undefined) {
         currentRequirement = requirement;
         requirementContainers.push(

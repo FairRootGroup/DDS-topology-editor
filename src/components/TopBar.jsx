@@ -22,8 +22,8 @@ import store from '../Store';
 
   handleTopologyIdChange = (e) => {
     e.preventDefault();
-    this.toggleEditing();
     store.setTopologyId(e.target[0].form[0].value);
+    this.toggleEditing();
   }
 
   render() {

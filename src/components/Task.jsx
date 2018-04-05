@@ -21,15 +21,12 @@ import Modal from 'react-bootstrap/lib/Modal';
 import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
 import Popover from 'react-bootstrap/lib/Popover';
 
+import store, { MTask } from '../Store';
+
 @observer export default class Task extends Component {
   static propTypes = {
     task: PropTypes.object.isRequired,
-    properties: PropTypes.array.isRequired,
-    requirements: PropTypes.array.isRequired,
-    tasks: PropTypes.array.isRequired,
-    onRemoveTask: PropTypes.func.isRequired,
-    onEditTask: PropTypes.func.isRequired,
-    elementKey: PropTypes.number.isRequired
+    index: PropTypes.number.isRequired
   };
 
   @observable bodyVisible = false;
@@ -53,58 +50,57 @@ import Popover from 'react-bootstrap/lib/Popover';
 
   handleEditTask = (e) => {
     e.preventDefault();
+
+    // cancel if ID or exe is empty
     if (e.target[0].form[0].value === '' || e.target[0].form[1].value === '') {
       this.setInputValidity(false);
       return;
     }
-    var otherTasks = this.props.tasks.filter(task => task.id !== this.props.task.id);
-    if (otherTasks.some( task => task.id === e.target[0].form[0].value )) {
+
+    // cancel if ID already exists (except its own ID)
+    const otherTasks = store.tasks.filter(t => t.id !== this.props.task.id);
+    if (otherTasks.some(t => t.id === e.target[0].form[0].value)) {
       this.setInputValidity(false);
       return;
     }
 
-    var selectedProperties = [];
-    this.props.properties.forEach((property, i) => {
-      if (e.target[0].form[i + 5].value === 'read') {
-        selectedProperties.push({ id: property.id, access: 'read' });
-      } else if (e.target[0].form[i + 5].value === 'write') {
-        selectedProperties.push({ id: property.id, access: 'write' });
-      } else if (e.target[0].form[i + 5].value === 'readwrite') {
-        selectedProperties.push({ id: property.id, access: 'readwrite' });
-      }
-    });
-    var updatedTask = {
-      id: e.target[0].form[0].value,
-      exe: {
-        valueText: e.target[0].form[1].value
-      },
-      requirements: [],
-      properties: selectedProperties
-    };
-
-    if (e.target[0].form['requirements'].value !== '') {
-      updatedTask.requirements.push(e.target[0].form['requirements'].value);
-    }
+    const task = new MTask;
+    task.id = e.target[0].form[0].value;
+    task.exeValue = e.target[0].form[1].value;
 
     if (e.target[0].form[2].checked === true) {
-      updatedTask.exe.reachable = 'true';
+      task.exeReachable = 'true';
     }
 
     if (e.target[0].form[3].value !== '') {
-      updatedTask.env = {};
-      updatedTask.env.valueText = e.target[0].form[3].value;
+      task.envValue = e.target[0].form[3].value;
       if (e.target[0].form[4].checked == true) {
-        updatedTask.env.reachable = 'true';
+        task.envReachable = 'true';
       }
     }
 
+    store.properties.forEach((p, i) => {
+      if (e.target[0].form[i + 5].value === 'read') {
+        task.properties.push({ id: p.id, access: 'read' });
+      } else if (e.target[0].form[i + 5].value === 'write') {
+        task.properties.push({ id: p.id, access: 'write' });
+      } else if (e.target[0].form[i + 5].value === 'readwrite') {
+        task.properties.push({ id: p.id, access: 'readwrite' });
+      }
+    });
+
+    if (e.target[0].form['requirements'].value !== '') { // TODO: use this 'name' approach to replace dumb indexes everywhere
+      task.requirements.push(e.target[0].form['requirements'].value);
+    }
+
+    store.editTask(this.props.index, task);
+
     this.editTaskBtn.hide();
-    this.props.onEditTask(this.props.elementKey, updatedTask);
   }
 
   handleRemoveTask = () => {
+    store.removeTask(this.props.index);
     this.closeDeleteModal();
-    this.props.onRemoveTask(this.props.elementKey);
   }
 
   render() {
@@ -118,7 +114,7 @@ import Popover from 'react-bootstrap/lib/Popover';
     var envReachableCheckbox = false;
     var envPresent = false;
 
-    this.props.properties.forEach((property, i) => {
+    store.properties.forEach((property, i) => {
       var access = '';
       this.props.task.properties.forEach(currentProperty => {
         if (property.id === currentProperty.id) {
@@ -140,37 +136,37 @@ import Popover from 'react-bootstrap/lib/Popover';
       );
     });
 
-    this.props.requirements.forEach((requirement, i) => {
+    store.requirements.forEach((requirement, i) => {
       requirementOptions.push(
         <option value={requirement.id} key={'option' + i}>{requirement.id}</option>
       );
     });
 
-    if (this.props.task.exe.reachable) {
-      if (this.props.task.exe.reachable === 'true') {
+    if (this.props.task.exeReachable) {
+      if (this.props.task.exeReachable === 'true') {
         exeReachable = <span className="reachable" title="executable is available on worker nodes">(reachable)</span>;
         exeReachableCheckbox = true;
-      } else if (this.props.task.exe.reachable === 'false') {
+      } else if (this.props.task.exeReachable === 'false') {
         exeReachable = <span className="reachable" title="executable is not available on worker nodes">(unreachable)</span>;
       }
     }
 
     if (this.props.task.env) {
       envPresent = true;
-      if (this.props.task.env.reachable) {
-        if (this.props.task.env.reachable === 'true') {
-          envValue = <li><span><strong>env:</strong></span> <input className="code" readOnly value={this.props.task.env.valueText}></input><span className="reachable" title="executable is available on worker nodes">(reachable)</span></li>;
+      if (this.props.task.envReachable) {
+        if (this.props.task.envReachable === 'true') {
+          envValue = <li><span><strong>env:</strong></span> <input className="code" readOnly value={this.props.task.envValue}></input><span className="reachable" title="executable is available on worker nodes">(reachable)</span></li>;
           envReachableCheckbox = true;
-        } else if (this.props.task.env.reachable === 'false') {
-          envValue = <li><span><strong>env:</strong></span> <input className="code" readOnly value={this.props.task.env.valueText}></input><span className="reachable" title="executable is not available on worker nodes">(unreachable)</span></li>;
+        } else if (this.props.task.envReachable === 'false') {
+          envValue = <li><span><strong>env:</strong></span> <input className="code" readOnly value={this.props.task.envValue}></input><span className="reachable" title="executable is not available on worker nodes">(unreachable)</span></li>;
         }
       } else {
-        envValue = <li><span><strong>env:</strong></span> <input className="code" readOnly value={this.props.task.env.valueText}></input></li>;
+        envValue = <li><span><strong>env:</strong></span> <input className="code" readOnly value={this.props.task.envValue}></input></li>;
       }
     }
 
     this.props.task.requirements.forEach((requirement, i) => { // TODO: handle multiple
-      let el = this.props.requirements.find(r => r.id === requirement);
+      let el = store.requirements.find(r => r.id === requirement);
       if (el !== undefined)
       {
         currentRequirement = requirement;
@@ -224,14 +220,14 @@ import Popover from 'react-bootstrap/lib/Popover';
                 <FormGroup>
                   <InputGroup>
                     <InputGroup.Addon>exe</InputGroup.Addon>
-                    <FormControl type="text" onFocus={() => this.setInputValidity(true)} className={this.inputValid ? 'mono' : 'mono invalid-input'} defaultValue={this.props.task.exe.valueText || ''} />
+                    <FormControl type="text" onFocus={() => this.setInputValidity(true)} className={this.inputValid ? 'mono' : 'mono invalid-input'} defaultValue={this.props.task.exeValue || ''} />
                   </InputGroup>
                 </FormGroup>
                 <Checkbox defaultChecked={exeReachableCheckbox}>exe reachable (optional)</Checkbox>
                 <FormGroup>
                   <InputGroup>
                     <InputGroup.Addon>env</InputGroup.Addon>
-                    <FormControl type="text" onFocus={() => this.setInputValidity(true)} className="mono" defaultValue={envPresent ? this.props.task.env.valueText || '' : ''} />
+                    <FormControl type="text" onFocus={() => this.setInputValidity(true)} className="mono" defaultValue={envPresent ? this.props.task.envValue || '' : ''} />
                   </InputGroup>
                 </FormGroup>
                 <Checkbox defaultChecked={envReachableCheckbox}>env reachable (optional)</Checkbox>
@@ -265,7 +261,7 @@ import Popover from 'react-bootstrap/lib/Popover';
         <ul className={this.bodyVisible ? 'visible-container' : 'invisible-container'}>
           <li>
             <span><strong>exe:</strong></span>
-            <input className="code" readOnly value={this.props.task.exe.valueText} title={this.props.task.exe.valueText}></input>
+            <input className="code" readOnly value={this.props.task.exeValue} title={this.props.task.exeValue}></input>
             {exeReachable}
           </li>
           {envValue}

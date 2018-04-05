@@ -7,32 +7,20 @@
  ********************************************************************************/
 
 import React, { Component, Fragment } from 'react';
-import PropTypes from 'prop-types';
+import { observer } from 'mobx-react';
 
 import Task from './Task';
 
-export default class TaskList extends Component {
-  static propTypes = {
-    properties: PropTypes.array.isRequired,
-    requirements: PropTypes.array.isRequired,
-    tasks: PropTypes.array.isRequired,
-    onRemoveTask: PropTypes.func.isRequired,
-    onEditTask: PropTypes.func.isRequired
-  };
+import store from '../Store';
+
+@observer export default class TaskList extends Component {
+  shouldComponentUpdate = () => true
 
   render() {
     return (
       <Fragment>
-        {this.props.tasks.map((task, index) => {
-          return <Task task={task}
-            properties={this.props.properties}
-            requirements={this.props.requirements}
-            tasks={this.props.tasks}
-            onRemoveTask={this.props.onRemoveTask}
-            onEditTask={this.props.onEditTask}
-            key={index}
-            elementKey={index}
-          />;
+        {store.tasks.map((t, i) => {
+          return <Task task={t} key={i} index={i} />;
         })}
       </Fragment>
     );

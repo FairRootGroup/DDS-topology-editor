@@ -7,28 +7,20 @@
  ********************************************************************************/
 
 import React, { Component, Fragment } from 'react';
-import PropTypes from 'prop-types';
+import { observer } from 'mobx-react';
 
 import Requirement from './Requirement';
 
-export default class RequirementList extends Component {
-  static propTypes = {
-    requirements: PropTypes.array.isRequired,
-    onRemoveRequirement: PropTypes.func.isRequired,
-    onEditRequirement: PropTypes.func.isRequired
-  };
+import store from '../Store';
+
+@observer export default class RequirementList extends Component {
+  shouldComponentUpdate = () => true
 
   render() {
     return (
       <Fragment>
-        {this.props.requirements.map((requirement, i) => {
-          return <Requirement requirement={requirement}
-            requirements={this.props.requirements}
-            onRemoveRequirement={this.props.onRemoveRequirement}
-            onEditRequirement={this.props.onEditRequirement}
-            key={i}
-            elementKey={i}
-          />;
+        {store.requirements.map((r, i) => {
+          return <Requirement requirement={r} key={i} index={i} />;
         })}
       </Fragment>
     );
