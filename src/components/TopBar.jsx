@@ -28,7 +28,7 @@ import store from '../Store';
 
   render() {
     return (
-      <nav className="navbar navbar-inverse" role="navigation">
+      <nav className="header-pane navbar navbar-inverse" role="navigation">
         <div className="container">
           <div className="navbar-header">
             <button type="button" className="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
@@ -49,17 +49,6 @@ import store from '../Store';
                   </form>
                   :
                   <a href="#" onClick={this.toggleEditing}>{store.topologyId}</a>}
-              </li>
-            </ul>
-            <ul className="nav navbar-nav navbar-right">
-              <li>
-                <a href="#" onClick={store.toggleFluid}>
-                  {store.fluid ?
-                    <span className="glyphicon glyphicon-resize-small"></span>
-                    :
-                    <span className="glyphicon glyphicon-resize-full"></span>
-                  }
-                </a>
               </li>
             </ul>
           </div>

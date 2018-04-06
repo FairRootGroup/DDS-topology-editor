@@ -85,45 +85,39 @@ import store from '../Store';
 
     return (
       <Fragment>
-        <TopBar />
+        <div className="main-container">
+          <TopBar />
 
-        <div className={store.fluid ? 'container-fluid' : 'container'}>
-          <div className="row">
-            <div className="col-xs-3">
-              <ul className="list-group left-pane">
-                <FileActions />
-                <PropertyList />
-                <TaskList propertyCheckboxes={propertyCheckboxes} requirementOptions={requirementOptions} />
-                <CollectionList taskCheckboxes={taskCheckboxes} requirementOptions={requirementOptions} />
-                <GroupList taskCheckboxes={taskCheckboxes} collectionCheckboxes={collectionCheckboxes} />
-                <RequirementList />
+          <ul className="list-group left-pane">
+            <FileActions />
+            <PropertyList />
+            <TaskList propertyCheckboxes={propertyCheckboxes} requirementOptions={requirementOptions} />
+            <CollectionList taskCheckboxes={taskCheckboxes} requirementOptions={requirementOptions} />
+            <GroupList taskCheckboxes={taskCheckboxes} collectionCheckboxes={collectionCheckboxes} />
+            <RequirementList />
 
-                <li className="list-group-item">
-                  <button type="button" className="btn btn-sm btn-default" onClick={this.openResetModal}>
-                    <span className="glyphicon glyphicon-remove" title="reset the topology"></span> reset
-                  </button>
+            <li className="list-group-item">
+              <button type="button" className="btn btn-sm btn-default" onClick={this.openResetModal}>
+                <span className="glyphicon glyphicon-remove" title="reset the topology"></span> reset
+              </button>
 
-                  <Modal show={this.showResetModal} onHide={this.closeResetModal}>
-                    <Modal.Header closeButton>
-                      <Modal.Title>Reset topology?</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                      <p>This will clear all the contents of the topology.</p>
-                      <p>Unsaved changes will be lost.</p>
-                    </Modal.Body>
-                    <Modal.Footer>
-                      <Button bsStyle="danger" onClick={() => { store.reset(); this.closeResetModal();} }>Reset</Button>
-                      <Button onClick={this.closeResetModal}>Cancel</Button>
-                    </Modal.Footer>
-                  </Modal>
-                </li>
-              </ul>
-            </div>
+              <Modal show={this.showResetModal} onHide={this.closeResetModal}>
+                <Modal.Header closeButton>
+                  <Modal.Title>Reset topology?</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                  <p>This will clear all the contents of the topology.</p>
+                  <p>Unsaved changes will be lost.</p>
+                </Modal.Body>
+                <Modal.Footer>
+                  <Button bsStyle="danger" onClick={() => { store.reset(); this.closeResetModal();} }>Reset</Button>
+                  <Button onClick={this.closeResetModal}>Cancel</Button>
+                </Modal.Footer>
+              </Modal>
+            </li>
+          </ul>
 
-            <div className="col-xs-9">
-              <MainEditor />
-            </div>
-          </div>
+          <MainEditor />
         </div>
       </Fragment>
     );

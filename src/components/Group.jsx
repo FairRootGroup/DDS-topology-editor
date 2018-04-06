@@ -157,17 +157,9 @@ import store, { MGroup } from '../Store';
                 <InputGroup>
                   <InputGroup.Addon>id</InputGroup.Addon>
                   <FormControl type="text" onFocus={() => this.setInputValidity(true)} className={this.inputValid ? '' : 'invalid-input'} defaultValue={this.props.group.id} />
+                  <InputGroup.Addon>n</InputGroup.Addon>
+                  <FormControl className="add-cg-tc-counter" type="text" defaultValue={this.props.group.n} />
                 </InputGroup>
-                <div className="row">
-                  <div className="col-xs-6">
-                    <InputGroup>
-                      <InputGroup.Addon>n</InputGroup.Addon>
-                      <FormGroup>
-                        <FormControl className="add-cg-tc-counter" type="text" defaultValue={this.props.group.n} />
-                      </FormGroup>
-                    </InputGroup>
-                  </div>
-                </div>
                 <p>Tasks in this group:</p>
                 {TaskCheckboxes}
                 <p>Collections in this group:</p>

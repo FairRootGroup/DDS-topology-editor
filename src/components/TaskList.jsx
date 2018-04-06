@@ -92,24 +92,20 @@ import store, { MTask } from '../Store';
               <form onSubmit={this.handleAddTask}>
                 <FormGroup>
                   <InputGroup>
-                    <InputGroup.Addon>id&nbsp;</InputGroup.Addon>
-                    <FormControl type="text" onFocus={() => this.setInputValidity(true)} className={this.inputValid ? '' : 'invalid-input'} />
+                    <InputGroup.Addon style={{ width: '32px', textAlign: 'right', padding: '0 10px 0 0' }}>id</InputGroup.Addon>
+                    <FormControl style={{ width: '235px' }} type="text" onFocus={() => this.setInputValidity(true)} className={this.inputValid ? '' : 'invalid-input'} />
+                  </InputGroup>
+                  <InputGroup style={{ marginTop: '5px', marginBottom: '5px' }}>
+                    <InputGroup.Addon style={{ width: '32px', textAlign: 'right', padding: '0 10px 0 0' }}>exe</InputGroup.Addon>
+                    <FormControl style={{ width: '235px' }} type="text" onFocus={() => this.setInputValidity(true)} className={this.inputValid ? 'mono' : 'mono invalid-input'} />
+                    <Checkbox>reachable (optional)</Checkbox>
+                  </InputGroup>
+                  <InputGroup style={{ marginTop: '5px', marginBottom: '5px' }}>
+                    <InputGroup.Addon style={{ width: '32px', textAlign: 'right', padding: '0 10px 0 0' }}>env</InputGroup.Addon>
+                    <FormControl style={{ width: '235px' }} type="text" className="mono" />
+                    <Checkbox>reachable (optional)</Checkbox>
                   </InputGroup>
                 </FormGroup>
-                <FormGroup>
-                  <InputGroup>
-                    <InputGroup.Addon>exe</InputGroup.Addon>
-                    <FormControl type="text" onFocus={() => this.setInputValidity(true)} className={this.inputValid ? 'mono' : 'mono invalid-input'} />
-                  </InputGroup>
-                </FormGroup>
-                <Checkbox>exe reachable (optional)</Checkbox>
-                <FormGroup>
-                  <InputGroup>
-                    <InputGroup.Addon>env</InputGroup.Addon>
-                    <FormControl type="text" className="mono" />
-                  </InputGroup>
-                </FormGroup>
-                <Checkbox>env reachable (optional)</Checkbox>
 
                 <p>Properties in this task:</p>
                 {this.props.propertyCheckboxes}

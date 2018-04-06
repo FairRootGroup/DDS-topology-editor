@@ -14,7 +14,6 @@ import { observer } from 'mobx-react';
 
 import Button from 'react-bootstrap/lib/Button';
 import FormControl from 'react-bootstrap/lib/FormControl';
-import FormGroup from 'react-bootstrap/lib/FormGroup';
 import InputGroup from 'react-bootstrap/lib/InputGroup';
 import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
 import Popover from 'react-bootstrap/lib/Popover';
@@ -80,17 +79,9 @@ import store, { MGroup } from '../Store';
                 <InputGroup>
                   <InputGroup.Addon>id</InputGroup.Addon>
                   <FormControl type="text" onFocus={() => this.setInputValidity(true)} className={this.inputValid ? '' : 'invalid-input'} />
+                  <InputGroup.Addon>n</InputGroup.Addon>
+                  <FormControl className="add-cg-tc-counter" type="text" defaultValue="1" />
                 </InputGroup>
-                <div className="row">
-                  <div className="col-xs-6">
-                    <InputGroup>
-                      <InputGroup.Addon>n</InputGroup.Addon>
-                      <FormGroup>
-                        <FormControl className="add-cg-tc-counter" type="number" min="1" defaultValue="1" />
-                      </FormGroup>
-                    </InputGroup>
-                  </div>
-                </div>
                 <p>Tasks in this group:</p>
                 {this.props.taskCheckboxes}
                 <p>Collections in this group:</p>

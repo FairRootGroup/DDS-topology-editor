@@ -32,6 +32,31 @@ a:focus, a:active:focus {
 input[type="radio"], input[type="checkbox"] {
     margin: 5px 0 0;
 }
+
+
+.main-container {
+    display: grid;
+    min-height: 100vh;
+    grid-template-areas: "head head"
+                         "left main";
+    grid-template-columns: 256px 1fr;
+    grid-template-rows: 64px 1fr;
+}
+
+.header-pane {
+    grid-area: head;
+}
+
+.left-pane {
+    grid-area: left;
+    margin: 10px;
+}
+
+.main-pane {
+    grid-area: main;
+    margin: 10px;
+}
+
 .panel {
     box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12);
 }
@@ -797,10 +822,6 @@ span.pattern-type {
 }
 
 /* Main */
-
-#main-editor-body .row {
-
-}
 
 .main-element {
     border-radius: 0px;

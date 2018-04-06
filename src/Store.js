@@ -56,7 +56,6 @@ export class MMain {
 
 class Store {
   @persist @observable topologyId = 'new';
-  @persist @observable fluid = false;
 
   @persist('list', MVariable) @observable variables = [];
   @persist('list', MProperty) @observable properties = [];
@@ -67,7 +66,6 @@ class Store {
 
   @action reset = () => {
     this.topologyId = 'new';
-    this.fluid = false;
     this.variables = [];
     this.properties = [];
     this.requirements = [];
@@ -76,7 +74,6 @@ class Store {
     this.main = new MMain;
   }
 
-  @action toggleFluid = () => { this.fluid = !this.fluid; }
   @action setTopologyId = (id) => { this.topologyId = id; }
 
   @action setVariables = (variables) => { this.variables = variables; }
@@ -245,6 +242,5 @@ export default store;
 hydrate('topologyEditor', store);
 
 autorun(() => {
-  // console.log('store.fluid: ' + store.fluid);
   // console.log('store.topologyId: ' + store.topologyId);
 });
