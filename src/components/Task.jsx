@@ -94,7 +94,6 @@ import store, { MTask } from '../Store';
     }
 
     store.editTask(this.props.index, task);
-
     this.editTaskBtn.hide();
   }
 
@@ -142,7 +141,7 @@ import store, { MTask } from '../Store';
       );
     });
 
-    if (this.props.task.exeReachable) {
+    if (this.props.task.exeReachable !== '') {
       if (this.props.task.exeReachable === 'true') {
         exeReachable = <span className="reachable" title="executable is available on worker nodes">(reachable)</span>;
         exeReachableCheckbox = true;
@@ -151,9 +150,9 @@ import store, { MTask } from '../Store';
       }
     }
 
-    if (this.props.task.env) {
+    if (this.props.task.envValue !== '') {
       envPresent = true;
-      if (this.props.task.envReachable) {
+      if (this.props.task.envReachable !== '') {
         if (this.props.task.envReachable === 'true') {
           envValue = <li><span><strong>env:</strong></span> <input className="code" readOnly value={this.props.task.envValue}></input><span className="reachable" title="executable is available on worker nodes">(reachable)</span></li>;
           envReachableCheckbox = true;
@@ -214,23 +213,23 @@ import store, { MTask } from '../Store';
                 <FormGroup>
                   <InputGroup>
                     <InputGroup.Addon>id</InputGroup.Addon>
-                    <FormControl type="text" onFocus={() => this.setInputValidity(true)} className={this.inputValid ? '' : 'invalid-input'} defaultValue={this.props.task.id} />
+                    <FormControl type="text" name="id" onFocus={() => this.setInputValidity(true)} className={this.inputValid ? '' : 'invalid-input'} defaultValue={this.props.task.id} />
                   </InputGroup>
                 </FormGroup>
                 <FormGroup>
                   <InputGroup>
                     <InputGroup.Addon>exe</InputGroup.Addon>
-                    <FormControl type="text" onFocus={() => this.setInputValidity(true)} className={this.inputValid ? 'mono' : 'mono invalid-input'} defaultValue={this.props.task.exeValue || ''} />
+                    <FormControl type="text" name="exe" onFocus={() => this.setInputValidity(true)} className={this.inputValid ? 'mono' : 'mono invalid-input'} defaultValue={this.props.task.exeValue || ''} />
                   </InputGroup>
                 </FormGroup>
-                <Checkbox defaultChecked={exeReachableCheckbox}>exe reachable (optional)</Checkbox>
+                <Checkbox name="exeReachable" defaultChecked={exeReachableCheckbox}>exe reachable (optional)</Checkbox>
                 <FormGroup>
                   <InputGroup>
                     <InputGroup.Addon>env</InputGroup.Addon>
-                    <FormControl type="text" onFocus={() => this.setInputValidity(true)} className="mono" defaultValue={envPresent ? this.props.task.envValue || '' : ''} />
+                    <FormControl type="text" name="env" onFocus={() => this.setInputValidity(true)} className="mono" defaultValue={envPresent ? this.props.task.envValue || '' : ''} />
                   </InputGroup>
                 </FormGroup>
-                <Checkbox defaultChecked={envReachableCheckbox}>env reachable (optional)</Checkbox>
+                <Checkbox name="envReachable" defaultChecked={envReachableCheckbox}>env reachable (optional)</Checkbox>
 
                 <p>Properties in this task:</p>
                 {propertyCheckboxes}

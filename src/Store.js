@@ -179,26 +179,26 @@ class Store {
 
     // update collections with new task info
     this.collections.forEach((c) => {
-      c.tasks.forEach((t) => {
+      c.tasks.forEach((t, i, a) => {
         if (t === oldId) {
-          t = updatedTask.id;
+          a[i] = updatedTask.id;
         }
       });
     });
 
     // update groups with new task info
     this.main.groups.forEach((g) => {
-      g.tasks.forEach((t) => {
+      g.tasks.forEach((t, i, a) => {
         if (t === oldId) {
-          t = updatedTask.id;
+          a[i] = updatedTask.id;
         }
       });
     });
 
     // update main with new task info
-    this.main.tasks.forEach((t) => {
+    this.main.tasks.forEach((t, i, a) => {
       if (t === oldId) {
-        t = updatedTask.id;
+        a[i] = updatedTask.id;
       }
     });
   }
@@ -209,17 +209,17 @@ class Store {
 
     // update groups with new collection info
     this.main.groups.forEach((g) => {
-      g.collections.forEach((c) => {
+      g.collections.forEach((c, i, a) => {
         if (c === oldId) {
-          c = updatedCollection.id;
+          a[i] = updatedCollection.id;
         }
       });
     });
 
     // update main with new collection info
-    this.main.collections.forEach((c) => {
+    this.main.collections.forEach((c, i, a) => {
       if (c === oldId) {
-        c = updatedCollection.id;
+        a[i] = updatedCollection.id;
       }
     });
   }
