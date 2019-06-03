@@ -2,7 +2,7 @@ import { action, autorun, observable } from 'mobx';
 import * as mobx from 'mobx';
 import { create, persist } from 'mobx-persist';
 
-mobx.configure({ enforceActions: "never" });
+mobx.configure({ enforceActions: "observed" });
 
 export class MVariable {
   @persist @observable id = '';
