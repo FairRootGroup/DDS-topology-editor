@@ -144,8 +144,11 @@ import store, { MCollection, MGroup, MMain, MProperty, MRequirement, MTask, MTas
       const requirement = new MRequirement;
 
       requirement.id = r.getAttribute('id');
-      requirement.type = r.getAttribute('type');
-      requirement.value = r.getAttribute('value');
+
+      r.querySelectorAll('hostPattern').forEach(hp => {
+        requirement.type = hp.getAttribute('type');
+        requirement.value = hp.getAttribute('value');
+      });
 
       requirements.push(requirement);
     });
@@ -402,7 +405,7 @@ import store, { MCollection, MGroup, MMain, MProperty, MRequirement, MTask, MTas
         <div className="row centered">
           <ButtonGroup>
             <Button className="btn-file" componentClass="span" bsSize="small" title="load topology file from disk">
-              <span className="glyphicon glyphicon-floppy-open"></span> load<input type="file" onChange={this.handleFileLoad} />
+              <span className="glyphicon glyphicon-floppy-open"></span> load<input type="file" onChange={this.handleFileLoad} value="" />
             </Button>
 
             <OverlayTrigger trigger="click" placement="bottom" ref={el => this.fetchBtn = el} onEnter={this.fetchTopologies} onExit={this.cancelFetch} overlay={

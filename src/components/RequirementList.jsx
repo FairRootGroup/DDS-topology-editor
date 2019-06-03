@@ -47,6 +47,7 @@ import store, { MRequirement } from '../Store';
     const requirement = new MRequirement;
     requirement.id = e.target[0].form[0].value;
     requirement.value = e.target[0].form[3].value;
+    console.log(e.target[0].form[3].value);
 
     // set the type according to the radio button value
     e.target[0].form[1].checked ? requirement.type = 'hostname' : requirement.type = 'wnname';
