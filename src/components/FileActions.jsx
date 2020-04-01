@@ -8,7 +8,7 @@
 
 import React, { Component } from 'react';
 import vkbeautify from 'vkbeautify';
-import { saveAs } from 'filesaver.js';
+import { saveAs } from 'file-saver';
 
 import { action, observable } from 'mobx';
 import { observer } from 'mobx-react';
