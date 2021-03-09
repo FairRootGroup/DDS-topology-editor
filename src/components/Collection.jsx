@@ -9,7 +9,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import { action, observable } from 'mobx';
+import { action, observable, makeObservable } from 'mobx';
 import { observer } from 'mobx-react';
 
 import Button from 'react-bootstrap/lib/Button';
@@ -81,6 +81,11 @@ import store, { MCollection } from '../Store';
   handleRemoveCollection = () => {
     store.removeCollection(this.props.index);
     this.closeDeleteModal();
+  }
+
+  constructor(props) {
+    super(props);
+    makeObservable(this);
   }
 
   render() {

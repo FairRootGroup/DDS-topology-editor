@@ -8,7 +8,7 @@
 
 import React, { Component, Fragment } from 'react';
 
-import { action, observable } from 'mobx';
+import { action, observable, makeObservable } from 'mobx';
 import { observer } from 'mobx-react';
 
 import Button from 'react-bootstrap/lib/Button';
@@ -54,6 +54,11 @@ import store, { MRequirement } from '../Store';
 
     store.addRequirement(requirement);
     this.addRequirementBtn.hide();
+  }
+
+  constructor(props) {
+    super(props);
+    makeObservable(this);
   }
 
   render() {

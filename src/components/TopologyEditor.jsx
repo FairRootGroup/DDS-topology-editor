@@ -8,7 +8,7 @@
 
 import React, { Component, Fragment } from 'react';
 
-import { action, observable } from 'mobx';
+import { action, observable, makeObservable } from 'mobx';
 import { observer } from 'mobx-react';
 
 import Button from 'react-bootstrap/lib/Button';
@@ -34,6 +34,11 @@ import store from '../Store';
 
   @action openResetModal = () => { this.showResetModal = true; }
   @action closeResetModal = () => { this.showResetModal = false; }
+
+  constructor(props) {
+    super(props);
+    makeObservable(this);
+  }
 
   render() {
     let propertyCheckboxes = [];

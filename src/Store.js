@@ -1,4 +1,4 @@
-import { action, autorun, observable } from 'mobx';
+import { action, autorun, observable, makeObservable } from 'mobx';
 import * as mobx from 'mobx';
 import { create, persist } from 'mobx-persist';
 
@@ -231,6 +231,10 @@ class Store {
   hasTask = (id) => { return this.tasks.some(el => el.id === id); }
   hasCollection = (id) => { return this.collections.some(el => el.id === id); }
   hasMainGroup = (id) => { return this.main.groups.some(el => el.id === id); }
+
+  constructor() {
+    makeObservable(this);
+  }
 }
 
 const hydrate = create({ storage: localStorage, jsonify: true });

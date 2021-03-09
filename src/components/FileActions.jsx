@@ -10,7 +10,7 @@ import React, { Component } from 'react';
 import vkbeautify from 'vkbeautify';
 import { saveAs } from 'file-saver';
 
-import { action, observable } from 'mobx';
+import { action, observable, makeObservable } from 'mobx';
 import { observer } from 'mobx-react';
 
 import Button from 'react-bootstrap/lib/Button';
@@ -397,6 +397,11 @@ import store, { MCollection, MGroup, MMain, MProperty, MRequirement, MTask, MTas
 
     const blob = new Blob([xmlString], { type: 'text/plain;charset=utf-8' });
     saveAs(blob, store.topologyId + '.xml');
+  }
+
+  constructor(props) {
+    super(props);
+    makeObservable(this);
   }
 
   render() {

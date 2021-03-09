@@ -8,7 +8,7 @@
   },
   "scripts": {
     "build": "webpack --mode production",
-    "dev": "webpack-dev-server --mode development --hot --content-base ./dist"
+    "dev": "webpack serve --mode development --hot --content-base ./dist"
   },
   "repository": {
     "type": "git",
@@ -21,31 +21,31 @@
   },
   "homepage": "https://github.com/rbx/DDS-topology-editor#readme",
   "dependencies": {
-    "file-saver": "^2.0.2",
-    "github-api": "^3.3.0",
-    "mobx": "^5.15.4",
+    "file-saver": "^2.0.5",
+    "github-api": "^3.4.0",
+    "mobx": "^6.1.8",
     "mobx-persist": "^0.4.1",
-    "mobx-react": "^6.2.5",
+    "mobx-react": "^7.1.0",
     "prop-types": "^15.7.2",
-    "react": "~16.13.1",
+    "react": "~17.0.1",
     "react-bootstrap": "~0.33.0",
-    "react-dom": "~16.13.1",
+    "react-dom": "~17.0.1",
     "react-mixin": "^5.0.0",
     "vkbeautify": "^0.99.3"
   },
   "devDependencies": {
-    "@babel/core": "^7.11.0",
-    "@babel/plugin-proposal-class-properties": "^7.10.4",
-    "@babel/plugin-proposal-decorators": "^7.10.5",
-    "@babel/preset-env": "^7.11.0",
-    "@babel/preset-react": "^7.10.4",
+    "@babel/core": "^7.13.10",
+    "@babel/plugin-proposal-class-properties": "^7.13.0",
+    "@babel/plugin-proposal-decorators": "^7.13.5",
+    "@babel/preset-env": "^7.13.10",
+    "@babel/preset-react": "^7.12.13",
     "babel-eslint": "^10.1.0",
-    "babel-loader": "8.1.0",
-    "eslint": "^7.6.0",
-    "eslint-plugin-react": "^7.20.5",
-    "react-hot-loader": "^4.12.21",
-    "webpack": "4.44.1",
-    "webpack-cli": "^3.3.12",
-    "webpack-dev-server": "3.11.0"
+    "babel-loader": "8.2.2",
+    "eslint": "^7.21.0",
+    "eslint-plugin-react": "^7.22.0",
+    "react-hot-loader": "^4.13.0",
+    "webpack": "5.24.4",
+    "webpack-cli": "^4.5.0",
+    "webpack-dev-server": "3.11.2"
   }
 }

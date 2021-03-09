@@ -8,7 +8,7 @@
 
 import React, { Component } from 'react';
 
-import { action, observable } from 'mobx';
+import { action, observable, makeObservable } from 'mobx';
 import { observer } from 'mobx-react';
 
 import store from '../Store';
@@ -24,6 +24,11 @@ import store from '../Store';
     e.preventDefault();
     store.setTopologyId(e.target[0].form[0].value);
     this.toggleEditing();
+  }
+
+  constructor(props) {
+    super(props);
+    makeObservable(this);
   }
 
   render() {

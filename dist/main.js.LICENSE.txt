@@ -1,0 +1,123 @@
+/*
+object-assign
+(c) Sindre Sorhus
+@license MIT
+*/
+
+/*!
+  Copyright (c) 2017 Jed Watson.
+  Licensed under the MIT License (MIT), see
+  http://jedwatson.github.io/classnames
+*/
+
+/*! https://mths.be/utf8js v2.1.2 by @mathias */
+
+/**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @file
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @copyright  2013 Michael Aufreiter (Development Seed) and 2016 Yahoo Inc.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @license    Licensed under {@link https://spdx.org/licenses/BSD-3-Clause-Clear.html BSD-3-Clause-Clear}.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      *             Github.js is freely distributable.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */
+
+/**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @file
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @copyright  2013 Michael Aufreiter (Development Seed) and 2016 Yahoo Inc.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @license    Licensed under {@link https://spdx.org/licenses/BSD-3-Clause-Clear.html BSD-3-Clause-Clear}.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                *             Github.js is freely distributable.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+/**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @file
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @copyright  2016 Matt Smith (Development Seed)
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @license    Licensed under {@link https://spdx.org/licenses/BSD-3-Clause-Clear.html BSD-3-Clause-Clear}.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                *             Github.js is freely distributable.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+/**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @file
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @copyright  2016 Yahoo Inc.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @license    Licensed under {@link https://spdx.org/licenses/BSD-3-Clause-Clear.html BSD-3-Clause-Clear}.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                *             Github.js is freely distributable.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+/**
+* vkBeautify - javascript plugin to pretty-print or minify text in XML, JSON, CSS and SQL formats.
+*
+* Copyright (c) 2012 Vadim Kiryukhin
+* vkiryukhin @ gmail.com
+* http://www.eslinstructor.net/vkbeautify/
+*
+* Dual licensed under the MIT and GPL licenses:
+*   http://www.opensource.org/licenses/mit-license.php
+*   http://www.gnu.org/licenses/gpl.html
+*
+*   Pretty print
+*
+*        vkbeautify.xml(text [,indent_pattern]);
+*        vkbeautify.json(text [,indent_pattern]);
+*        vkbeautify.css(text [,indent_pattern]);
+*        vkbeautify.sql(text [,indent_pattern]);
+*
+*        @text - String; text to beatufy;
+*        @indent_pattern - Integer | String;
+*                Integer:  number of white spaces;
+*                String:   character string to visualize indentation ( can also be a set of white spaces )
+*   Minify
+*
+*        vkbeautify.xmlmin(text [,preserve_comments]);
+*        vkbeautify.jsonmin(text);
+*        vkbeautify.cssmin(text [,preserve_comments]);
+*        vkbeautify.sqlmin(text);
+*
+*        @text - String; text to minify;
+*        @preserve_comments - Bool; [optional];
+*                Set this flag to true to prevent removing comments from @text ( minxml and mincss functions only. )
+*
+*   Examples:
+*        vkbeautify.xml(text); // pretty print XML
+*        vkbeautify.json(text, 4 ); // pretty print JSON
+*        vkbeautify.css(text, '. . . .'); // pretty print CSS
+*        vkbeautify.sql(text, '----'); // pretty print SQL
+*
+*        vkbeautify.xmlmin(text, true);// minify XML, preserve comments
+*        vkbeautify.jsonmin(text);// minify JSON
+*        vkbeautify.cssmin(text);// minify CSS, remove comments ( default )
+*        vkbeautify.sqlmin(text);// minify SQL
+*
+*/
+
+/** @license React v0.20.1
+ * scheduler.production.min.js
+ *
+ * Copyright (c) Facebook, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+/** @license React v16.13.1
+ * react-is.production.min.js
+ *
+ * Copyright (c) Facebook, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+/** @license React v17.0.1
+ * react-dom.production.min.js
+ *
+ * Copyright (c) Facebook, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+/** @license React v17.0.1
+ * react.production.min.js
+ *
+ * Copyright (c) Facebook, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
